@@ -51,7 +51,7 @@ public class Database {
 		stmt.setString(1, data.getUsername());
 		stmt.setString(2, data.getPassword());
 		stmt.setString(3, this.encryptionKey);
-		stmt.execute();
+		stmt.executeUpdate();
 	}
 
 	public Player authenticatePlayer(PlayerLoginData data, ConnectionToClient client) {
@@ -80,6 +80,17 @@ public class Database {
 	}
 
 	public void updatePlayerData(Player player) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement("UPDATE players SET xp = ?, wins = ?, losses = ? WHERE id = ?;");
+			stmt.setInt(1, player.getXp());
+			stmt.setInt(2, player.getWins());
+			stmt.setInt(3, player.getLosses());
+			stmt.setInt(4, player.getId());
+
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		// TODO Implement
 	}
 
@@ -103,6 +114,12 @@ public class Database {
 			throwables.printStackTrace();
 		}
 
-		System.out.println(db.authenticatePlayer(new PlayerLoginData("thisisausername", "yoooooo1"), null));
+		Player p = db.authenticatePlayer(new PlayerLoginData("thisisausername", "yoooooo1"), null);
+
+		System.out.println(p);
+
+		p.setWins(1000);
+
+		db.updatePlayerData(p);
 	}
 }
