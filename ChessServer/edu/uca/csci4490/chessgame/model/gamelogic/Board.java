@@ -1,0 +1,130 @@
+package edu.uca.csci4490.chessgame.model.gamelogic;
+
+import edu.uca.csci4490.chessgame.model.gamelogic.piece.*;
+import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
+
+import java.io.Serializable;
+
+public class Board implements Serializable {
+	private Piece[][] board;
+
+	public Board() {
+		this.board = new Piece[8][8];
+	}
+
+	public Piece getPieceAt(int x, int y) {
+		return this.board[x][y];
+	}
+
+	public Piece getPieceAt(Location loc) {
+		if (loc == null) return null;
+		return this.board[loc.getX()][loc.getY()];
+	}
+
+	/**
+	 * Checks if piece is blocked by another piece or by an ally on the destination piece
+	 * @param piece
+	 * @param destination
+	 * @return
+	 */
+	public boolean pieceIsBlocked(Piece piece, Location destination) {
+		if (piece == null || destination == null) return true;
+
+		// check if ally piece is at destination
+		if (getPieceAt(destination) != null &&
+				getPieceAt(destination).getColor() == piece.getColor()) {
+			return true;
+		}
+
+		Location original = piece.getLocation();
+		Direction dir = original.getDirectionOf(destination);
+
+		if (dir == null) return true;
+
+		// return false if L shaped
+		if (dir.isLShaped()) {
+			return false; // note that we already checked for ally piece
+		}
+
+		// check line between locations for piece
+		int distance = 1;
+		Location checkedLoc = original.getRelative(dir, distance);
+		while (checkedLoc != null && !checkedLoc.equals(destination)) {
+			Piece checkedPiece = getPieceAt(checkedLoc);
+
+			if (checkedPiece != null) {
+				return checkedPiece.getColor() == piece.getColor();
+			}
+
+			distance++;
+		}
+
+		return false;
+	}
+
+	public void setPieceOnBoard(byte x, byte y, Piece piece) {
+		this.board[x][y] = piece;
+
+		if (piece != null) {
+			piece.setLocation(new Location(x, y));
+		}
+	}
+
+	public void setPieceOnBoard(Location loc, Piece piece) {
+		setPieceOnBoard(loc.getX(), loc.getY(), piece);
+	}
+
+	public void setupBoard() {
+		// white ranked pieces
+		setPieceOnBoard((byte)0,(byte)0, new Rook(Color.WHITE));
+		setPieceOnBoard((byte)1,(byte)0, new Knight(Color.WHITE));
+		setPieceOnBoard((byte)2,(byte)0, new Bishop(Color.WHITE));
+		setPieceOnBoard((byte)5,(byte)0, new King(Color.WHITE));
+		setPieceOnBoard((byte)5,(byte)0, new Queen(Color.WHITE));
+		setPieceOnBoard((byte)5,(byte)0, new Bishop(Color.WHITE));
+		setPieceOnBoard((byte)6,(byte)0, new Knight(Color.WHITE));
+		setPieceOnBoard((byte)7,(byte)0, new Rook(Color.WHITE));
+
+		// white pawns
+		for (byte i = 0; i < 8; i++) {
+			setPieceOnBoard(i, (byte)1, new Pawn(Color.WHITE));
+		}
+
+		// black ranked pieces
+		setPieceOnBoard((byte)0,(byte)7, new Rook(Color.BLACK));
+		setPieceOnBoard((byte)1,(byte)7, new Knight(Color.BLACK));
+		setPieceOnBoard((byte)2,(byte)7, new Bishop(Color.BLACK));
+		setPieceOnBoard((byte)5,(byte)7, new King(Color.BLACK));
+		setPieceOnBoard((byte)5,(byte)7, new Queen(Color.BLACK));
+		setPieceOnBoard((byte)5,(byte)7, new Bishop(Color.BLACK));
+		setPieceOnBoard((byte)6,(byte)7, new Knight(Color.BLACK));
+		setPieceOnBoard((byte)7,(byte)7, new Rook(Color.BLACK));
+
+		// white pawns
+		for (byte i = 0; i < 8; i++) {
+			setPieceOnBoard(i, (byte)6, new Pawn(Color.BLACK));
+		}
+	}
+
+	public void movePiece(Piece piece, Location to) {
+		setPieceOnBoard(piece.getLocation(), null);
+		setPieceOnBoard(to, piece);
+	}
+
+	public Board getHypothetical(Piece piece, Location to) {
+		Board board = new Board();
+
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				Piece p = this.getPieceAt(x, y);
+				if (p != null) {
+					Piece copy = p.copy();
+					board.setPieceOnBoard((byte)x, (byte)y, copy);
+				}
+			}
+		}
+
+		board.movePiece(piece, to);
+		return board;
+	}
+}

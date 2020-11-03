@@ -1,7 +1,7 @@
 package edu.uca.csci4490.chessgame.model.gamelogic.piece;
 
+import edu.uca.csci4490.chessgame.model.gamelogic.Board;
 import edu.uca.csci4490.chessgame.model.gamelogic.Color;
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 import edu.uca.csci4490.chessgame.model.gamelogic.Location;
 
 import java.util.ArrayList;
@@ -30,14 +30,24 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public ArrayList<Location> allMovableLocations(Game game) {
+	public ArrayList<Location> allMovableLocations(Board board) {
+		ArrayList<Location> locations = new ArrayList<>();
+
+		return null;
+	}
+
+	@Override
+	public ArrayList<Location> filterAvailableLocations(Board board) {
 		// TODO implement
 		return null;
 	}
 
 	@Override
-	public ArrayList<Location> filterAvailableLocations(Game game) {
-		// TODO implement
-		return null;
+	public Piece copy() {
+		Piece pawn = new Pawn();
+		pawn.setColor(this.getColor());
+		pawn.setLocation(this.getLocation());
+		pawn.setImage(this.getImage());
+		return pawn;
 	}
 }
