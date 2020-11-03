@@ -91,7 +91,6 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		// TODO Implement
 	}
 
 	// quick test

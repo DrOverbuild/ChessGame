@@ -1,15 +1,16 @@
 package edu.uca.csci4490.chessgame.model.gamelogic.piece;
 
 import edu.uca.csci4490.chessgame.model.gamelogic.Color;
+import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 import edu.uca.csci4490.chessgame.model.gamelogic.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class Piece implements Serializable {
-	private Color color;
-	private Location location;
-	private String image;
+	private Color color = null;
+	private Location location = null;
+	private String image = null;
 
 	public Piece() {
 	}
@@ -44,7 +45,7 @@ public abstract class Piece implements Serializable {
 		this.image = image;
 	}
 
-	public abstract ArrayList<Location> allMovableLocations();
+	public abstract ArrayList<Location> allMovableLocations(Game game);
 
-	public abstract ArrayList<Location> filterAvailableLocations();
+	public abstract ArrayList<Location> filterAvailableLocations(Game game);
 }
