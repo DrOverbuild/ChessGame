@@ -3,6 +3,7 @@ package edu.uca.csci4490.chessgame.model.gamelogic;
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.gamelogic.piece.*;
 import edu.uca.csci4490.chessgame.server.communication.GameCommunication;
+import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -156,7 +157,49 @@ public class Game implements Serializable {
 	}
 
 	public Piece getPieceAt(Location loc) {
+		if (loc == null) return null;
 		return this.board[loc.getX()][loc.getY()];
+	}
+
+	/**
+	 * Checks if piece is blocked by another piece or by an ally on the destination piece
+	 * @param piece
+	 * @param destination
+	 * @return
+	 */
+	public boolean pieceIsBlocked(Piece piece, Location destination) {
+		if (piece == null || destination == null) return true;
+
+		// check if ally piece is at destination
+		if (getPieceAt(destination) != null &&
+				getPieceAt(destination).getColor() == piece.getColor()) {
+			return true;
+		}
+
+		Location original = piece.getLocation();
+		Direction dir = original.getDirectionOf(destination);
+
+		if (dir == null) return true;
+
+		// return false if L shaped
+		if (dir.isLShaped()) {
+			return false; // note that we already checked for ally piece
+		}
+
+		// check line between locations for piece
+		int distance = 1;
+		Location checkedLoc = original.getRelative(dir, distance);
+		while (checkedLoc != null && !checkedLoc.equals(destination)) {
+			Piece checkedPiece = getPieceAt(checkedLoc);
+
+			if (checkedPiece != null) {
+				return checkedPiece.getColor() == piece.getColor();
+			}
+
+			distance++;
+		}
+
+		return false;
 	}
 
 	public void setPieceOnBoard(byte x, byte y, Piece piece) {
@@ -227,11 +270,11 @@ public class Game implements Serializable {
 	 * @return
 	 */
 	public ArrayList<Location> pieceSelected(Piece piece) {
-		return piece.filterAvailableLocations(this);
+		return piece.filterAvailableLocations(getBoard());
 	}
 
 	public void movePiece(Piece piece, Location to, Class<? extends Piece> promoteTo) {
-		if (piece.filterAvailableLocations(this).contains(to)) {
+		if (piece.filterAvailableLocations(getBoard()).contains(to)) {
 			Piece destinationPiece = getPieceAt(to);
 
 			if (destinationPiece != null) {
