@@ -127,4 +127,33 @@ public class Board implements Serializable {
 		board.movePiece(piece, to);
 		return board;
 	}
+
+	public King getKing(Color color) {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				Piece piece = getPieceAt(x, y);
+
+				if (piece instanceof King && piece.getColor() == color) {
+					return (King)piece;
+				}
+			}
+		}
+
+		return null; // if this happens, something has gone horribly wrong in the game
+	}
+
+	public boolean pieceIsEndangered(Piece piece) {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				Piece potentialThreat = getPieceAt(x, y);
+				if (potentialThreat != null) {
+					if (!potentialThreat.filterAvailableLocations(this).contains(piece.getLocation())) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
 }

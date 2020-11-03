@@ -177,7 +177,21 @@ public class Game implements Serializable {
 	 * @return
 	 */
 	public ArrayList<Location> pieceSelected(Piece piece) {
-		return piece.filterAvailableLocations(getBoard());
+		ArrayList<Location> availableLocations = piece.filterAvailableLocations(getBoard());
+
+		// find locations from array that would put the king in check
+		// we do this outside of the filterAvailableLocations because doing so would cause
+		// unlimited recursion... and we only want to look at the next possible game state
+		ArrayList<Location> toRemove = new ArrayList<>();
+		for (Location location: availableLocations) {
+			Board hypothetical = board.getHypothetical(piece, location);
+			if (hypothetical.pieceIsEndangered(hypothetical.getKing(turn))) {
+				toRemove.add(location);
+			}
+		}
+		availableLocations.removeAll(toRemove);
+
+		return availableLocations;
 	}
 
 	public void movePiece(Piece piece, Location to, Class<? extends Piece> promoteTo) {
