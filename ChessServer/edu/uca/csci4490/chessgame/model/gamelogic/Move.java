@@ -32,4 +32,10 @@ public class Move implements Serializable {
 	public void setTo(Location to) {
 		this.to = to;
 	}
+
+	public Move(Piece piece, Location from, Location to) {
+		this.piece = piece;
+		this.from = from;
+		this.to = to;
+	}
 }

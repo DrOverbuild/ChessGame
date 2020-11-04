@@ -4,6 +4,7 @@ import edu.uca.csci4490.chessgame.model.gamelogic.piece.*;
 import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Board implements Serializable {
 	private Piece[][] board;
@@ -142,11 +143,27 @@ public class Board implements Serializable {
 		return null; // if this happens, something has gone horribly wrong in the game
 	}
 
+	public ArrayList<Piece> allPieces(Color color) {
+		ArrayList<Piece> pieces = new ArrayList<>();
+
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				Piece piece = getPieceAt(x, y);
+
+				if (piece != null && piece.getColor() == color) {
+					pieces.add(piece);
+				}
+			}
+		}
+
+		return pieces;
+	}
+
 	public boolean pieceIsEndangered(Piece piece) {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 				Piece potentialThreat = getPieceAt(x, y);
-				if (potentialThreat != null) {
+				if (potentialThreat != null && potentialThreat.getColor() != piece.getColor()) {
 					if (!potentialThreat.filterAvailableLocations(this).contains(piece.getLocation())) {
 						return true;
 					}

@@ -153,6 +153,18 @@ public class Game implements Serializable {
 		return null;
 	}
 
+	public ArrayList<Location> filterMovesThatPutKingInCheck(ArrayList<Location> availableLocations, Piece piece) {
+		ArrayList<Location> updatedList = new ArrayList<>(availableLocations);
+		for (Location location: availableLocations) {
+			Board hypothetical = board.getHypothetical(piece, location);
+			if (hypothetical.pieceIsEndangered(hypothetical.getKing(turn))) {
+				updatedList.remove(location);
+			}
+		}
+
+		return updatedList;
+	}
+
 	public void capturePiece(Piece piece) {
 		piece.setLocation(null);
 		capturedPieces.add(piece);
@@ -182,16 +194,8 @@ public class Game implements Serializable {
 		// find locations from array that would put the king in check
 		// we do this outside of the filterAvailableLocations because doing so would cause
 		// unlimited recursion... and we only want to look at the next possible game state
-		ArrayList<Location> toRemove = new ArrayList<>();
-		for (Location location: availableLocations) {
-			Board hypothetical = board.getHypothetical(piece, location);
-			if (hypothetical.pieceIsEndangered(hypothetical.getKing(turn))) {
-				toRemove.add(location);
-			}
-		}
-		availableLocations.removeAll(toRemove);
 
-		return availableLocations;
+		return filterMovesThatPutKingInCheck(availableLocations, piece);
 	}
 
 	public void movePiece(Piece piece, Location to, Class<? extends Piece> promoteTo) {
@@ -213,28 +217,49 @@ public class Game implements Serializable {
 				}
 			}
 
+			Location original = piece.getLocation();
+
 			board.movePiece(piece, to);
 
-			checkForCheck();
-			checkForCheckmate();
-			checkForStalemate();
+			moves.add(new Move(piece, original, to));
 
 			// switch turn
 			turn = turn == Color.WHITE ? Color.BLACK : Color.WHITE;
+
+			checkForCheck();
+			checkForCheckmateAndStalemate();
 		} else {
 			System.out.println("Warning - tried to make a move that was not allowed");
 		}
 	}
 
 	public void checkForCheck() {
-		// todo implement
+		inCheck = board.pieceIsEndangered(board.getKing(turn));
 	}
 
-	public void checkForCheckmate() {
-		// todo implement
-	}
+	public void checkForCheckmateAndStalemate() {
+		boolean movesLeft = false;
+		for (Piece p:board.allPieces(turn)) {
+			ArrayList<Location> moves = p.filterAvailableLocations(board);
+			moves = filterMovesThatPutKingInCheck(moves, p);
 
-	public void checkForStalemate() {
-		// todo implement
+			if (moves.size() != 0) {
+				movesLeft = true;
+				break;
+			}
+		}
+
+		if (!movesLeft) {
+			if (inCheck) {
+				checkmate = true;
+				return;
+			} else {
+				stalemate = true;
+			}
+		}
+
+		if (!stalemate) {
+			// todo check for three identical moves in a row
+		}
 	}
 }
