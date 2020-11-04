@@ -1,19 +1,14 @@
 package edu.uca.csci4490.chessgame.model.gamelogic.piece;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
-
+import edu.uca.csci4490.chessgame.model.gamelogic.Color;
 import java.util.ArrayList;
 
 public class Bishop extends Piece {
-	@Override
-	public ArrayList<Location> allMovableLocations() {
-		// TODO implement
-		return null;
-	}
+	public Bishop() { }
 
-	@Override
-	public ArrayList<Location> filterAvailableLocations() {
-		// TODO implement
-		return null;
+	public Bishop(Color color) {
+		super();
+		this.setColor(color);
+		this.setImage("pawn");
 	}
 }

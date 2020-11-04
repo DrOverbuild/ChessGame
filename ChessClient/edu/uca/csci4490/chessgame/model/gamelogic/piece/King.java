@@ -1,19 +1,13 @@
 package edu.uca.csci4490.chessgame.model.gamelogic.piece;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
-
-import java.util.ArrayList;
+import edu.uca.csci4490.chessgame.model.gamelogic.Color;
 
 public class King extends Piece {
-	@Override
-	public ArrayList<Location> allMovableLocations() {
-		// TODO implement
-		return null;
-	}
+	public King() { }
 
-	@Override
-	public ArrayList<Location> filterAvailableLocations() {
-		// TODO implement
-		return null;
+	public King(Color color) {
+		super();
+		this.setColor(color);
+		this.setImage("pawn");
 	}
 }
