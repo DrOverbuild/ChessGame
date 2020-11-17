@@ -83,4 +83,15 @@ public class Player implements Serializable {
 				", losses=" + losses +
 				'}';
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Player)) return false;
+
+		Player player = (Player) o;
+
+		if (id != player.id) return false;
+		return username != null ? username.equals(player.username) : player.username == null;
+	}
 }
