@@ -109,6 +109,7 @@ public class GameCommunication {
 		game.movePiece(data.getPiece(), data.getMoveTo(), data.getPromoteTo());
 
 		if (game.isCheckmate() || game.isStalemate()) {
+			// todo update players' xp, wins/losses, etc through player manager
 			sendEndOfGameData(game);
 		} else {
 			sendNextTurn(game);
