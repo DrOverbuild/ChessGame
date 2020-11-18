@@ -41,6 +41,14 @@ public class Game implements Serializable {
 		this.capturedPieces = new ArrayList<>();
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Game)) return false;
+		Game game = (Game) o;
+		return id == game.getId();
+	}
+
 	public GameCommunication getCommunication() {
 		return communication;
 	}
@@ -153,6 +161,19 @@ public class Game implements Serializable {
 		return null;
 	}
 
+	public void playerAbandonedGame(Player p) {
+		// I don't feel good about this hacky method to force a winner when the other player
+		// abandons the game but this is how this class was designed and I'm not about to
+		// refactor this thing.
+		if (getWhite().equals(p)) {
+			checkmate = true;
+			turn = Color.BLACK;
+		} else if (getBlack().equals(p)) {
+			checkmate = true;
+			turn = Color.WHITE;
+		}
+	}
+
 	public ArrayList<Location> filterMovesThatPutKingInCheck(ArrayList<Location> availableLocations, Piece piece) {
 		ArrayList<Location> updatedList = new ArrayList<>(availableLocations);
 		for (Location location: availableLocations) {
@@ -189,6 +210,10 @@ public class Game implements Serializable {
 	 * @return
 	 */
 	public ArrayList<Location> pieceSelected(Piece piece) {
+		if (stalemate || checkmate) {
+			return new ArrayList<>();
+		}
+
 		ArrayList<Location> availableLocations = piece.filterAvailableLocations(getBoard());
 
 		// find locations from array that would put the king in check
@@ -199,7 +224,7 @@ public class Game implements Serializable {
 	}
 
 	public void movePiece(Piece piece, Location to, Class<? extends Piece> promoteTo) {
-		if (piece.filterAvailableLocations(getBoard()).contains(to)) {
+		if (piece.filterAvailableLocations(getBoard()).contains(to) || stalemate || checkmate) {
 			Piece destinationPiece = board.getPieceAt(to);
 
 			if (destinationPiece != null) {

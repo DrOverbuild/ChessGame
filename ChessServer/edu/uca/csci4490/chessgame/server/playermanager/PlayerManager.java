@@ -5,7 +5,6 @@ import edu.uca.csci4490.chessgame.model.data.CreateAccountData;
 import edu.uca.csci4490.chessgame.model.data.PlayerLoginData;
 import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 import edu.uca.csci4490.chessgame.server.ChessServer;
-import edu.uca.csci4490.chessgame.server.communication.ChessServerCommunication;
 import edu.uca.csci4490.chessgame.server.database.Database;
 import edu.uca.csci4490.chessgame.server.database.UserAlreadyExistsException;
 import ocsf.server.ConnectionToClient;
@@ -24,15 +23,14 @@ public class PlayerManager {
 
 	private ChessServer server;
 	private Database database;
-	private ChessServerCommunication comms;
 
-	public PlayerManager(ChessServer server, ChessServerCommunication comms) {
+	public PlayerManager(ChessServer server) {
 		allLoggedInPlayers = new HashSet<>();
 		waitingRoom = new HashSet<>();
 		challenges = new HashMap<>();
 
 		this.server = server;
-		this.comms = comms;
+		this.database = new Database();
 	}
 
 	/**
@@ -44,13 +42,24 @@ public class PlayerManager {
 		return new HashSet<>(waitingRoom);
 	}
 
+	/**
+	 * Remember, when calling this, all players in the waiting room must be sent the update
+	 */
 	public void movePlayerToWaitingRoom(Player p) {
 		waitingRoom.add(p);
-		comms.getWaitingRoomCommunication().sendWaitingRoomToAll(getWaitingRoom());
 	}
 
+
+	/**
+	 * Remember, when calling this, all players in the waiting room must be sent the update
+	 */
 	public void removePlayerFromWaitingRoom(Player p) {
 		waitingRoom.remove(p);
+		challenges.remove(p);
+
+		for (Player challenger: challenges.keySet()) {
+			challenges.get(challenger).remove(p);
+		}
 	}
 
 	public Player playerByClient(ConnectionToClient client) {
@@ -78,17 +87,19 @@ public class PlayerManager {
 	 * If the request was rejected, notify the other player {from}.
 	 */
 	public void playerResponded(Player from, Player to, boolean accepted) {
-		if (accepted) {
-			if (waitingRoom.contains(from) && waitingRoom.contains(to) &&
-					playerHasChallengedAnotherPlayer(from, to)) {
+		if (!waitingRoom.contains(from) || !waitingRoom.contains(to) ||
+				!playerHasChallengedAnotherPlayer(from, to)) {
+			return; // this shouldn't happen
+		}
+
+		Set<Player> playersChallenges = challenges.get(from);
+		if (playersChallenges != null) {
+			playersChallenges.remove(to);
+
+			if (accepted) {
+				removePlayerFromWaitingRoom(from);
+				removePlayerFromWaitingRoom(to);
 				server.startGame(from, to);
-			} else {
-				// todo notify responder of problem
-			}
-		} else {
-			Set<Player> playersChallenges = challenges.get(from);
-			if (playersChallenges != null) {
-				playersChallenges.remove(to);
 			}
 		}
 	}
@@ -151,10 +162,14 @@ public class PlayerManager {
 			challenges.get(p).remove(p);
 		}
 
-		// TODO check if player is in game and end game if so
+		Game game = server.gameOfPlayer(remove);
+		if (game != null) {
+			game.playerAbandonedGame(remove);
+			server.endGame(game);
+		}
 	}
 
 	public void updateStats(Game game) {
-
+		// TODO implement
 	}
 }
