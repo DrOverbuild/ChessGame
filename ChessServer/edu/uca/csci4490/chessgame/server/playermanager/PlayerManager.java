@@ -3,12 +3,15 @@ package edu.uca.csci4490.chessgame.server.playermanager;
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.CreateAccountData;
 import edu.uca.csci4490.chessgame.model.data.PlayerLoginData;
+import edu.uca.csci4490.chessgame.model.gamelogic.Color;
 import edu.uca.csci4490.chessgame.model.gamelogic.Game;
+import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
 import edu.uca.csci4490.chessgame.server.ChessServer;
 import edu.uca.csci4490.chessgame.server.database.Database;
 import edu.uca.csci4490.chessgame.server.database.UserAlreadyExistsException;
 import ocsf.server.ConnectionToClient;
 
+import javax.management.remote.rmi._RMIConnection_Stub;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -170,6 +173,41 @@ public class PlayerManager {
 	}
 
 	public void updateStats(Game game) {
-		// TODO implement
+		Player winner = game.getWinner();
+		Player loser = game.getLoser();
+		Color winnerColor = Color.WHITE;
+		Color loserColor = Color.BLACK;
+
+		if (winner.equals(game.getBlack())) {
+			winnerColor = Color.BLACK;
+			loserColor = Color.WHITE;
+		}
+
+		winner.setWins(winner.getWins() + 1);
+		loser.setLosses(loser.getLosses() + 1);
+
+		// get xp for winner (100 for winning + however many pieces are left)
+
+		// king: 0 // this piece will always be on the board so it doesnt count
+		// queen: 10
+		// bishop: 8
+		// knight: 7
+		// rook: 6
+		// pawn: 1
+		int winnerXP = winner.getXp() + 100;
+		int loserXP = loser.getXp();
+		for (Piece p: game.getBoard().allPieces(null)) {
+			if (p.getColor().equals(winnerColor)) {
+				winnerXP+=p.getWorth();
+			} else {
+				loserXP+=p.getWorth();
+			}
+		}
+
+		winner.setXp(winnerXP);
+		loser.setXp(loserXP);
+
+		database.updatePlayerData(winner);
+		database.updatePlayerData(loser);
 	}
 }

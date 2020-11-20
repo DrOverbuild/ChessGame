@@ -44,6 +44,11 @@ public class Bishop extends Piece {
 	}
 
 	@Override
+	public int getWorth() {
+		return 8;
+	}
+
+	@Override
 	public Piece copy() {
 		Piece bishop = new Bishop();
 		bishop.setColor(this.getColor());

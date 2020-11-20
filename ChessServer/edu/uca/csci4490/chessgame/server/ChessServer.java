@@ -48,6 +48,7 @@ public class ChessServer {
 
 	public void startGame(Player from, Player to) {
 		Game newGame = new Game(gameId++, from, to);
+		newGame.getBoard().setupBoard();
 		runningGames.add(newGame);
 		comms.getGameCommunication().sendStartOfGame(newGame);
 	}
@@ -58,7 +59,7 @@ public class ChessServer {
 		playerManager.movePlayerToWaitingRoom(game.getWhite());
 		getComms().getWaitingRoomCommunication().sendWaitingRoomToAll(getPlayerManager().getWaitingRoom());
 
-		// todo update players' xp, wins/losses, etc through player manager
+		playerManager.updateStats(game);
 	}
 
 	public Game gameOfPlayer(Player p) {

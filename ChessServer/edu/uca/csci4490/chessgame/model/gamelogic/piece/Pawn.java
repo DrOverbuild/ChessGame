@@ -110,4 +110,9 @@ public class Pawn extends Piece {
 		pawn.setImage(this.getImage());
 		return pawn;
 	}
+
+	@Override
+	public int getWorth() {
+		return 1;
+	}
 }
