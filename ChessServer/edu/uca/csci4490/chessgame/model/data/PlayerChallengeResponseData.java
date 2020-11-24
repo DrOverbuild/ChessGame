@@ -7,9 +7,9 @@ public class PlayerChallengeResponseData {
 	private Player to;
 	private Player from;
 	
-	public boolean accepted = false;
+	private boolean accepted = false;
 	
-	public void PlayerAcceptChallengeData(Player to, Player from) {
+	public PlayerChallengeResponseData(Player from, Player to, Boolean accepted) {
 		this.to = to;
 		this.from = from;
 		this.accepted = accepted;

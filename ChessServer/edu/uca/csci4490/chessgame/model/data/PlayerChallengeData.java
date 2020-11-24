@@ -7,9 +7,9 @@ public class PlayerChallengeData {
 	private Player to;
 	private Player from;
 	
-	public PlayerChallengeData(Player to, Player from) {
-		this.to = to;
+	public PlayerChallengeData(Player from, Player to) {
 		this.from = from;
+		this.to = to;
 	}
 	
 	public void setTo(Player to) {

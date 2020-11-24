@@ -12,12 +12,16 @@ import ocsf.server.ConnectionToClient;
 public class ChessServerCommunication extends AbstractServer {
 	
 	//Data fields for Chess Server
-	//private PlayerLoginCommunication;
-	//private WaitingRoomCommuniciation;
-	//private GameCommunication;
+	private PlayerLoginCommunication playerLoginCommunication;
+	private WaitingRoomCommunication waitingRoomCommunication;
+	private GameCommunication gameCommunication;
 	
 	public ChessServerCommunication(int port) {
 		super(port);
+		
+		// initialize private data fields
+		// etc 
+		playerLoginCommunication = new PlayerLoginCommunication();
 	}
 
 	@Override
@@ -110,27 +114,27 @@ public class ChessServerCommunication extends AbstractServer {
 		System.out.println("Client " + client.getId() + " connected\n");
 	}
 	
-	public void setPlayerLoginCommunication(){
-		
+	public void setPlayerLoginCommunication(PlayerLoginCommunication playerLoginCommunication){
+		this.playerLoginCommunication = playerLoginCommunication;
 	}
 	
-	public void getPlayerLoginCommunication(){
-		
+	public PlayerLoginCommunication getPlayerLoginCommunication(){
+		return playerLoginCommunication;
 	}
-	public void setWaitingRoomCommunication(){
-		
-	}
-	
-	public void getWaitingRoomCommunication(){
-	
+	public void setWaitingRoomCommunication(WaitingRoomCommunication waitingRoomCommunication){
+		this.waitingRoomCommunication = waitingRoomCommunication;
 	}
 	
-	public void setGameCommunication() {
-		
+	public WaitingRoomCommunication getWaitingRoomCommunication(){
+		return waitingRoomCommunication;
 	}
 	
-	public void getGameCommunication() {
-		
+	public void setGameCommunication(GameCommunication gameCommunication) {
+		this.gameCommunication = gameCommunication;
+	}
+	
+	public GameCommunication getGameCommunication() {
+		return gameCommunication;
 	}
 	
 	
