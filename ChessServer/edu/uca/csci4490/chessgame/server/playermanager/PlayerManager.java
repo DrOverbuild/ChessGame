@@ -11,7 +11,6 @@ import edu.uca.csci4490.chessgame.server.database.Database;
 import edu.uca.csci4490.chessgame.server.database.UserAlreadyExistsException;
 import ocsf.server.ConnectionToClient;
 
-import javax.management.remote.rmi._RMIConnection_Stub;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;

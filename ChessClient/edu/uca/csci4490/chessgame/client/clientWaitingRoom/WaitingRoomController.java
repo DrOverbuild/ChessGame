@@ -4,6 +4,8 @@ import edu.uca.csci4490.chessgame.client.ChessClient;
 import edu.uca.csci4490.chessgame.client.clientLoginScreen.LoginView;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
+import edu.uca.csci4490.chessgame.model.data.PlayerChallengeData;
+import edu.uca.csci4490.chessgame.model.data.PlayerChallengeResponseData;
 import edu.uca.csci4490.chessgame.model.data.StartOfGameData;
 import edu.uca.csci4490.chessgame.model.data.WaitingRoomData;
 
@@ -99,7 +101,7 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 
 	}
 
-	public void receivePlayerChallengeResponse(PlayerChallengeResponse data) {
+	public void receivePlayerChallengeResponse(PlayerChallengeResponseData data) {
 
 	}
 
