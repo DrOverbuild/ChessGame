@@ -33,14 +33,6 @@ public class PlayerTableModel extends AbstractTableModel {
 			return player.getXp();
 		}
 
-		if (columnIndex == 2) {
-			return player.getWins();
-		}
-
-		if (columnIndex == 3) {
-			return player.getLosses();
-		}
-
 		return "";
 	}
 

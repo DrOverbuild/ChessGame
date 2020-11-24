@@ -1,13 +1,35 @@
 package edu.uca.csci4490.chessgame.client;
 
+import edu.uca.csci4490.chessgame.client.clientLoginScreen.CreateAccountController;
+import edu.uca.csci4490.chessgame.client.clientLoginScreen.CreateAccountView;
+import edu.uca.csci4490.chessgame.client.clientLoginScreen.LoginScreenController;
+import edu.uca.csci4490.chessgame.client.clientLoginScreen.LoginView;
+import edu.uca.csci4490.chessgame.client.clientWaitingRoom.WaitingRoomController;
+import edu.uca.csci4490.chessgame.client.clientWaitingRoom.WaitingRoomPanel;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
+import edu.uca.csci4490.chessgame.model.Player;
+import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class ChessClient extends JFrame {
+	private static final String LOGIN_PANEL = "login";
+	private static final String CREATE_ACCOUNT_PANEL = "create";
+	private static final String WAITING_ROOM_PANEL = "waiting";
+	private static final String GAME_SCREEN_PANEL = "game";
+
+
+	private LoginScreenController lc;
+	private CreateAccountController cc;
+	private WaitingRoomController wc;
+	private GameRoomControl gc;
+
+	private CardLayout layout;
+	private JPanel container;
 
 	// Constructor that creates the client GUI.
 	public ChessClient() {
@@ -27,38 +49,30 @@ public class ChessClient extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Create the card layout container.
-		CardLayout cardLayout = new CardLayout();
-		JPanel container = new JPanel(cardLayout);
+		layout = new CardLayout();
+		container = new JPanel(layout);
 
 		//Create the Controllers next
 		//Next, create the Controllers
-		InitialControl ic = new InitialControl(container, client);
-		LoginControl lc = new LoginControl(container, client);
-		CreateAccountControl cc = new CreateAccountControl(container, client);
-		WaitingRoomControl wc = new WaitingRoomControl(container, client);
-		GameRoomControl gc = new GameRoomControl(container, client);
-
-		//Set the client info
-		client.setLoginControl(lc);
-		client.setCreateAccountControl(cc);
-
+		lc = new LoginScreenController(container, client);
+		cc = new CreateAccountController(container, client);
+		wc = new WaitingRoomController(container, this, client);
+		gc = new GameRoomControl(container, client);
 
 		// Create the four views. (need the controller to register with the Panels
-		JPanel view1 = new InitialPanel(ic);
-		JPanel view2 = new LoginPanel(lc);
-		JPanel view3 = new CreateAccountPanel(cc);
+		JPanel view2 = new LoginView(lc);
+		JPanel view3 = new CreateAccountView(cc);
 		JPanel view4 = new WaitingRoomPanel(wc);
-		JPanel view5 = new GameRoomPanel(gc);
+//		JPanel view5 = new GameRoomPanel(gc);
 
 		// Add the views to the card layout container.
-		container.add(view1, "1");
-		container.add(view2, "2");
-		container.add(view3, "3");
-		container.add(view4, "4");
-		container.add(view5, "5");
+		container.add(view2, LOGIN_PANEL);
+		container.add(view3, CREATE_ACCOUNT_PANEL);
+		container.add(view4, WAITING_ROOM_PANEL);
+		container.add(view5, GAME_SCREEN_PANEL);
 
 		// Show the initial view in the card layout.
-		cardLayout.show(container, "1");
+		layout.show(container, LOGIN_PANEL);
 
 		// Add the card layout container to the JFrame.
 		// GridBagLayout makes the container stay centered in the window.
@@ -68,6 +82,16 @@ public class ChessClient extends JFrame {
 		// Show the JFrame.
 		this.setSize(550, 350);
 		this.setVisible(true);
+	}
+
+	public void transitionToWaitingRoom(Player loggedInPlayer, ArrayList<Player> players) {
+		wc.setLoggedInPlayer(loggedInPlayer);
+		wc.setPlayers(players);
+		layout.show(container, WAITING_ROOM_PANEL);
+	}
+
+	public void transitionToGameScreen(Game game) {
+
 	}
 
 	// Main function that creates the client GUI when the program is started.

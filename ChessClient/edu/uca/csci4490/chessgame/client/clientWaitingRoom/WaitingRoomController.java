@@ -34,6 +34,9 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	public WaitingRoomController(JPanel container, ChessClient client, ChessClientCommunication comms) {
 		this.comms = comms;
 		this.client = client;
+
+		playerListPanel = new PlayerListPanel(this);
+		playerViewPanel = new PlayerViewPanel(this);
 	}
 
 	// Handle button clicks.
@@ -63,6 +66,14 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 		cardLayout.show(container, "4");
 	}
 
+	public PlayerListPanel getListPanel() {
+		return playerListPanel;
+	}
+
+	public PlayerViewPanel getDetailPanel() {
+		return playerViewPanel;
+	}
+
 	public void setLoggedInPlayer(Player player) {
 		this.loggedInPlayer = player;
 	}
@@ -76,7 +87,7 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	private void setSelectedPlayer(Player p) {
-
+		playerViewPanel.setPlayer(p);
 	}
 
 	public void receiveWaitingRoom(WaitingRoomData data) {
