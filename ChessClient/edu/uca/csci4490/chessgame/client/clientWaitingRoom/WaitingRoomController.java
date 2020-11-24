@@ -4,10 +4,7 @@ import edu.uca.csci4490.chessgame.client.ChessClient;
 import edu.uca.csci4490.chessgame.client.clientLoginScreen.LoginView;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
-import edu.uca.csci4490.chessgame.model.data.PlayerChallengeData;
-import edu.uca.csci4490.chessgame.model.data.PlayerChallengeResponseData;
-import edu.uca.csci4490.chessgame.model.data.StartOfGameData;
-import edu.uca.csci4490.chessgame.model.data.WaitingRoomData;
+import edu.uca.csci4490.chessgame.model.data.*;
 import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 
 import javax.swing.*;
@@ -63,8 +60,7 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 		// The log out button takes the user back to the login screen
 		// the card layout number might need to be changed
 		if (command.equals("Log out")) {
-			CardLayout cardLayout = (CardLayout) container.getLayout();
-			cardLayout.show(container, "1");
+			sendPlayerLogout();
 		}
 
 		else if (command.equals("Challenge")) {
@@ -182,6 +178,24 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 			System.exit(-1);
 		}
 	}
+
+	public void sendPlayerLogout() {
+		PlayerLogoutData data = new PlayerLogoutData();
+		data.setPlayer(loggedInPlayer);
+
+		try {
+			comms.sendToServer(data);
+		} catch (IOException e) {
+			System.out.println("FATAL - Disconnected from server");
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+		loggedInPlayer = null;
+
+		client.transitionToLoginScreen();
+	}
+
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {

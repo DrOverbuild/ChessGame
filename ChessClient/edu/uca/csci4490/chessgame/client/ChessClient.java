@@ -84,6 +84,10 @@ public class ChessClient extends JFrame {
 		this.setVisible(true);
 	}
 
+	public void transitionToLoginScreen() {
+		layout.show(container, LOGIN_PANEL);
+	}
+
 	public void transitionToWaitingRoom(Player loggedInPlayer, ArrayList<Player> players) {
 		wc.setLoggedInPlayer(loggedInPlayer);
 		wc.setPlayers(players);
@@ -98,5 +102,6 @@ public class ChessClient extends JFrame {
 	public static void main(String[] args) {
 		new ChessClient();
 	}
+
 
 }
