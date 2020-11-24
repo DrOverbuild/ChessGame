@@ -18,19 +18,29 @@ public class PlayerTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 4;
+		return 2;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Player player = controller.getWaitingRoomPlayers().get(rowIndex);
 
+
 		if (columnIndex == 0) {
 			return player.getUsername();
 		}
 
 		if (columnIndex == 1) {
-			return player.getXp();
+			boolean isChallenger = controller.getChallengers().contains(player);
+			boolean isChallengee = controller.getChallengees().contains(player);
+
+			if (isChallenger) {
+				return "Challenged You";
+			} else if (isChallengee) {
+				return "Challenged";
+			} else if (controller.getLoggedInPlayer().equals(player)) {
+				return "You";
+			}
 		}
 
 		return "";
@@ -38,18 +48,11 @@ public class PlayerTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int i) {
-		switch (i) {
-			case 0:
-				return "Player";
-			case 1:
-				return "XP";
-			case 2:
-				return "Wins";
-			case 3:
-				return "Losses";
-			default:
-				return "";
+		if (i == 0) {
+			return "Player";
 		}
+
+		return "";
 	}
 
 	@Override

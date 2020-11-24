@@ -8,6 +8,7 @@ import edu.uca.csci4490.chessgame.model.data.PlayerChallengeData;
 import edu.uca.csci4490.chessgame.model.data.PlayerChallengeResponseData;
 import edu.uca.csci4490.chessgame.model.data.StartOfGameData;
 import edu.uca.csci4490.chessgame.model.data.WaitingRoomData;
+import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -16,11 +17,24 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class WaitingRoomController implements ActionListener, ListSelectionListener {
 
 	private Player loggedInPlayer;
+
+	private Player selectedPlayer = null;
+
+	/**
+	 * List of players that have challenged the logged in player to a game
+	 */
+	private ArrayList<Player> challengers;
+
+	/**
+	 * List of player that the logged in player has challenged;
+	 */
+	private ArrayList<Player> challengees;
 
 	private ArrayList<Player> waitingRoomPlayers = new ArrayList<>();
 
@@ -48,15 +62,18 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 
 		// The log out button takes the user back to the login screen
 		// the card layout number might need to be changed
-		if (command == "Log Out") {
+		if (command.equals("Log out")) {
 			CardLayout cardLayout = (CardLayout) container.getLayout();
 			cardLayout.show(container, "1");
 		}
 
-		// The Submit button submits the login information to the server.
-		else if (command == "Accept") {
+		else if (command.equals("Challenge")) {
+			sendPlayerChallenge(selectedPlayer);
+		}
 
-			// not sure what specifically needs to happen here
+		// The Submit button submits the login information to the server.
+		else if (command.equals("Accept")) {
+			sendPlayerChallengeResponse(selectedPlayer, true);
 		}
 	}
 
@@ -74,6 +91,18 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 
 	public PlayerViewPanel getDetailPanel() {
 		return playerViewPanel;
+	}
+
+	public ArrayList<Player> getChallengers() {
+		return challengers;
+	}
+
+	public ArrayList<Player> getChallengees() {
+		return challengees;
+	}
+
+	public Player getLoggedInPlayer() {
+		return loggedInPlayer;
 	}
 
 	public void setLoggedInPlayer(Player player) {
@@ -98,25 +127,60 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	public void receivePlayerChallenge(PlayerChallengeData data) {
+		if (data.getTo().equals(loggedInPlayer)) {
+			challengers.add(data.getFrom());
+			playerListPanel.updatePlayers();
 
+			// refresh challenge button if the challenge was from the currently selected player
+			if (selectedPlayer.equals(data.getFrom())) {
+				setLoggedInPlayer(selectedPlayer);
+			}
+		} else {
+			System.out.println("WARNING - received a challenge but currently logged in player is not to whom" +
+					" this challenge was directed.");
+		}
 	}
 
 	public void receivePlayerChallengeResponse(PlayerChallengeResponseData data) {
-
+		if (data.getFrom().equals(loggedInPlayer)) {
+			challengers.remove(data.getFrom());
+			playerListPanel.updatePlayers();
+		} else {
+			System.out.println("WARNING - received a challenge response but currently logged in player is not to whom" +
+					" this response was directed.");
+		}
 	}
 
 	public void receiveStartOfGame(StartOfGameData data) {
+		Game game = data.getGame();
+		challengers.remove(game.getBlack());
+		challengers.remove(game.getWhite());
+
 		this.client.transitionToGameScreen(data.getGame());
 	}
 
 	public void sendPlayerChallenge(Player to) {
-		// TODO setup data object
+		PlayerChallengeData data = new PlayerChallengeData(loggedInPlayer, to);
 
-//		client.
+		try {
+			comms.sendToServer(data);
+		} catch (IOException e) {
+			System.out.println("FATAL - Disconnected from server");
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 
 	public void sendPlayerChallengeResponse(Player to, boolean accepted) {
-		// TODO setup data object
+		PlayerChallengeResponseData data = new PlayerChallengeResponseData(loggedInPlayer, to, accepted);
+
+		try {
+			comms.sendToServer(data);
+		} catch (IOException e) {
+			System.out.println("FATAL - Disconnected from server");
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 
 	@Override

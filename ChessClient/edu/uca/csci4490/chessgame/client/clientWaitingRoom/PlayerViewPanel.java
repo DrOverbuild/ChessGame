@@ -11,10 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 public class PlayerViewPanel extends JPanel {
-
+	private WaitingRoomController controller;
 
 	private JButton logoutBtn;
-	private JButton acceptBtn;
+	private JButton challengeBtn;
 	private JLabel firstPlaceImg;
 	private JLabel secondPlaceImg;
 	private JLabel thirdPlaceImg;
@@ -26,7 +26,8 @@ public class PlayerViewPanel extends JPanel {
 	private JLabel lossesDataLabel;
 
 	public PlayerViewPanel(WaitingRoomController wrc) {
-		
+		this.controller = wrc;
+
 		JPanel panel = new JPanel(new GridLayout(3, 1, 0, 10));
 		
 		
@@ -81,13 +82,15 @@ public class PlayerViewPanel extends JPanel {
 		
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout());
-		JButton logoutBtn = new JButton("Log Out");
+		logoutBtn = new JButton("Log out");
+		logoutBtn.setActionCommand("Log out");
 		logoutBtn.setSize(10,10);
 	    logoutBtn.addActionListener(wrc);
-	    JButton acceptBtn = new JButton("Accept");
-	    acceptBtn.addActionListener(wrc);    
+	    challengeBtn = new JButton("Challenge");
+	    challengeBtn.setEnabled(false);
+	    challengeBtn.addActionListener(wrc);
 	    buttonPanel.add(logoutBtn);
-	    buttonPanel.add(acceptBtn);
+	    buttonPanel.add(challengeBtn);
 	    panel.add(buttonPanel);
 		
 		
@@ -101,5 +104,19 @@ public class PlayerViewPanel extends JPanel {
 		xpDataLabel.setText(player.getXp() + "");
 		winsDataLabel.setText(player.getWins() + "");
 		lossesDataLabel.setText(player.getLosses() + "");
+
+		if (controller.getChallengers().contains(player)) {
+			challengeBtn.setText("Accept");
+			challengeBtn.setActionCommand("Accept");
+			challengeBtn.setEnabled(true);
+		} else if (controller.getLoggedInPlayer().equals(player)) {
+			challengeBtn.setText("Challenge");
+			challengeBtn.setActionCommand("Challenge");
+			challengeBtn.setEnabled(false);
+		} else {
+			challengeBtn.setText("Challenge");
+			challengeBtn.setActionCommand("Challenge");
+			challengeBtn.setEnabled(true);
+		}
 	}
 }
