@@ -1,4 +1,4 @@
-package clientWaitingRoom;
+package edu.uca.csci4490.chessgame.client.clientWaitingRoom;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -27,9 +27,6 @@ public class PlayerViewPanel extends JPanel {
 	private JLabel firstPlaceImg;
 	private JLabel secondPlaceImg;
 	private JLabel thirdPlaceImg;
-	
-	import PlayerListPanel;
-	
 	
 	public PlayerViewPanel(WaitingRoomController wrc) throws IOException {
 		

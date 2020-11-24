@@ -1,4 +1,7 @@
-package clientLoginScreen;
+package edu.uca.csci4490.chessgame.client.clientLoginScreen;
+
+import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
+import edu.uca.csci4490.chessgame.model.data.PlayerLoginData;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -11,10 +14,10 @@ public class LoginScreenController implements ActionListener {
 
 	// Private data fields for the container and chat client.
 	private JPanel container;
-	private ChatClient client;
+	private ChessClientCommunication client;
 
 	// Constructor for the login controller.
-	public LoginScreenController(JPanel container, ChatClient client)
+	public LoginScreenController(JPanel container, ChessClientCommunication client)
 	{
 		this.container = container;
 		this.client = client;

@@ -1,4 +1,7 @@
-package clientLoginScreen;
+package edu.uca.csci4490.chessgame.client.clientLoginScreen;
+
+import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
+import edu.uca.csci4490.chessgame.model.data.CreateAccountData;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -10,13 +13,13 @@ import javax.swing.JPanel;
 public class CreateAccountController implements ActionListener{
 	 // Private data fields for the container and chat client.
 	  private JPanel container;
-	  private ChessClient client;
+	  private ChessClientCommunication client;
 	  
 	  // Constructor for the create account controller.
-	  public CreateAccountController(JPanel container, ChessClient client)
+	  public CreateAccountController(JPanel container, ChessClientCommunication client)
 	  {
 	    this.container = container;
-	    this.client = client;
+//	    this.client = client;
 	  }
 	  
 	  // Handle button clicks.
@@ -77,7 +80,7 @@ public class CreateAccountController implements ActionListener{
 	  public void createAccountSuccess()
 	  {
 	    CreateAccountView createAccountView = (CreateAccountView)container.getComponent(2);
-	    ClientGUI clientGUI = (ClientGUI)SwingUtilities.getWindowAncestor(createAccountPanel);
+//	    ClientGUI clientGUI = (ClientGUI)SwingUtilities.getWindowAncestor(createAccountPanel);
 	    //clientGUI.setUser(new User(createAccountPanel.getUsername(), createAccountPanel.getPassword()));
 	    CardLayout cardLayout = (CardLayout)container.getLayout();
 	    cardLayout.show(container, "4");
