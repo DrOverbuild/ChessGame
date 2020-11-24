@@ -1,43 +1,34 @@
 package edu.uca.csci4490.chessgame.client.clientLoginScreen;
 
-import java.awt.Color;
-import java.awt.GridLayout;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
+import java.awt.*;
 
 
-public class LoginView extends JPanel{
-	public LoginView() {
-	}
+public class LoginView extends JPanel {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JLabel errorText;
-	
-	 // Getter for the text in the username field.
-	  public String getUsername()
-	  {
-	    return usernameField.getText();
-	  }
-	  
-	  // Getter for the text in the password field.
-	  public String getPassword()
-	  {
-	    return new String(passwordField.getPassword());
-	  }
-	  
-	  // Setter for the error text.
-	  public void setError(String error)
-	  {
-	    errorText.setText(error);
-	  }
+
+	public LoginView() {
+	}
+
+	// Getter for the text in the username field.
+	public String getUsername() {
+		return usernameField.getText();
+	}
+
+	// Getter for the text in the password field.
+	public String getPassword() {
+		return new String(passwordField.getPassword());
+	}
+
+	// Setter for the error text.
+	public void setError(String error) {
+		errorText.setText(error);
+	}
 
 	// Constructor for the login panel.
-	public void LoginView(LoginScreenController lc)
-	{
+	public void LoginView(LoginScreenController lc) {
 		// Create the controller and set it in the chat client.
 		//LoginControl controller = new LoginControl(container, client);
 		//client.setLoginControl(controller);
@@ -47,7 +38,7 @@ public class LoginView extends JPanel{
 		JPanel labelPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 		errorText = new JLabel("", JLabel.CENTER);
 		errorText.setForeground(Color.RED);
-		
+
 		// not included in original image drawn by jasper
 //		JLabel instructionLabel = new JLabel("Enter your username and password to log in.", JLabel.CENTER);
 //		labelPanel.add(errorText);
@@ -69,7 +60,7 @@ public class LoginView extends JPanel{
 		JButton createAccountBtn = new JButton("Create Account");
 		createAccountBtn.addActionListener(lc);
 		JButton signInBtn = new JButton("Sign In");
-		signInBtn.addActionListener(lc);    
+		signInBtn.addActionListener(lc);
 		buttonPanel.add(signInBtn);
 		buttonPanel.add(signInBtn);
 
