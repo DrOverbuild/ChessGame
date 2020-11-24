@@ -82,6 +82,5 @@ public class ChessClient extends JFrame{
 	  {
 	    new ChessClient();
 	  }
-	}
 
 }

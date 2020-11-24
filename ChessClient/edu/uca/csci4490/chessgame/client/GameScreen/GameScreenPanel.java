@@ -8,10 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import edu.uca.csci4490.chessgame.model.Player;
-import edu.uca.csci4490.chessgame.model.gamelogic;
-import edu.uca.csci4490.chessgame.model.gamelogic.Board;
-import edu.uca.csci4490.chessgame.model.gamelogic.piece;
-
 public class GameScreenPanel extends JPanel {
 	
 	public GameScreenPanel() {
