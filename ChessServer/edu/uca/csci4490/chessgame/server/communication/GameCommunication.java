@@ -109,6 +109,7 @@ public class GameCommunication {
 		game.movePiece(data.getPiece(), data.getMoveTo(), data.getPromoteTo());
 
 		if (game.isCheckmate() || game.isStalemate()) {
+			server.endGame(game);
 			sendEndOfGameData(game);
 		} else {
 			sendNextTurn(game);

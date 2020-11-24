@@ -52,4 +52,9 @@ public class Queen extends Piece {
 		queen.setImage(this.getImage());
 		return queen;
 	}
+
+	@Override
+	public int getWorth() {
+		return 10;
+	}
 }

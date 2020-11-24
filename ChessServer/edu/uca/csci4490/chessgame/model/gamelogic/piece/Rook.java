@@ -51,4 +51,9 @@ public class Rook extends Piece {
 		rook.setImage(this.getImage());
 		return rook;
 	}
+
+	@Override
+	public int getWorth() {
+		return 6;
+	}
 }
