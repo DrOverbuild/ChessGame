@@ -1,24 +1,39 @@
 package edu.uca.csci4490.chessgame.client.clientWaitingRoom;
 
+import edu.uca.csci4490.chessgame.client.ChessClient;
 import edu.uca.csci4490.chessgame.client.clientLoginScreen.LoginView;
+import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
+import edu.uca.csci4490.chessgame.model.Player;
+import edu.uca.csci4490.chessgame.model.data.StartOfGameData;
+import edu.uca.csci4490.chessgame.model.data.WaitingRoomData;
 
-import java.awt.CardLayout;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import javax.swing.JPanel;
+public class WaitingRoomController implements ActionListener, ListSelectionListener {
 
-public class WaitingRoomController implements ActionListener {
+	private Player loggedInPlayer;
+
+	private ArrayList<Player> waitingRoomPlayers = new ArrayList<>();
 
 	// Private data fields for the container and chat client.
 	private JPanel container;
-//	private ChessClientCommunication client;
+	private ChessClient client;
+	private ChessClientCommunication comms;
+
+	private PlayerListPanel playerListPanel;
+	private PlayerViewPanel playerViewPanel;
 
 	// Constructor for the login controller.
-	public WaitingRoomController(JPanel container /*, ChatClient client*/)
-	{
-		this.container = container;
-//		this.client = client;
+	public WaitingRoomController(JPanel container, ChessClient client, ChessClientCommunication comms) {
+		this.comms = comms;
+		this.client = client;
 	}
 
 	// Handle button clicks.
@@ -41,18 +56,74 @@ public class WaitingRoomController implements ActionListener {
 	}
 
 	// After the login is successful, set the User object and display the contacts screen.
-	public void logOutSuccess()
-	{
+	public void logOutSuccess() {
 		LoginView loginPanel = (LoginView) container.getComponent(1);
 
-		CardLayout cardLayout = (CardLayout)container.getLayout();
+		CardLayout cardLayout = (CardLayout) container.getLayout();
 		cardLayout.show(container, "4");
 	}
 
-	// Method that displays a message in the error label.
-	public void displayError(String error)
-	{
-		LoginView loginPanel = (LoginView) container.getComponent(1);
-		loginPanel.setError(error);
+	public void setLoggedInPlayer(Player player) {
+		this.loggedInPlayer = player;
+	}
+
+	public void setPlayers(ArrayList<Player> waitingRoomPlayers) {
+		this.waitingRoomPlayers = waitingRoomPlayers;
+	}
+
+	public ArrayList<Player> getWaitingRoomPlayers() {
+		return waitingRoomPlayers;
+	}
+
+	private void setSelectedPlayer(Player p) {
+
+	}
+
+	public void receiveWaitingRoom(WaitingRoomData data) {
+		this.waitingRoomPlayers = data.getPlayers();
+		playerListPanel.updatePlayers();
+	}
+
+	public void receivePlayerChallenge(PlayerChallengeData data) {
+
+	}
+
+	public void receivePlayerChallengeResponse(PlayerChallengeResponse data) {
+
+	}
+
+	public void receiveStartOfGame(StartOfGameData data) {
+		this.client.transitionToGameScreen(data.getGame());
+	}
+
+	public void sendPlayerChallenge(Player to) {
+		// TODO setup data object
+
+//		client.
+	}
+
+	public void sendPlayerChallengeResponse(Player to, boolean accepted) {
+		// TODO setup data object
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// ensure the selection has stopped changing
+		if (!e.getValueIsAdjusting()) {
+			// ensure the source is a ListSelectionModel object
+			if (e.getSource() instanceof ListSelectionModel) {
+				// cast it
+				ListSelectionModel model = ((ListSelectionModel) e.getSource());
+				// ensure there is something selected
+				if (!model.isSelectionEmpty()) {
+					// get the index of the selection
+					int index = model.getMaxSelectionIndex();
+
+					// get the patient at index and load it in the editor
+					Player p = this.getWaitingRoomPlayers().get(index);
+					this.setSelectedPlayer(p);
+				}
+			}
+		}
 	}
 }
