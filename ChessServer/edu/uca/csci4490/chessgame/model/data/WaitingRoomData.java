@@ -7,15 +7,14 @@ import java.util.ArrayList;
 public class WaitingRoomData {
 	private ArrayList<Player> players;
 	
-	public void setPlayers(Player player) {
-		//players
+	public WaitingRoomData(ArrayList<Player> players) {
+		this.players = players;
+	}
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
 	}
 	
 	public ArrayList<Player> getPlayers() {
 		return players;
-	}
-	
-	public void WaitingRoomData() {
-		//players.getwins losses xp get username
 	}
 }

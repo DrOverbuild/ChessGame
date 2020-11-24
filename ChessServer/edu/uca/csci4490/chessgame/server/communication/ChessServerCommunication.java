@@ -88,6 +88,7 @@ public class ChessServerCommunication extends AbstractServer {
 					return;
 				}  	
 			}
+		}
 	
 	public void listeningException(Throwable exception) {
 		System.out.println("Listening exception: " + exception.getMessage() + "\n");
