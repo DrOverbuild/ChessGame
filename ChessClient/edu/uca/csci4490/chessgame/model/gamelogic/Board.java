@@ -32,4 +32,5 @@ public class Board implements Serializable {
 	public void setPieceOnBoard(Location loc, Piece piece) {
 		setPieceOnBoard(loc.getX(), loc.getY(), piece);
 	}
+
 }
