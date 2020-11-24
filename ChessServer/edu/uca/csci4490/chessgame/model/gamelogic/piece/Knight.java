@@ -52,4 +52,9 @@ public class Knight extends Piece {
 		knight.setImage(this.getImage());
 		return knight;
 	}
+
+	@Override
+	public int getWorth() {
+		return 7;
+	}
 }

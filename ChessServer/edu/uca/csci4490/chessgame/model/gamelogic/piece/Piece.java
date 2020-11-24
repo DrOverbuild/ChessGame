@@ -50,4 +50,6 @@ public abstract class Piece implements Serializable {
 	public abstract ArrayList<Location> allMovableLocations(Board board);
 
 	public abstract ArrayList<Location> filterAvailableLocations(Board board);
+
+	public abstract int getWorth();
 }
