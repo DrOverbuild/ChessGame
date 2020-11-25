@@ -71,14 +71,6 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 		}
 	}
 
-	// After the login is successful, set the User object and display the contacts screen.
-	public void logOutSuccess() {
-		LoginView loginPanel = (LoginView) container.getComponent(1);
-
-		CardLayout cardLayout = (CardLayout) container.getLayout();
-		cardLayout.show(container, "4");
-	}
-
 	public PlayerListPanel getListPanel() {
 		return playerListPanel;
 	}
@@ -155,39 +147,19 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 
 	public void sendPlayerChallenge(Player to) {
 		PlayerChallengeData data = new PlayerChallengeData(loggedInPlayer, to);
-
-		try {
-			comms.sendToServer(data);
-		} catch (IOException e) {
-			System.out.println("FATAL - Disconnected from server");
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		comms.send(data);
 	}
 
 	public void sendPlayerChallengeResponse(Player to, boolean accepted) {
 		PlayerChallengeResponseData data = new PlayerChallengeResponseData(loggedInPlayer, to, accepted);
-
-		try {
-			comms.sendToServer(data);
-		} catch (IOException e) {
-			System.out.println("FATAL - Disconnected from server");
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		comms.send(data);
 	}
 
 	public void sendPlayerLogout() {
 		PlayerLogoutData data = new PlayerLogoutData();
 		data.setPlayer(loggedInPlayer);
 
-		try {
-			comms.sendToServer(data);
-		} catch (IOException e) {
-			System.out.println("FATAL - Disconnected from server");
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		comms.send(data);
 
 		loggedInPlayer = null;
 
