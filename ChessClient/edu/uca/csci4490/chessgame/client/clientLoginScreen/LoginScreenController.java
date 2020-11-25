@@ -2,22 +2,18 @@ package edu.uca.csci4490.chessgame.client.clientLoginScreen;
 
 import edu.uca.csci4490.chessgame.client.ChessClient;
 import edu.uca.csci4490.chessgame.model.Player;
-import edu.uca.csci4490.chessgame.model.data.PlayerLogoutData;
 import edu.uca.csci4490.chessgame.model.data.WaitingRoomData;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.data.ErrorData;
 import edu.uca.csci4490.chessgame.model.data.PlayerLoginData;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class LoginScreenController implements ActionListener {
 
 	// Private data fields for the container and chat client.
-	private LoginView panel = null;
+	private LoginView view;
 	private ChessClientCommunication comms;
 	private ChessClient client;
 
@@ -32,10 +28,12 @@ public class LoginScreenController implements ActionListener {
 	public LoginScreenController(ChessClient client, ChessClientCommunication comms) {
 		this.comms = comms;
 		this.client = client;
+
+		view = new LoginView(this);
 	}
 
-	public void setPanel(LoginView panel) {
-		this.panel = panel;
+	public LoginView getView() {
+		return view;
 	}
 
 	// Handle button clicks.
@@ -51,8 +49,8 @@ public class LoginScreenController implements ActionListener {
 		// The Submit button submits the login information to the server.
 		else if (command.equals("Sign In")) {
 			// Get the username and password the user entered.
-			String username = panel.getUsername();
-			String password = panel.getPassword();
+			String username = view.getUsername();
+			String password = view.getPassword();
 
 			// Check the validity of the information locally first.
 			if (username.equals("") || password.equals("")) {
@@ -60,7 +58,7 @@ public class LoginScreenController implements ActionListener {
 				return;
 			}
 
-			panel.disableButtons();
+			view.disableButtons();
 
 			// Submit the login information to the server.
 			sendLogin(username, password);
@@ -69,12 +67,12 @@ public class LoginScreenController implements ActionListener {
 
 	// Method that displays a message in the error label.
 	public void displayError(String error) {
-		panel.setError(error);
+		view.setError(error);
 	}
 
 	public void receiveError(ErrorData data) {
 		attemptingUsername = null;
-		panel.enableButtons();
+		view.enableButtons();
 		displayError(data.getMsg());
 	}
 
@@ -101,7 +99,7 @@ public class LoginScreenController implements ActionListener {
 
 		// reset login ui for logging out and returning to beginning screen
 		attemptingUsername = null;
-		panel.enableButtons();
+		view.enableButtons();
 
 		client.transitionToWaitingRoom(loggedIn, data.getPlayers());
 	}

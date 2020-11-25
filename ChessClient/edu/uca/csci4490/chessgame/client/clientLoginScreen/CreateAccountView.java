@@ -15,6 +15,8 @@ public class CreateAccountView extends JPanel{
 	private JPasswordField passwordField;
 	private JPasswordField verifyPasswordField;
 	private JLabel errorText;
+
+	private JButton createAccountBtn;
 	private JButton backBtn;
 
 	// Getter for the text in the username field.
@@ -76,9 +78,9 @@ public class CreateAccountView extends JPanel{
 
 		// Create a panel for the buttons.
 		JPanel buttonPanel = new JPanel();
-		JButton backBtn = new JButton("Back");
+		backBtn = new JButton("Back");
 		backBtn.addActionListener(cc);
-		JButton createAccountBtn = new JButton("Create Account");
+		createAccountBtn = new JButton("Create Account");
 		createAccountBtn.addActionListener(cc);    
 		buttonPanel.add(backBtn);
 		buttonPanel.add(createAccountBtn);
@@ -89,5 +91,25 @@ public class CreateAccountView extends JPanel{
 		grid.add(accountPanel);
 		grid.add(buttonPanel);
 		this.add(grid);
+	}
+
+	public void displayError(String msg) {
+		errorText.setForeground(Color.RED);
+		errorText.setText(msg);
+	}
+
+	public void displaySuccess(String msg) {
+		errorText.setForeground(Color.GREEN);
+		errorText.setText(msg);
+	}
+
+	public void enableButtons() {
+		backBtn.setEnabled(true);
+		createAccountBtn.setEnabled(true);
+	}
+
+	public void disableButtons() {
+		backBtn.setEnabled(false);
+		createAccountBtn.setEnabled(false);
 	}
 }

@@ -52,21 +52,18 @@ public class ChessClient extends JFrame {
 		layout = new CardLayout();
 		container = new JPanel(layout);
 
-		//Create the Controllers next
-		//Next, create the Controllers
+		// Create the Controllers next
+		// these controllers will also build the views.
 		lc = new LoginScreenController(this, client);
-		cc = new CreateAccountController(container, client);
+		cc = new CreateAccountController(this, client);
 		wc = new WaitingRoomController(this, client);
 		gc = new GameRoomControl(container, client);
 
-		// Create the four views. (need the controller to register with the Panels
-		LoginView loginView = new LoginView(lc);
-		JPanel view3 = new CreateAccountView(cc);
+		// Retreive/create the views. Most controllers have already built the views.
+		JPanel loginView = lc.getView();
+		JPanel view3 = cc.getView();
 		JPanel view4 = new WaitingRoomPanel(wc);
 //		JPanel view5 = new GameRoomPanel(gc);
-
-		// connect controllers to views
-		lc.setPanel(loginView);
 
 		// Add the views to the card layout container.
 		container.add(loginView, LOGIN_PANEL);
