@@ -1,4 +1,4 @@
-package edu.uca.csci4490.chessgame.client.clientLoginScreen;
+package edu.uca.csci4490.chessgame.client.loginscreen;
 
 import edu.uca.csci4490.chessgame.client.ChessClient;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;

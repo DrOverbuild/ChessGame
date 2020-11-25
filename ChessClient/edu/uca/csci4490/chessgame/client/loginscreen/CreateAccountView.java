@@ -1,4 +1,4 @@
-package edu.uca.csci4490.chessgame.client.clientLoginScreen;
+package edu.uca.csci4490.chessgame.client.loginscreen;
 
 import java.awt.Color;
 import java.awt.GridLayout;

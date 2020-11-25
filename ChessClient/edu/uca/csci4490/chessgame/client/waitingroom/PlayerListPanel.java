@@ -1,10 +1,7 @@
-package edu.uca.csci4490.chessgame.client.clientWaitingRoom;
-
-import edu.uca.csci4490.chessgame.model.Player;
+package edu.uca.csci4490.chessgame.client.waitingroom;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PlayerListPanel extends JPanel{
 	private JTable mainTable;

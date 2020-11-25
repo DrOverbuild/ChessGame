@@ -1,4 +1,4 @@
-package edu.uca.csci4490.chessgame.client.clientWaitingRoom;
+package edu.uca.csci4490.chessgame.client.waitingroom;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,11 +1,9 @@
 package edu.uca.csci4490.chessgame.client;
 
-import edu.uca.csci4490.chessgame.client.clientLoginScreen.CreateAccountController;
-import edu.uca.csci4490.chessgame.client.clientLoginScreen.CreateAccountView;
-import edu.uca.csci4490.chessgame.client.clientLoginScreen.LoginScreenController;
-import edu.uca.csci4490.chessgame.client.clientLoginScreen.LoginView;
-import edu.uca.csci4490.chessgame.client.clientWaitingRoom.WaitingRoomController;
-import edu.uca.csci4490.chessgame.client.clientWaitingRoom.WaitingRoomPanel;
+import edu.uca.csci4490.chessgame.client.loginscreen.CreateAccountController;
+import edu.uca.csci4490.chessgame.client.loginscreen.LoginScreenController;
+import edu.uca.csci4490.chessgame.client.waitingroom.WaitingRoomController;
+import edu.uca.csci4490.chessgame.client.waitingroom.WaitingRoomPanel;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.gamelogic.Game;

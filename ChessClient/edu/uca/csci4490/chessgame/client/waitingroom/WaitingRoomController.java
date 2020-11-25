@@ -1,7 +1,6 @@
-package edu.uca.csci4490.chessgame.client.clientWaitingRoom;
+package edu.uca.csci4490.chessgame.client.waitingroom;
 
 import edu.uca.csci4490.chessgame.client.ChessClient;
-import edu.uca.csci4490.chessgame.client.clientLoginScreen.LoginView;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
@@ -10,11 +9,8 @@ import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class WaitingRoomController implements ActionListener, ListSelectionListener {
