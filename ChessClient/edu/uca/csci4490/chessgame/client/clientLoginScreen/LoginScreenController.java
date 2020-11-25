@@ -69,8 +69,7 @@ public class LoginScreenController implements ActionListener {
 
 	// Method that displays a message in the error label.
 	public void displayError(String error) {
-		LoginView loginPanel = (LoginView) container.getComponent(1);
-		loginPanel.setError(error);
+		panel.setError(error);
 	}
 
 	public void receiveError(ErrorData data) {
