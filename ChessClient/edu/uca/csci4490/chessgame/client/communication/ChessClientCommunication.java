@@ -1,26 +1,43 @@
 package edu.uca.csci4490.chessgame.client.communication;
 
+import edu.uca.csci4490.chessgame.client.ChessClient;
+import edu.uca.csci4490.chessgame.model.data.ErrorData;
+import edu.uca.csci4490.chessgame.model.data.WaitingRoomData;
 import ocsf.client.AbstractClient;
 
 import java.io.IOException;
 
 public class ChessClientCommunication extends AbstractClient {
 
-	//private LoginControl lc;
-	//private CreateAccountController cc;
-	//private CreateAccountData cd;
-	//private WaitingRoomController wc;
-	//private GameRoomController gc;
+	private ChessClient client;
 
-	public ChessClientCommunication() {
+	public ChessClientCommunication(ChessClient client) {
 		super("localhost", 8300);
 
+		this.client = client;
 	}
 
 	@Override
-	protected void handleMessageFromServer(Object arg0) {
+	protected void handleMessageFromServer(Object o) {
+		if (o instanceof ErrorData) {
+			client.getLc().receiveError((ErrorData)o);
+		}
 
+		if (o instanceof WaitingRoomData) {
+			if (client.getCurrentPanel().equals(ChessClient.LOGIN_PANEL)) {
+				client.getLc().receiveWaitingRoom((WaitingRoomData)o);
+			} else if (client.getCurrentPanel().equals(ChessClient.WAITING_ROOM_PANEL)) {
+				client.getWc().receiveWaitingRoom((WaitingRoomData)o);
+			}
+		}
 
+		if (o instanceof CreateAccountSuccessData) {
+			client.getCc().receiveCreateAccountSuccess();
+		}
+
+		if (o instanceof CreateAccountUnsuccessfulData) {
+			client.getCc().receiveCreateAccountUnsuccessful();
+		}
 	}
 
 	public void connectionException(Throwable exception) {

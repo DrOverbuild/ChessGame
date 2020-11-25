@@ -16,11 +16,12 @@ import java.util.ArrayList;
 
 
 public class ChessClient extends JFrame {
-	private static final String LOGIN_PANEL = "login";
-	private static final String CREATE_ACCOUNT_PANEL = "create";
-	private static final String WAITING_ROOM_PANEL = "waiting";
-	private static final String GAME_SCREEN_PANEL = "game";
+	public static final String LOGIN_PANEL = "login";
+	public static final String CREATE_ACCOUNT_PANEL = "create";
+	public static final String WAITING_ROOM_PANEL = "waiting";
+	public static final String GAME_SCREEN_PANEL = "game";
 
+	private String currentPanel = LOGIN_PANEL;
 
 	private LoginScreenController lc;
 	private CreateAccountController cc;
@@ -33,7 +34,7 @@ public class ChessClient extends JFrame {
 	// Constructor that creates the client GUI.
 	public ChessClient(String ip, int port) {
 		// Set up the chat client.
-		ChessClientCommunication client = new ChessClientCommunication();
+		ChessClientCommunication client = new ChessClientCommunication(this);
 		client.setHost(ip);
 		client.setPort(port);
 
@@ -86,23 +87,31 @@ public class ChessClient extends JFrame {
 		this.setVisible(true);
 	}
 
+	private void transition() {
+		layout.show(container, currentPanel);
+	}
+
 	public void transitionToLoginScreen() {
-		layout.show(container, LOGIN_PANEL);
+		currentPanel = LOGIN_PANEL;
+		transition();
 	}
 
 	public void transitionToCreateAccountScreen() {
-		layout.show(container, CREATE_ACCOUNT_PANEL);
+		currentPanel = CREATE_ACCOUNT_PANEL;
+		transition();
 	}
 
 	public void transitionToWaitingRoom(Player loggedInPlayer, ArrayList<Player> players) {
 		wc.setThisPlayer(loggedInPlayer);
 		wc.setPlayers(players);
-		layout.show(container, WAITING_ROOM_PANEL);
+		currentPanel = WAITING_ROOM_PANEL;
+		transition();
 	}
 
 	public void transitionToGameScreen(Game game, Player player) {
 		gc.initGame(game, player);
-		layout.show(container, GAME_SCREEN_PANEL);
+		currentPanel = GAME_SCREEN_PANEL;
+		transition();
 	}
 
 	public LoginScreenController getLc() {
@@ -119,6 +128,10 @@ public class ChessClient extends JFrame {
 
 	public GameScreenController getGc() {
 		return gc;
+	}
+
+	public String getCurrentPanel() {
+		return currentPanel;
 	}
 
 	// Main function that creates the client GUI when the program is started.
