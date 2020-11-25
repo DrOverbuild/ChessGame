@@ -74,6 +74,20 @@ public class GameScreenController implements ActionListener {
 		return thisPlayer;
 	}
 
+	public void initGame(Game game, Player thisPlayer, Color thisColor) {
+		this.game = game;
+		this.thisColor = thisColor;
+		this.thisPlayer = thisPlayer;
+
+		view.updateGame(game);
+
+		if (game.getWhoseTurn().equals(thisPlayer)) {
+			view.setStatus("Your turn");
+		} else {
+			view.setStatus("Waiting for " + game.getWhoseTurn().getUsername() + "...");
+		}
+	}
+
 	public void receiveAvailableMoves(AvailableMovesData data) {
 		if (selectedPiece == null) {
 			System.out.println("WARNING - Received AvailableMovesData but we aren't waiting for it. Ignoring message.");
