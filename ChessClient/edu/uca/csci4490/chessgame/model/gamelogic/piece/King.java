@@ -8,6 +8,6 @@ public class King extends Piece {
 	public King(Color color) {
 		super();
 		this.setColor(color);
-		this.setImage("pawn");
+		this.setImage("king");
 	}
 }
