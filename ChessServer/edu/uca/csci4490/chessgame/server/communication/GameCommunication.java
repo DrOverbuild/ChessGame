@@ -115,4 +115,16 @@ public class GameCommunication {
 			sendNextTurn(game);
 		}
 	}
+	
+	public void receiveGameAbandoned(AbandonGameData data) {
+		// get game by id
+		int id = data.getGameID();
+		
+		// call game.playerAbandonedGame
+		Game game = server.getGameByID(id);
+		game.playerAbandonedGame(data.getPlayer());
+		
+		// send EndOfGameData to both players
+		sendEndOfGameData(game);
+	}
 }
