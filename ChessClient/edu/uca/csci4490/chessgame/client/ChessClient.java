@@ -1,5 +1,6 @@
 package edu.uca.csci4490.chessgame.client;
 
+import edu.uca.csci4490.chessgame.client.GameScreen.GameScreenController;
 import edu.uca.csci4490.chessgame.client.loginscreen.CreateAccountController;
 import edu.uca.csci4490.chessgame.client.loginscreen.LoginScreenController;
 import edu.uca.csci4490.chessgame.client.waitingroom.WaitingRoomController;
@@ -24,21 +25,24 @@ public class ChessClient extends JFrame {
 	private LoginScreenController lc;
 	private CreateAccountController cc;
 	private WaitingRoomController wc;
-	private GameRoomControl gc;
+	private GameScreenController gc;
 
 	private CardLayout layout;
 	private JPanel container;
 
 	// Constructor that creates the client GUI.
-	public ChessClient() {
+	public ChessClient(String ip, int port) {
 		// Set up the chat client.
 		ChessClientCommunication client = new ChessClientCommunication();
-		client.setHost("localhost");
-		client.setPort(8300);
+		client.setHost(ip);
+		client.setPort(port);
+
 		try {
 			client.openConnection();
 		} catch (IOException e) {
+			System.out.println("FATAL - Could not establish connection");
 			e.printStackTrace();
+			System.exit(-1);
 		}
 
 
@@ -55,19 +59,19 @@ public class ChessClient extends JFrame {
 		lc = new LoginScreenController(this, client);
 		cc = new CreateAccountController(this, client);
 		wc = new WaitingRoomController(this, client);
-		gc = new GameRoomControl(container, client);
+		gc = new GameScreenController(this, client);
 
 		// Retreive/create the views. Most controllers have already built the views.
 		JPanel loginView = lc.getView();
-		JPanel view3 = cc.getView();
-		JPanel view4 = new WaitingRoomPanel(wc);
-//		JPanel view5 = new GameRoomPanel(gc);
+		JPanel createAccountView = cc.getView();
+		JPanel waitingRoomView = new WaitingRoomPanel(wc);
+		JPanel gameScreenView = gc.getView();
 
 		// Add the views to the card layout container.
 		container.add(loginView, LOGIN_PANEL);
-		container.add(view3, CREATE_ACCOUNT_PANEL);
-		container.add(view4, WAITING_ROOM_PANEL);
-		container.add(view5, GAME_SCREEN_PANEL);
+		container.add(createAccountView, CREATE_ACCOUNT_PANEL);
+		container.add(waitingRoomView, WAITING_ROOM_PANEL);
+		container.add(gameScreenView, GAME_SCREEN_PANEL);
 
 		// Show the initial view in the card layout.
 		layout.show(container, LOGIN_PANEL);
@@ -96,12 +100,48 @@ public class ChessClient extends JFrame {
 		layout.show(container, WAITING_ROOM_PANEL);
 	}
 
-	public void transitionToGameScreen(Game game) {
+	public void transitionToGameScreen(Game game, Player player) {
+		gc.initGame(game, player);
+		layout.show(container, GAME_SCREEN_PANEL);
+	}
 
+	public LoginScreenController getLc() {
+		return lc;
+	}
+
+	public CreateAccountController getCc() {
+		return cc;
+	}
+
+	public WaitingRoomController getWc() {
+		return wc;
+	}
+
+	public GameScreenController getGc() {
+		return gc;
 	}
 
 	// Main function that creates the client GUI when the program is started.
 	public static void main(String[] args) {
-		new ChessClient();
+		String ip = "localhost";
+		String port = "8300";
+		String[] exp;
+		if (args.length == 0) {
+			exp = JOptionPane.showInputDialog("Enter IP Address: ").split(":");
+		} else {
+			exp = args[0].split(":");
+		}
+
+		if (exp.length >= 1) {
+			ip = exp[0];
+		}
+
+		if (exp.length >= 2 ) {
+			port = exp[1];
+		}
+
+		int portInt = Integer.parseInt(port);
+
+		new ChessClient(ip, portInt);
 	}
 }

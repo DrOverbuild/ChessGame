@@ -11,7 +11,8 @@ import java.util.ArrayList;
 public class GameScreenPanel extends JPanel {
 
 	private JLabel status;
-	private JButton[][] pieceButtons;
+	private JButton[][] pieceButtons = new JButton[8][8];
+	private JButton abandonButton;
 
 	public GameScreenPanel(GameScreenController controller) {
 
@@ -35,8 +36,10 @@ public class GameScreenPanel extends JPanel {
 				pieceButtons[x][y] = pieceButton;
 
 				if (dark) {
-					pieceButton.setBackground(Color.LIGHT_GRAY);
-				}
+					pieceButton.setBackground(Color.DARK_GRAY);
+				} else {
+				    pieceButton.setBackground(Color.LIGHT_GRAY);
+                }
 
 				dark = !dark;
 			}
@@ -64,7 +67,7 @@ public class GameScreenPanel extends JPanel {
 		status = new JLabel("status", JLabel.CENTER);
 		buttonsPanel.add(status, BorderLayout.CENTER);
 
-		JButton abandonButton = new JButton("Abandon Game");
+		abandonButton = new JButton("Abandon Game");
 		abandonButton.setActionCommand("Abandon Game");
 		abandonButton.addActionListener(controller);
 		buttonsPanel.add(abandonButton, BorderLayout.EAST);
@@ -72,8 +75,14 @@ public class GameScreenPanel extends JPanel {
 		this.add(buttonsPanel, BorderLayout.SOUTH);
 	}
 
-	public void updateAvailableMoves(ArrayList<Location> availableMoves) {
-		// TODO Implement
+	public void updateAvailableMoves(Piece piece, ArrayList<Location> availableMoves) {
+        String path = "res" + System.getProperty("file.separator") +
+                piece.getImage() + "_outline.png";
+        ImageIcon icon = new ImageIcon(path);
+
+        for (Location loc: availableMoves) {
+            pieceButtons[loc.getX()][loc.getY()].setIcon(icon);
+        }
 	}
 
 	public void updateGame(Game game) {
@@ -109,5 +118,10 @@ public class GameScreenPanel extends JPanel {
 				pieceButtons[x][y].setEnabled(false);
 			}
 		}
+	}
+
+	public void setToLeaveGame() {
+		abandonButton.setText("Go to Waiting Room");
+		abandonButton.setActionCommand("Waiting Room");
 	}
 }
