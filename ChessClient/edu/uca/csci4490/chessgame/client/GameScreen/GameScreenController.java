@@ -34,7 +34,7 @@ public class GameScreenController implements ActionListener {
 		this.client = client;
 		this.comms = comms;
 
-		view = new GameScreenPanel();
+		view = new GameScreenPanel(this);
 	}
 
 	@Override

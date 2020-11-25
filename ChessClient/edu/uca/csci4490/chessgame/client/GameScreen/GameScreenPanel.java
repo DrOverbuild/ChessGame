@@ -3,17 +3,16 @@ package edu.uca.csci4490.chessgame.client.GameScreen;
 import java.awt.*;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 import edu.uca.csci4490.chessgame.model.gamelogic.Location;
+import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
 
 public class GameScreenPanel extends JPanel {
 
     private JLabel status;
+    private JButton[][] pieceButtons;
 
 	public GameScreenPanel(GameScreenController controller) {
 		
@@ -23,16 +22,18 @@ public class GameScreenPanel extends JPanel {
     // Create the contacts label in the north.
     JLabel label = new JLabel("Chess Game", JLabel.CENTER);
     this.add(label, BorderLayout.NORTH);
-    
+
+    // setup grid
     JPanel grid = new JPanel(new GridLayout(8,8));
     boolean dark = false;
 
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; i++) {
+    for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < 8; y++) {
             JButton pieceButton = new JButton();
-            pieceButton.setActionCommand(i + "," + j);
+            pieceButton.setActionCommand(x + "," + y);
             pieceButton.addActionListener(controller);
             grid.add(pieceButton);
+            pieceButtons[x][y] = pieceButton;
 
             if (dark) {
                 pieceButton.setBackground(Color.LIGHT_GRAY);
@@ -77,7 +78,26 @@ public class GameScreenPanel extends JPanel {
     }
 
     public void updateGame(Game game) {
-        // TODO implement
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                updatePiece(x, y, game.getBoard().getPieceAt(x, y));
+            }
+        }
+    }
+
+    private void updatePiece(int x, int y, Piece piece) {
+        JButton pieceButton = pieceButtons[x][y];
+
+        if (piece == null) {
+	        pieceButton.setIcon(null);
+        } else {
+            String path = "res" + System.getProperty("file.separator") +
+                    piece.getImage() + "_" +
+                    piece.getColor().name().toLowerCase() + ".png";
+            // ex - pawn_black.png
+            ImageIcon icon = new ImageIcon(path);
+            pieceButton.setIcon(icon);
+        }
     }
 
     public void setStatus(String status) {
@@ -85,6 +105,10 @@ public class GameScreenPanel extends JPanel {
     }
 
     public void disableButtons() {
-        // TODO implement
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                pieceButtons[x][y].setEnabled(false);
+            }
+        }
     }
 }
