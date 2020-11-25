@@ -30,7 +30,7 @@ public class ChessServer {
 	}
 
 	public void start() {
-		comms = new ChessServerCommunication(8300);
+		comms = new ChessServerCommunication(8300, this);
 		playerManager = new PlayerManager(this);
 	}
 
@@ -57,7 +57,7 @@ public class ChessServer {
 		runningGames.remove(game);
 		playerManager.movePlayerToWaitingRoom(game.getBlack());
 		playerManager.movePlayerToWaitingRoom(game.getWhite());
-		getComms().getWaitingRoomCommunication().sendWaitingRoomToAll(getPlayerManager().getWaitingRoom());
+		getComms().getWaitingRoomCommunication().sendWaitingRoomToAll();
 
 		playerManager.updateStats(game);
 	}

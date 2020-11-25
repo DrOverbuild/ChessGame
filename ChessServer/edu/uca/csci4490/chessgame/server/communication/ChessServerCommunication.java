@@ -3,9 +3,9 @@ package edu.uca.csci4490.chessgame.server.communication;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import lab7out.CreateAccountData;
-import lab7out.Error;
-import lab7out.LoginData;
+import edu.uca.csci4490.chessgame.server.ChessServer;
+import edu.uca.csci4490.chessgame.server.playermanager.PlayerManager;
+import edu.uca.csci4490.chessgame.model.data.*;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -15,84 +15,64 @@ public class ChessServerCommunication extends AbstractServer {
 	private PlayerLoginCommunication playerLoginCommunication;
 	private WaitingRoomCommunication waitingRoomCommunication;
 	private GameCommunication gameCommunication;
+	private ChessServer server;
+	private PlayerManager playermanager;
 	
-	public ChessServerCommunication(int port) {
+	public ChessServerCommunication(int port, ChessServer server) {
 		super(port);
-		
 		// initialize private data fields
 		// etc 
-		playerLoginCommunication = new PlayerLoginCommunication();
+		server = new ChessServer();
+		playerLoginCommunication = new PlayerLoginCommunication(server, server.getPlayerManager(), this);
+		waitingRoomCommunication = new WaitingRoomCommunication();
+		gameCommunication = new GameCommunication(server);
+		playermanager = new PlayerManager(server);
 	}
 
 	@Override
-	protected void handleMessageFromClient(Object o, ConnectionToClient connectionToClient) {
+	protected void handleMessageFromClient(Object o, ConnectionToClient client) {
 		{
 			// If we received LoginData, verify the account information.
-			if (o instanceof LoginData)
+			if (o instanceof PlayerLoginData)
 			{
-				// Check the username and password with the database.
-				LoginData data = (LoginData)o;
-				Object result = "result";
-				try {
-					if (database.verifyAccount(data.getUsername(), data.getPassword()))
-					{
-						result = "LoginSuccessful";
-						log.append("Client " + connectionToClient.getId() + " successfully logged in as " + data.getUsername() + "\n");
-					}
-					else
-					{
-						result = new Error("The username and password are incorrect.", "Login");
-						log.append("Client " + connectionToClient.getId() + " failed to log in\n");
-					}
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				// Send the result to the client.
-				try
-				{
-					connectionToClient.sendToClient(result);
-				}
-				catch (IOException e)
-				{
-					return;
-				}
+				// Try to Login the player
+				playerLoginCommunication.receivePlayerLogin((PlayerLoginData)o, client);
 			}
 
 			// If we received CreateAccountData, create a new account.
 			else if (o instanceof CreateAccountData)
 			{
 				// Try to create the account.
-				CreateAccountData data = (CreateAccountData)o;
-				Object result = null;
-				try {
-					if (database.createNewAccount(data.getUsername(), data.getPassword()))
-					{
-						result = "CreateAccountSuccessful";
-						log.append("Client " + connectionToClient.getId() + " created a new account called " + data.getUsername() + "\n");
-					}
-					else
-					{
-						result = new Error("The username is already in use.", "CreateAccount");
-						log.append("Client " + connectionToClient.getId() + " failed to create a new account\n");
-					}
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				// Send the result to the client.
-				try
-				{
-					connectionToClient.sendToClient(result);
-				}
-				catch (IOException e)
-				{
-					return;
-				}  	
+				playerLoginCommunication.receiveCreateAccount((CreateAccountData)o, client);
 			}
-		}
+			else if (o instanceof PlayerChallengeData)
+			{
+				// Receive a challenge data
+				waitingRoomCommunication.receivePlayerChallenge((PlayerChallengeData)o);
+			}
+			else if (o instanceof PlayerChallengeResponseData)
+			{
+				// Receive a challenge response data
+				waitingRoomCommunication.receivePlayerChallengeResponse((PlayerChallengeResponseData)o);
+			}
+			else if (o instanceof PieceSelectionData)
+			{
+				// Receive data about the piece selection
+				gameCommunication.receivePieceSelection((PieceSelectionData)o, client);
+			}
+			else if (o instanceof PieceMoveData)
+			{
+				// Receive Piece Move Data
+				gameCommunication.receivePieceMove((PieceMoveData)o, client);
+			}
+			else if (o instanceof AbandonGameData)
+			{
+				// Receive game Abandoned
+				gameCommunication.receiveGameAbandoned((AbandonGameData)o);
+			}
+			
+		}	
+	}
 	
 	public void listeningException(Throwable exception) {
 		System.out.println("Listening exception: " + exception.getMessage() + "\n");
