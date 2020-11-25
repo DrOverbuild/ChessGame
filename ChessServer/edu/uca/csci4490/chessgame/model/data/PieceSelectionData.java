@@ -4,11 +4,11 @@ import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
 
 import java.io.Serializable;
 
-public class PIeceSelectionData implements Serializable {
+public class PieceSelectionData implements Serializable {
 	private int gameID;
 	private Piece piece;
 
-	public PIeceSelectionData(int gameID, Piece piece) {
+	public PieceSelectionData(int gameID, Piece piece) {
 		this.gameID = gameID;
 		this.piece = piece;
 	}
