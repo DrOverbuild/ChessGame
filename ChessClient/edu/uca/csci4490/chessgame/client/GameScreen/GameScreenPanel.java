@@ -2,12 +2,16 @@ package edu.uca.csci4490.chessgame.client.GameScreen;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import edu.uca.csci4490.chessgame.model.Player;
+import edu.uca.csci4490.chessgame.model.gamelogic.Game;
+import edu.uca.csci4490.chessgame.model.gamelogic.Location;
+
 public class GameScreenPanel extends JPanel {
 	
 	public GameScreenPanel() {
@@ -45,5 +49,20 @@ public class GameScreenPanel extends JPanel {
     
     
 	}
-	
+
+    public void updateAvailableMoves(ArrayList<Location> availableMoves) {
+        // TODO Implement
+    }
+
+    public void updateGame(Game game) {
+        // TODO implement
+    }
+
+    public void setStatus(String status) {
+        // TODO implement
+    }
+
+    public void disableButtons() {
+        // TODO implement
+    }
 }
