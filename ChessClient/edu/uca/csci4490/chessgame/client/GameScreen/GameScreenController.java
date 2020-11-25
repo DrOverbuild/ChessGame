@@ -4,11 +4,11 @@ import edu.uca.csci4490.chessgame.client.ChessClient;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
+import edu.uca.csci4490.chessgame.model.gamelogic.Color;
 import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 import edu.uca.csci4490.chessgame.model.gamelogic.Location;
 import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -78,10 +78,15 @@ public class GameScreenController implements ActionListener {
 		return thisPlayer;
 	}
 
-	public void initGame(Game game, Player thisPlayer, Color thisColor) {
+	public GameScreenPanel getView() {
+		return view;
+	}
+
+	public void initGame(Game game, Player thisPlayer) {
 		this.game = game;
-		this.thisColor = thisColor;
 		this.thisPlayer = thisPlayer;
+
+		this.thisColor = game.getBlack().equals(thisPlayer) ? Color.BLACK : Color.WHITE;
 
 		view.updateGame(game);
 
