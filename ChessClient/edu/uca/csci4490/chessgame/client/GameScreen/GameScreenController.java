@@ -17,8 +17,8 @@ public class GameScreenController implements ActionListener {
 
 	// Private data fields for the container and chat client.
 	private ChessClientCommunication comms;
-	private ChessClient client;
 	private GameScreenPanel view;
+	private ChessClient client;
 
 	private Game game;
 
@@ -29,6 +29,8 @@ public class GameScreenController implements ActionListener {
 	private Piece selectedPiece = null;
 	private Player thisPlayer;
 	private Color thisColor;
+
+	private boolean abandonedGame = false;
 
 	public GameScreenController(ChessClient client, ChessClientCommunication comms) {
 		this.client = client;
@@ -43,11 +45,13 @@ public class GameScreenController implements ActionListener {
 		String command = ae.getActionCommand();
 
 		if (command.equals("Abandon Game")) {
-
+			sendAbandonGame();
 		} else if (command.equals("View Moves")) {
 
 		} else if (command.equals("View Captured Pieces")) {
 
+		} else if (command.equals("Waiting Room")) {
+			client.transitionToWaitingRoom(thisPlayer, client.getWc().getWaitingRoomPlayers());
 		} else if (command.contains(",")) {
 			// 0,1
 			String[] components = command.split(",");
@@ -100,7 +104,7 @@ public class GameScreenController implements ActionListener {
 		}
 
 		availableMoves = data.getMoves();
-		view.updateAvailableMoves(availableMoves);
+		view.updateAvailableMoves(selectedPiece, availableMoves);
 	}
 
 	public void receiveNextTurn(NextTurnData data) {
@@ -126,7 +130,9 @@ public class GameScreenController implements ActionListener {
 			return;
 		}
 
-		if (data.isStalemate()) {
+		if (abandonedGame) {
+			// do nothing
+		} else if (data.isStalemate()) {
 			view.setStatus("Stalemate.");
 		} else if (data.getWinner().equals(thisPlayer)) {
 			view.setStatus("You win!");
@@ -135,6 +141,9 @@ public class GameScreenController implements ActionListener {
 		}
 
 		view.disableButtons();
+		view.setToLeaveGame();
+
+		client.getWc().setPlayers(data.getWaitingRoom());
 	}
 
 	public void sendPieceSelection(int x, int y) {
@@ -154,8 +163,26 @@ public class GameScreenController implements ActionListener {
 		}
 
 		Location to = new Location((byte)x, (byte)y);
+
+		if (!availableMoves.contains(to)) {
+			// remove outlines and do nothing
+			view.updateGame(game);
+
+			if (game.getBoard().getPieceAt(to).getColor().equals(thisColor)) {
+				sendPieceSelection(x, y);
+			}
+
+			return;
+		}
+
 		PieceMoveData data = new PieceMoveData(game.getId(), selectedPiece, to);
 		comms.send(data);
 	}
 
+	public void sendAbandonGame() {
+		view.setStatus("You abandoned the game");
+		view.disableButtons();
+		abandonedGame = true;
+		// TODO send abandon game
+	}
 }
