@@ -29,8 +29,8 @@ public class ChessServer {
 	public ChessServer() {
 	}
 
-	public void start() {
-		comms = new ChessServerCommunication(8300, this);
+	public void start(int port) {
+		comms = new ChessServerCommunication(port, this);
 		playerManager = new PlayerManager(this);
 	}
 
@@ -43,7 +43,13 @@ public class ChessServer {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		int port = 8300;
+
+		if (args.length > 0) {
+			port = Integer.parseInt(args[0]);
+		}
+
+		new ChessServer().start(port);
 	}
 
 	public void startGame(Player from, Player to) {
