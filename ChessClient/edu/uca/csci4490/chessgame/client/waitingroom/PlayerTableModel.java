@@ -38,7 +38,7 @@ public class PlayerTableModel extends AbstractTableModel {
 				return "Challenged You";
 			} else if (isChallengee) {
 				return "Challenged";
-			} else if (controller.getLoggedInPlayer().equals(player)) {
+			} else if (controller.getThisPlayer().equals(player)) {
 				return "You";
 			}
 		}

@@ -109,7 +109,7 @@ public class PlayerViewPanel extends JPanel {
 			challengeBtn.setText("Accept");
 			challengeBtn.setActionCommand("Accept");
 			challengeBtn.setEnabled(true);
-		} else if (controller.getLoggedInPlayer().equals(player)) {
+		} else if (controller.getThisPlayer().equals(player)) {
 			challengeBtn.setText("Challenge");
 			challengeBtn.setActionCommand("Challenge");
 			challengeBtn.setEnabled(false);

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class WaitingRoomController implements ActionListener, ListSelectionListener {
 
-	private Player loggedInPlayer;
+	private Player thisPlayer;
 
 	private Player selectedPlayer = null;
 
@@ -83,12 +83,12 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 		return challengees;
 	}
 
-	public Player getLoggedInPlayer() {
-		return loggedInPlayer;
+	public Player getThisPlayer() {
+		return thisPlayer;
 	}
 
-	public void setLoggedInPlayer(Player player) {
-		this.loggedInPlayer = player;
+	public void setThisPlayer(Player player) {
+		this.thisPlayer = player;
 	}
 
 	public void setPlayers(ArrayList<Player> waitingRoomPlayers) {
@@ -109,13 +109,13 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	public void receivePlayerChallenge(PlayerChallengeData data) {
-		if (data.getTo().equals(loggedInPlayer)) {
+		if (data.getTo().equals(thisPlayer)) {
 			challengers.add(data.getFrom());
 			playerListPanel.updatePlayers();
 
 			// refresh challenge button if the challenge was from the currently selected player
 			if (selectedPlayer.equals(data.getFrom())) {
-				setLoggedInPlayer(selectedPlayer);
+				setThisPlayer(selectedPlayer);
 			}
 		} else {
 			System.out.println("WARNING - received a challenge but currently logged in player is not to whom" +
@@ -124,7 +124,7 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	public void receivePlayerChallengeResponse(PlayerChallengeResponseData data) {
-		if (data.getFrom().equals(loggedInPlayer)) {
+		if (data.getFrom().equals(thisPlayer)) {
 			challengers.remove(data.getFrom());
 			playerListPanel.updatePlayers();
 		} else {
@@ -142,22 +142,22 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	public void sendPlayerChallenge(Player to) {
-		PlayerChallengeData data = new PlayerChallengeData(loggedInPlayer, to);
+		PlayerChallengeData data = new PlayerChallengeData(thisPlayer, to);
 		comms.send(data);
 	}
 
 	public void sendPlayerChallengeResponse(Player to, boolean accepted) {
-		PlayerChallengeResponseData data = new PlayerChallengeResponseData(loggedInPlayer, to, accepted);
+		PlayerChallengeResponseData data = new PlayerChallengeResponseData(thisPlayer, to, accepted);
 		comms.send(data);
 	}
 
 	public void sendPlayerLogout() {
 		PlayerLogoutData data = new PlayerLogoutData();
-		data.setPlayer(loggedInPlayer);
+		data.setPlayer(thisPlayer);
 
 		comms.send(data);
 
-		loggedInPlayer = null;
+		thisPlayer = null;
 
 		client.transitionToLoginScreen();
 	}
