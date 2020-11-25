@@ -189,5 +189,9 @@ public class GameScreenController implements ActionListener {
 		view.disableButtons();
 		abandonedGame = true;
 		// TODO send abandon game
+		AbandonGameData data = new AbandonGameData();
+		data.setGameID(game.getId());
+		data.setPlayer(thisPlayer);
+		comms.send(data);
 	}
 }
