@@ -54,19 +54,22 @@ public class ChessClient extends JFrame {
 
 		//Create the Controllers next
 		//Next, create the Controllers
-		lc = new LoginScreenController(container, client);
+		lc = new LoginScreenController(this, client);
 		cc = new CreateAccountController(container, client);
-		wc = new WaitingRoomController(container, this, client);
+		wc = new WaitingRoomController(this, client);
 		gc = new GameRoomControl(container, client);
 
 		// Create the four views. (need the controller to register with the Panels
-		JPanel view2 = new LoginView(lc);
+		LoginView loginView = new LoginView(lc);
 		JPanel view3 = new CreateAccountView(cc);
 		JPanel view4 = new WaitingRoomPanel(wc);
 //		JPanel view5 = new GameRoomPanel(gc);
 
+		// connect controllers to views
+		lc.setPanel(loginView);
+
 		// Add the views to the card layout container.
-		container.add(view2, LOGIN_PANEL);
+		container.add(loginView, LOGIN_PANEL);
 		container.add(view3, CREATE_ACCOUNT_PANEL);
 		container.add(view4, WAITING_ROOM_PANEL);
 		container.add(view5, GAME_SCREEN_PANEL);
@@ -88,6 +91,10 @@ public class ChessClient extends JFrame {
 		layout.show(container, LOGIN_PANEL);
 	}
 
+	public void transitionToCreateAccountScreen() {
+		layout.show(container, CREATE_ACCOUNT_PANEL);
+	}
+
 	public void transitionToWaitingRoom(Player loggedInPlayer, ArrayList<Player> players) {
 		wc.setLoggedInPlayer(loggedInPlayer);
 		wc.setPlayers(players);
@@ -102,6 +109,4 @@ public class ChessClient extends JFrame {
 	public static void main(String[] args) {
 		new ChessClient();
 	}
-
-
 }

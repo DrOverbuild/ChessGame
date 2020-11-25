@@ -9,8 +9,8 @@ public class LoginView extends JPanel {
 	private JPasswordField passwordField;
 	private JLabel errorText;
 
-	public LoginView() {
-	}
+	private JButton signInBtn;
+	private JButton createAccountBtn;
 
 	// Getter for the text in the username field.
 	public String getUsername() {
@@ -28,21 +28,12 @@ public class LoginView extends JPanel {
 	}
 
 	// Constructor for the login panel.
-	public void LoginView(LoginScreenController lc) {
-		// Create the controller and set it in the chat client.
-		//LoginControl controller = new LoginControl(container, client);
-		//client.setLoginControl(controller);
-
+	public LoginView(LoginScreenController lc) {
 		// Create a panel for the labels at the top of the GUI.
 		// create space for the error text
 		JPanel labelPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 		errorText = new JLabel("", JLabel.CENTER);
 		errorText.setForeground(Color.RED);
-
-		// not included in original image drawn by jasper
-//		JLabel instructionLabel = new JLabel("Enter your username and password to log in.", JLabel.CENTER);
-//		labelPanel.add(errorText);
-//		labelPanel.add(instructionLabel);
 
 		// Create a panel for the login information form.
 		JPanel loginPanel = new JPanel(new GridLayout(2, 2, 5, 5));
@@ -57,10 +48,12 @@ public class LoginView extends JPanel {
 
 		// Create a panel for the buttons.
 		JPanel buttonPanel = new JPanel();
-		JButton createAccountBtn = new JButton("Create Account");
+		createAccountBtn = new JButton("Create Account");
 		createAccountBtn.addActionListener(lc);
-		JButton signInBtn = new JButton("Sign In");
+		createAccountBtn.setActionCommand("Create Account");
+		signInBtn = new JButton("Sign In");
 		signInBtn.addActionListener(lc);
+		signInBtn.setActionCommand("Sign In");
 		buttonPanel.add(signInBtn);
 		buttonPanel.add(signInBtn);
 
@@ -70,6 +63,16 @@ public class LoginView extends JPanel {
 		grid.add(loginPanel);
 		grid.add(buttonPanel);
 		this.add(grid);
+	}
+
+	public void disableButtons() {
+		createAccountBtn.setEnabled(false);
+		signInBtn.setEnabled(false);
+	}
+
+	public void enableButtons() {
+		createAccountBtn.setEnabled(true);
+		signInBtn.setEnabled(true);
 	}
 }
 

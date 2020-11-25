@@ -26,17 +26,15 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	/**
 	 * List of players that have challenged the logged in player to a game
 	 */
-	private ArrayList<Player> challengers;
+	private ArrayList<Player> challengers = new ArrayList<>();
 
 	/**
 	 * List of player that the logged in player has challenged;
 	 */
-	private ArrayList<Player> challengees;
+	private ArrayList<Player> challengees = new ArrayList<>();
 
 	private ArrayList<Player> waitingRoomPlayers = new ArrayList<>();
 
-	// Private data fields for the container and chat client.
-	private JPanel container;
 	private ChessClient client;
 	private ChessClientCommunication comms;
 
@@ -44,7 +42,7 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	private PlayerViewPanel playerViewPanel;
 
 	// Constructor for the login controller.
-	public WaitingRoomController(JPanel container, ChessClient client, ChessClientCommunication comms) {
+	public WaitingRoomController(ChessClient client, ChessClientCommunication comms) {
 		this.comms = comms;
 		this.client = client;
 

@@ -1,5 +1,8 @@
 package edu.uca.csci4490.chessgame.client.clientLoginScreen;
 
+import edu.uca.csci4490.chessgame.client.ChessClient;
+import edu.uca.csci4490.chessgame.model.Player;
+import edu.uca.csci4490.chessgame.model.data.PlayerLogoutData;
 import edu.uca.csci4490.chessgame.model.data.WaitingRoomData;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.data.ErrorData;
@@ -14,13 +17,25 @@ import java.io.IOException;
 public class LoginScreenController implements ActionListener {
 
 	// Private data fields for the container and chat client.
-	private JPanel container;
-	private ChessClientCommunication client;
+	private LoginView panel = null;
+	private ChessClientCommunication comms;
+	private ChessClient client;
+
+	/**
+	 * Username with which user attempts to sign in for. Set to null unless we're waiting for login results.
+	 * If we get a waiting room in response, then login was successful. Find the player in the waiting room
+	 * with the same username as  attemptingUsername, and that's the logged in player.
+	 */
+	private String attemptingUsername = null;
 
 	// Constructor for the login controller.
-	public LoginScreenController(JPanel container, ChessClientCommunication client) {
-		this.container = container;
+	public LoginScreenController(ChessClient client, ChessClientCommunication comms) {
+		this.comms = comms;
 		this.client = client;
+	}
+
+	public void setPanel(LoginView panel) {
+		this.panel = panel;
 	}
 
 	// Handle button clicks.
@@ -29,39 +44,27 @@ public class LoginScreenController implements ActionListener {
 		String command = ae.getActionCommand();
 
 		// The Create account panel takes the user to the create account gui
-		if (command == "Create Account") {
-			CardLayout cardLayout = (CardLayout) container.getLayout();
-			cardLayout.show(container, "3");
+		if (command.equals("Create Account")) {
+			client.transitionToCreateAccountScreen();
 		}
 
 		// The Submit button submits the login information to the server.
-		else if (command == "Sign In") {
+		else if (command.equals("Sign In")) {
 			// Get the username and password the user entered.
-			LoginView loginView = (LoginView) container.getComponent(1);
-			PlayerLoginData data = new PlayerLoginData(loginView.getUsername(), loginView.getPassword());
+			String username = panel.getUsername();
+			String password = panel.getPassword();
 
 			// Check the validity of the information locally first.
-			if (data.getUsername().equals("") || data.getPassword().equals("")) {
+			if (username.equals("") || password.equals("")) {
 				displayError("You must enter a username and password.");
 				return;
 			}
 
+			panel.disableButtons();
+
 			// Submit the login information to the server.
-			try {
-				client.sendToServer(data);
-			} catch (IOException e) {
-				displayError("Error connecting to the server.");
-			}
+			sendLogin(username, password);
 		}
-	}
-
-	// After the login is successful, set the User object and display the waiting room screen
-	public void loginSuccess() {
-		LoginView loginView = (LoginView) container.getComponent(1);
-
-		CardLayout cardLayout = (CardLayout) container.getLayout();
-		// this number will have to be changed based on the ClientGUI
-		cardLayout.show(container, "4");
 	}
 
 	// Method that displays a message in the error label.
@@ -71,11 +74,44 @@ public class LoginScreenController implements ActionListener {
 	}
 
 	public void receiveError(ErrorData data) {
+		attemptingUsername = null;
+		panel.enableButtons();
 		displayError(data.getMsg());
 	}
 
 	public void receiveWaitingRoom(WaitingRoomData data) {
+		if (attemptingUsername == null) {
+			System.out.println("WARNING - attemptingUsername set to null... the login screen receieved WaitingRoomData " +
+					"but was not waiting for log in results.");
+			return;
+		}
 
+		Player loggedIn = null;
+
+		for (Player p: data.getPlayers()) {
+			if (p.getUsername().equals(attemptingUsername)) {
+				loggedIn = p;
+			}
+		}
+
+		if (loggedIn == null) {
+			System.out.println("WARNING - not in waiting room... the login screen received WaitingRoomData but " +
+					"could not find " + attemptingUsername + " in waiting room. Ignoring the message.");
+			return;
+		}
+
+		// reset login ui for logging out and returning to beginning screen
+		attemptingUsername = null;
+		panel.enableButtons();
+
+		client.transitionToWaitingRoom(loggedIn, data.getPlayers());
+	}
+
+	public void sendLogin(String username, String password) {
+		attemptingUsername = username;
+
+		PlayerLoginData data = new PlayerLoginData(username, password);
+		comms.send(data);
 	}
 }
 
