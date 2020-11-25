@@ -74,7 +74,7 @@ public class GameCommunication {
 		}
 	}
 
-	public void receivePieceSelection(PIeceSelectionData data, ConnectionToClient client) {
+	public void receivePieceSelection(PieceSelectionData data, ConnectionToClient client) {
 		int id = data.getGameID();
 		Piece piece = data.getPiece();
 
