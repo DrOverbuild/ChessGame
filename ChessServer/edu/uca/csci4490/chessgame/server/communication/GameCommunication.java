@@ -10,6 +10,7 @@ import ocsf.server.ConnectionToClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class GameCommunication {
 	private ChessServer server;
@@ -63,8 +64,9 @@ public class GameCommunication {
 			loser = game.getBlack();
 			stalemate = true;
 		}
-
-		EndOfGameData data = new EndOfGameData(winner, loser, stalemate);
+		Set<Player> set = server.getPlayerManager().getWaitingRoom();
+		ArrayList<Player> player = new ArrayList<Player>(set);
+		EndOfGameData data = new EndOfGameData(winner, loser, stalemate, player);
 
 		try {
 			winner.getClient().sendToClient(data);
