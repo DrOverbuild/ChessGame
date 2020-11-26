@@ -2,22 +2,23 @@ package edu.uca.csci4490.chessgame.server.communication;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Set;
 
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
 import edu.uca.csci4490.chessgame.server.ChessServer;
-import edu.uca.csci4490.chessgame.server.playermanager.PlayerManager;
 
 public class WaitingRoomCommunication {
 	
 	private ChessServer server;
-	
+
+	public WaitingRoomCommunication(ChessServer server) {
+		this.server = server;
+	}
+
 	public void sendWaitingRoomToAll () {
 		Set<Player> players = server.getPlayerManager().getWaitingRoom();
-		
-		players.forEach(System.out::println);
+
 		ArrayList <Player> playerlist = new ArrayList<>(players);
 		WaitingRoomData data = new WaitingRoomData(playerlist);
 		for(Player p: players) {

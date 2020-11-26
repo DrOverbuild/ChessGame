@@ -23,7 +23,7 @@ public class ChessServerCommunication extends AbstractServer {
 		// etc 
 		this.server = server;
 		playerLoginCommunication = new PlayerLoginCommunication(server, server.getPlayerManager(), this);
-		waitingRoomCommunication = new WaitingRoomCommunication();
+		waitingRoomCommunication = new WaitingRoomCommunication(server);
 		gameCommunication = new GameCommunication(server);
 	}
 

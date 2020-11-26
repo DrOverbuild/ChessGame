@@ -23,7 +23,7 @@ public class PlayerLoginCommunication {
 	}
 	
 	public void receiveCreateAccount(CreateAccountData data, ConnectionToClient client) {
-		if(pmanager.accountCreated(data) == true) {
+		if(pmanager.accountCreated(data)) {
 			sendCreateAccountSuccessful(client);
 		}
 		else {
@@ -33,7 +33,7 @@ public class PlayerLoginCommunication {
 	}
 	
 	public void receivePlayerLogin(PlayerLoginData data, ConnectionToClient client) {
-		if(pmanager.clientLoggedIn(data, client) == true) {
+		if(pmanager.clientLoggedIn(data, client)) {
 			chessservercom.getWaitingRoomCommunication().sendWaitingRoomToAll();
 		}
 		else {
@@ -53,7 +53,7 @@ public class PlayerLoginCommunication {
 	
 	public void sendCreateAccountSuccessful(ConnectionToClient client) {
 		try {
-			client.sendToClient(new CreateAccountSuccessfulData(client));
+			client.sendToClient(new CreateAccountSuccessfulData());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
