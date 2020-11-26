@@ -2,6 +2,7 @@ package edu.uca.csci4490.chessgame.server.playermanager;
 
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.CreateAccountData;
+import edu.uca.csci4490.chessgame.model.data.EndOfGameData;
 import edu.uca.csci4490.chessgame.model.data.PlayerLoginData;
 import edu.uca.csci4490.chessgame.model.gamelogic.Color;
 import edu.uca.csci4490.chessgame.model.gamelogic.Game;
@@ -12,10 +13,7 @@ import edu.uca.csci4490.chessgame.server.database.UserAlreadyExistsException;
 import ocsf.server.ConnectionToClient;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PlayerManager {
 	// changed data types on all of these because we don't want duplicate entries
@@ -154,20 +152,23 @@ public class PlayerManager {
 		}
 	}
 
-	public void clientDisconnected(ConnectionToClient client) {
-		Player remove = playerByClient(client);
-
-		allLoggedInPlayers.remove(remove);
-		waitingRoom.remove(remove);
+	public void playerDisconnected(Player player) {
+		allLoggedInPlayers.remove(player);
+		waitingRoom.remove(player);
 
 		for (Player p : challenges.keySet()) {
 			challenges.get(p).remove(p);
 		}
 
-		Game game = server.gameOfPlayer(remove);
+		Game game = server.gameOfPlayer(player);
 		if (game != null) {
-			game.playerAbandonedGame(remove);
+			game.playerAbandonedGame(player);
 			server.endGame(game);
+
+			// send end of game to the other player in the game
+			EndOfGameData data = new EndOfGameData(game.getWinner(),
+					player, false, new ArrayList<>(getWaitingRoom()));
+			server.getComms().sendToPlayer(game.getWinner(), data);
 		}
 	}
 

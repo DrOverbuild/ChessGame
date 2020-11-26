@@ -2,11 +2,7 @@ package edu.uca.csci4490.chessgame.server.communication;
 
 import java.io.IOException;
 
-import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
 import edu.uca.csci4490.chessgame.server.ChessServer;
 import edu.uca.csci4490.chessgame.server.playermanager.PlayerManager;
 import ocsf.server.ConnectionToClient;

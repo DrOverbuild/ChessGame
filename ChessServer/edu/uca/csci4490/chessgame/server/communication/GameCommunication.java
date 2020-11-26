@@ -8,15 +8,16 @@ import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
 import edu.uca.csci4490.chessgame.server.ChessServer;
 import ocsf.server.ConnectionToClient;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
 public class GameCommunication {
 	private ChessServer server;
+	private ChessServerCommunication comms;
 
-	public GameCommunication(ChessServer server) {
+	public GameCommunication(ChessServer server, ChessServerCommunication comms) {
 		this.server = server;
+		this.comms = comms;
 	}
 
 	public void sendStartOfGame(Game game) {
@@ -24,21 +25,13 @@ public class GameCommunication {
 		Player white = game.getWhite();
 		StartOfGameData data = new StartOfGameData(game);
 
-		try {
-			black.getClient().sendToClient(data);
-			white.getClient().sendToClient(data);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		comms.sendToPlayer(black, data);
+		comms.sendToPlayer(white, data);
 	}
 
 	public void sendAvailableMoves(Game game, ArrayList<Location> moves) {
 		AvailableMovesData data = new AvailableMovesData(game.getId(),moves);
-		try {
-			game.getWhoseTurn().getClient().sendToClient(data);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		comms.sendToPlayer(game.getWhoseTurn(), data);
 	}
 
 	public void sendNextTurn(Game game) {
@@ -46,12 +39,8 @@ public class GameCommunication {
 		Player white = game.getWhite();
 		NextTurnData data = new NextTurnData(game);
 
-		try {
-			black.getClient().sendToClient(data);
-			white.getClient().sendToClient(data);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		comms.sendToPlayer(black, data);
+		comms.sendToPlayer(white, data);
 	}
 
 	public void sendEndOfGameData(Game game) {
@@ -65,15 +54,11 @@ public class GameCommunication {
 			stalemate = true;
 		}
 		Set<Player> set = server.getPlayerManager().getWaitingRoom();
-		ArrayList<Player> player = new ArrayList<Player>(set);
-		EndOfGameData data = new EndOfGameData(winner, loser, stalemate, player);
+		ArrayList<Player> players = new ArrayList<>(set);
+		EndOfGameData data = new EndOfGameData(winner, loser, stalemate, players);
 
-		try {
-			winner.getClient().sendToClient(data);
-			loser.getClient().sendToClient(data);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		comms.sendToPlayer(winner, data);
+		comms.sendToPlayer(loser, data);
 	}
 
 	public void receivePieceSelection(PieceSelectionData data, ConnectionToClient client) {

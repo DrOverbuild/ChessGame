@@ -1,10 +1,9 @@
 package edu.uca.csci4490.chessgame.server.communication;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
+import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.server.ChessServer;
-import edu.uca.csci4490.chessgame.server.playermanager.PlayerManager;
 import edu.uca.csci4490.chessgame.model.data.*;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -23,8 +22,8 @@ public class ChessServerCommunication extends AbstractServer {
 		// etc 
 		this.server = server;
 		playerLoginCommunication = new PlayerLoginCommunication(server, server.getPlayerManager(), this);
-		waitingRoomCommunication = new WaitingRoomCommunication(server);
-		gameCommunication = new GameCommunication(server);
+		waitingRoomCommunication = new WaitingRoomCommunication(server, this);
+		gameCommunication = new GameCommunication(server, this);
 	}
 
 	@Override
@@ -115,17 +114,20 @@ public class ChessServerCommunication extends AbstractServer {
 	public GameCommunication getGameCommunication() {
 		return gameCommunication;
 	}
-	
-	
-	
+
+	/**
+	 * Sends data object to given player. If an issue occurs, we need to remove the player from the server, whether
+	 * they are in the waiting room or in a game.
+	 * @param p
+	 * @param data
+	 */
+	public void sendToPlayer(Player p, Object data) {
+		try {
+			p.getClient().sendToClient(data);
+		} catch (IOException | NullPointerException e) {
+			System.out.println("WARNING - Lost connection to " + p.getUsername() + ". We have considered him logged out.");
+			e.printStackTrace();
+			server.getPlayerManager().playerDisconnected(p);
+		}
+	}
 }
-
-
-
-
-
-
-
-
-
-//.
