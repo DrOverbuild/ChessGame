@@ -1,6 +1,8 @@
 package edu.uca.csci4490.chessgame.server.communication;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.server.ChessServer;
@@ -15,6 +17,8 @@ public class ChessServerCommunication extends AbstractServer {
 	private WaitingRoomCommunication waitingRoomCommunication;
 	private GameCommunication gameCommunication;
 	private ChessServer server;
+
+	private Pinger pinger;
 	
 	public ChessServerCommunication(int port, ChessServer server) {
 		super(port);
@@ -24,11 +28,17 @@ public class ChessServerCommunication extends AbstractServer {
 		playerLoginCommunication = new PlayerLoginCommunication(server, server.getPlayerManager(), this);
 		waitingRoomCommunication = new WaitingRoomCommunication(server, this);
 		gameCommunication = new GameCommunication(server, this);
+
+		pinger = new Pinger(server, this);
+		new Timer().scheduleAtFixedRate(pinger, 1000, 1000);
 	}
 
 	@Override
 	protected void handleMessageFromClient(Object o, ConnectionToClient client) {
 		{
+			System.out.println("Incoming message from client " + client.getId());
+			System.out.println(o);
+			System.out.println();
 			// If we received LoginData, verify the account information.
 			if (o instanceof PlayerLoginData)
 			{
@@ -41,6 +51,10 @@ public class ChessServerCommunication extends AbstractServer {
 			{
 				// Try to create the account.
 				playerLoginCommunication.receiveCreateAccount((CreateAccountData)o, client);
+			}
+			else if (o instanceof PlayerLogoutData) {
+				// log the player out and update the other players
+				playerLoginCommunication.receivePlayerLogout((PlayerLogoutData) o);
 			}
 			else if (o instanceof PlayerChallengeData)
 			{
@@ -67,6 +81,7 @@ public class ChessServerCommunication extends AbstractServer {
 				// Receive game Abandoned
 				gameCommunication.receiveGameAbandoned((AbandonGameData)o);
 			}
+
 			
 		}	
 	}
@@ -123,11 +138,61 @@ public class ChessServerCommunication extends AbstractServer {
 	 */
 	public void sendToPlayer(Player p, Object data) {
 		try {
+			if (!data.equals("Ping")) {
+				System.out.println("Outgoing message to " + p.getUsername());
+				System.out.println(data);
+				System.out.println();
+			}
+
 			p.getClient().sendToClient(data);
 		} catch (IOException | NullPointerException e) {
-			System.out.println("WARNING - Lost connection to " + p.getUsername() + ". We have considered him logged out.");
 			e.printStackTrace();
+
+			System.out.println("WARNING - Lost connection to " + p.getUsername() + ". Considering them disconnected.");
+			System.out.println("Attempted to send: " + data);
+			System.out.println();
+
 			server.getPlayerManager().playerDisconnected(p);
+			getWaitingRoomCommunication().sendWaitingRoomToAll();
+		}
+	}
+}
+
+/**
+ * Simple class that sends a string message to each logged in player once a second to ensure the socket still exists.
+ * If the message fails to send, ChessServerCommunication takes care of the fact that the player doesn't seem to be
+ * connected. We have this class because the server doesn't know a client is disconnected until we try to send it a
+ * message.
+ */
+class Pinger extends TimerTask {
+	private ChessServer server;
+	private ChessServerCommunication comms;
+
+	public Pinger(ChessServer server, ChessServerCommunication comms) {
+		this.server = server;
+		this.comms = comms;
+	}
+
+	public ChessServer getServer() {
+		return server;
+	}
+
+	public void setServer(ChessServer server) {
+		this.server = server;
+	}
+
+	public ChessServerCommunication getComms() {
+		return comms;
+	}
+
+	public void setComms(ChessServerCommunication comms) {
+		this.comms = comms;
+	}
+
+	@Override
+	public void run() {
+		for (Player p: server.getPlayerManager().getAllLoggedInPlayers()) {
+			comms.sendToPlayer(p, "Ping");
 		}
 	}
 }

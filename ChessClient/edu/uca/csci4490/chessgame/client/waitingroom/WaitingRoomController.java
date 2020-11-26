@@ -112,7 +112,23 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	private void setSelectedPlayer(Player p) {
+		this.selectedPlayer = p;
 		playerViewPanel.setPlayer(p);
+	}
+
+	public Player playerById(int id) {
+		for (Player p: waitingRoomPlayers) {
+			if (p.getId() == id) {
+				return p;
+			}
+		}
+
+		return null;
+	}
+
+	public void emptyChallenges() {
+		challengees = new ArrayList<>();
+		challengers = new ArrayList<>();
 	}
 
 	public void receiveWaitingRoom(WaitingRoomData data) {
@@ -121,14 +137,16 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	public void receivePlayerChallenge(PlayerChallengeData data) {
-		if (data.getTo().equals(thisPlayer)) {
+		if (thisPlayer.equals(data.getTo())) {
 			challengers.add(data.getFrom());
 			playerListPanel.updatePlayers();
 
 			// refresh challenge button if the challenge was from the currently selected player
-			if (selectedPlayer.equals(data.getFrom())) {
+			if (selectedPlayer != null && selectedPlayer.equals(data.getFrom())) {
 				setThisPlayer(selectedPlayer);
 			}
+
+			comms.send(thisPlayer.getUsername() + " received player challenge");
 		} else {
 			System.out.println("WARNING - received a challenge but currently logged in player is not to whom" +
 					" this challenge was directed.");
@@ -154,6 +172,10 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	public void sendPlayerChallenge(Player to) {
+		challengees.add(to);
+		setSelectedPlayer(selectedPlayer);
+		playerListPanel.updatePlayers();
+
 		PlayerChallengeData data = new PlayerChallengeData(thisPlayer, to);
 		comms.send(data);
 	}

@@ -36,6 +36,11 @@ public class PlayerLoginCommunication {
 			sendLoginUnsuccessful(client);
 		}
 	}
+
+	public void receivePlayerLogout(PlayerLogoutData data) {
+		pmanager.playerDisconnected(data.getPlayer());
+		chessservercom.getWaitingRoomCommunication().sendWaitingRoomToAll();
+	}
 	
 	public void sendLoginUnsuccessful(ConnectionToClient client) {
 		ErrorData data = new ErrorData("Invalid username or password");

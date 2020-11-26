@@ -33,6 +33,10 @@ public class PlayerManager {
 		this.database = new Database();
 	}
 
+	public Set<Player> getAllLoggedInPlayers() {
+		return new HashSet<>(allLoggedInPlayers);
+	}
+
 	/**
 	 * Returns a copy of the waiting room list.
 	 *
@@ -46,6 +50,8 @@ public class PlayerManager {
 	 * Remember, when calling this, all players in the waiting room must be sent the update
 	 */
 	public void movePlayerToWaitingRoom(Player p) {
+		// check to make sure we don't have duplicate players
+		waitingRoom.remove(p);
 		waitingRoom.add(p);
 	}
 
@@ -66,6 +72,30 @@ public class PlayerManager {
 		for (Player p : allLoggedInPlayers) {
 			if (p.getClient() != null && p.getClient().equals(client)) {
 				return p;
+			}
+		}
+
+		return null;
+	}
+
+	public Player playerById(int id) {
+		for (Player p:allLoggedInPlayers) {
+			if (p.getId() == id) {
+				return p;
+			}
+		}
+
+		return null;
+	}
+
+	public ConnectionToClient clientForPlayer(Player p) {
+		if (p.getClient() != null) {
+			return p.getClient();
+		}
+
+		for (Player loggedInPlayer: allLoggedInPlayers) {
+			if (p.equals(loggedInPlayer)) {
+				return loggedInPlayer.getClient();
 			}
 		}
 
@@ -146,7 +176,10 @@ public class PlayerManager {
 		if (p == null) {
 			return false;
 		} else {
+			// check to make sure we don't have duplicate players
+			allLoggedInPlayers.remove(p);
 			allLoggedInPlayers.add(p);
+
 			this.movePlayerToWaitingRoom(p);
 			return true;
 		}
