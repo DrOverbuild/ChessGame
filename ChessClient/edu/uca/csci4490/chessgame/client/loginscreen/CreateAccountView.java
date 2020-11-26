@@ -81,6 +81,7 @@ public class CreateAccountView extends JPanel{
 		backBtn = new JButton("Back");
 		backBtn.addActionListener(cc);
 		createAccountBtn = new JButton("Create Account");
+		createAccountBtn.setActionCommand("Submit");
 		createAccountBtn.addActionListener(cc);    
 		buttonPanel.add(backBtn);
 		buttonPanel.add(createAccountBtn);
