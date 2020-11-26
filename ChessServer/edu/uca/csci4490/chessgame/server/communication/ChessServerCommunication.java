@@ -16,17 +16,15 @@ public class ChessServerCommunication extends AbstractServer {
 	private WaitingRoomCommunication waitingRoomCommunication;
 	private GameCommunication gameCommunication;
 	private ChessServer server;
-	private PlayerManager playermanager;
 	
 	public ChessServerCommunication(int port, ChessServer server) {
 		super(port);
 		// initialize private data fields
 		// etc 
-		server = new ChessServer();
+		this.server = server;
 		playerLoginCommunication = new PlayerLoginCommunication(server, server.getPlayerManager(), this);
 		waitingRoomCommunication = new WaitingRoomCommunication();
 		gameCommunication = new GameCommunication(server);
-		playermanager = new PlayerManager(server);
 	}
 
 	@Override
@@ -101,6 +99,7 @@ public class ChessServerCommunication extends AbstractServer {
 	public PlayerLoginCommunication getPlayerLoginCommunication(){
 		return playerLoginCommunication;
 	}
+
 	public void setWaitingRoomCommunication(WaitingRoomCommunication waitingRoomCommunication){
 		this.waitingRoomCommunication = waitingRoomCommunication;
 	}

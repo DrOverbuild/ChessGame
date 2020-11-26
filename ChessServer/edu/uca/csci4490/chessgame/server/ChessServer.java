@@ -5,6 +5,7 @@ import edu.uca.csci4490.chessgame.model.gamelogic.Game;
 import edu.uca.csci4490.chessgame.server.communication.ChessServerCommunication;
 import edu.uca.csci4490.chessgame.server.playermanager.PlayerManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +30,10 @@ public class ChessServer {
 	public ChessServer() {
 	}
 
-	public void start(int port) {
-		comms = new ChessServerCommunication(port, this);
+	public void start(int port) throws IOException {
 		playerManager = new PlayerManager(this);
+		comms = new ChessServerCommunication(port, this);
+		comms.listen();
 	}
 
 	public ChessServerCommunication getComms() {
@@ -49,7 +51,13 @@ public class ChessServer {
 			port = Integer.parseInt(args[0]);
 		}
 
-		new ChessServer().start(port);
+		try {
+			new ChessServer().start(port);
+		} catch (IOException e) {
+			System.out.println("FATAL - failed to set up server");
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 
 	public void startGame(Player from, Player to) {

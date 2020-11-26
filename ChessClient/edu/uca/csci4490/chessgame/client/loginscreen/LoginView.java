@@ -34,6 +34,7 @@ public class LoginView extends JPanel {
 		JPanel labelPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 		errorText = new JLabel("", JLabel.CENTER);
 		errorText.setForeground(Color.RED);
+		labelPanel.add(errorText);
 
 		// Create a panel for the login information form.
 		JPanel loginPanel = new JPanel(new GridLayout(2, 2, 5, 5));
@@ -55,7 +56,7 @@ public class LoginView extends JPanel {
 		signInBtn.addActionListener(lc);
 		signInBtn.setActionCommand("Sign In");
 		buttonPanel.add(signInBtn);
-		buttonPanel.add(signInBtn);
+		buttonPanel.add(createAccountBtn);
 
 		// Arrange the three panels in a grid.
 		JPanel grid = new JPanel(new GridLayout(3, 1, 0, 10));
