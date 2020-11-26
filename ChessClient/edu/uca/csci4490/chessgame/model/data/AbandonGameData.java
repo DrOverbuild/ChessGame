@@ -2,7 +2,9 @@ package edu.uca.csci4490.chessgame.model.data;
 
 import edu.uca.csci4490.chessgame.model.Player;
 
-public class AbandonGameData {
+import java.io.Serializable;
+
+public class AbandonGameData implements Serializable {
 	private int gameID;
 	private Player player;
 	
