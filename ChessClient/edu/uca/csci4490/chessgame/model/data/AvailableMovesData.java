@@ -29,4 +29,12 @@ public class AvailableMovesData implements Serializable {
 	public void setMoves(ArrayList<Location> moves) {
 		this.moves = moves;
 	}
+
+	@Override
+	public String toString() {
+		return "AvailableMovesData{" +
+				"gameID=" + gameID +
+				", moves: size(" + moves.size() +
+				")}";
+	}
 }

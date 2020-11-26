@@ -40,4 +40,13 @@ public class PlayerChallengeResponseData implements Serializable {
 	public void setAccepted(Boolean accepted) {
 		this.accepted= accepted;
 	}
+
+	@Override
+	public String toString() {
+		return "PlayerChallengeResponseData{" +
+				"to=" + to.getUsername() +
+				", from=" + from.getUsername() +
+				", accepted=" + accepted +
+				'}';
+	}
 }

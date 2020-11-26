@@ -181,4 +181,9 @@ public class Location implements Serializable {
 
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
 }

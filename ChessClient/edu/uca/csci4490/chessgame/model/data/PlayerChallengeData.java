@@ -30,5 +30,11 @@ public class PlayerChallengeData implements Serializable {
 		this.from = from;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "PlayerChallengeData{" +
+				"to=" + to.getUsername() +
+				", from=" + from.getUsername() +
+				'}';
+	}
 }

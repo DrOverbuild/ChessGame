@@ -18,4 +18,11 @@ public class WaitingRoomData implements Serializable {
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
+
+	@Override
+	public String toString() {
+		return "WaitingRoomData{" +
+				"players=size(" + players.size() +
+				")}";
+	}
 }

@@ -60,4 +60,14 @@ public class PieceMoveData implements Serializable {
 	public boolean hasPromotion() {
 		return this.promoteTo != null;
 	}
+
+	@Override
+	public String toString() {
+		return "PieceMoveData{" +
+				"gameID=" + gameID +
+				", piece=" + piece +
+				", moveTo=" + moveTo +
+				", promoteTo=" + promoteTo +
+				'}';
+	}
 }

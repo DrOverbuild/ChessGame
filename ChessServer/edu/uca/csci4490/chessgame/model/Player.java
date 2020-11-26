@@ -3,6 +3,7 @@ package edu.uca.csci4490.chessgame.model;
 import ocsf.server.ConnectionToClient;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Player implements Serializable {
 	private transient ConnectionToClient client;
@@ -84,14 +85,27 @@ public class Player implements Serializable {
 				'}';
 	}
 
+	/**
+	 * The only thing that should make one player different from another player object is their id.
+	 * We do not want to store multiple different player objects in the memory with the same id.
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Player)) return false;
-
+		if (o == null || getClass() != o.getClass()) return false;
 		Player player = (Player) o;
+		return id == player.id;
+	}
 
-		if (id != player.id) return false;
-		return username != null ? username.equals(player.username) : player.username == null;
+
+	/**
+	 * Set uses this function instead of equals() to check for duplicates.
+	 * @return
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

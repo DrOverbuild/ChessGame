@@ -15,5 +15,11 @@ public class PlayerLogoutData implements Serializable {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "PlayerLogoutData{" +
+				"player=" + player.getUsername() +
+				'}';
+	}
 }

@@ -18,4 +18,11 @@ public class StartOfGameData implements Serializable {
 	public void setGame(Game game) {
 		this.game = game;
 	}
+
+	@Override
+	public String toString() {
+		return "StartOfGameData{" +
+				"game=" + game.getId() +
+				'}';
+	}
 }

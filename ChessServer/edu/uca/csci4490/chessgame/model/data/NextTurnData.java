@@ -18,4 +18,11 @@ public class NextTurnData implements Serializable {
 	public void setGame(Game game) {
 		this.game = game;
 	}
+
+	@Override
+	public String toString() {
+		return "NextTurnData{" +
+				"game=" + game.getId() +
+				'}';
+	}
 }

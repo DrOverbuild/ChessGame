@@ -3,6 +3,7 @@ package edu.uca.csci4490.chessgame.model;
 import ocsf.server.ConnectionToClient;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Player implements Serializable {
 	private transient ConnectionToClient client = null;
@@ -82,11 +83,13 @@ public class Player implements Serializable {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Player)) return false;
-
+		if (o == null || getClass() != o.getClass()) return false;
 		Player player = (Player) o;
+		return id == player.id;
+	}
 
-		if (id != player.id) return false;
-		return username != null ? username.equals(player.username) : player.username == null;
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

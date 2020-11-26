@@ -49,4 +49,14 @@ public class EndOfGameData implements Serializable {
 	public void setWaitingRoom(ArrayList<Player> waitingRoom) {
 		this.waitingRoom = waitingRoom;
 	}
+
+	@Override
+	public String toString() {
+		return "EndOfGameData{" +
+				"winner=" + winner.getUsername() +
+				", loser=" + loser.getUsername() +
+				", stalemate=" + stalemate +
+				", waitingRoom=size(" + waitingRoom.size() +
+				")";
+	}
 }

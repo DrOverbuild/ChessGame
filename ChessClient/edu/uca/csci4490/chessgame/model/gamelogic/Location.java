@@ -1,9 +1,6 @@
 package edu.uca.csci4490.chessgame.model.gamelogic;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Objects;
-
 public class Location implements Serializable {
 	private byte x;
 	private byte y;
@@ -36,5 +33,10 @@ public class Location implements Serializable {
 		Location location = (Location) o;
 		return x == location.x &&
 				y == location.y;
+	}
+
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ")";
 	}
 }

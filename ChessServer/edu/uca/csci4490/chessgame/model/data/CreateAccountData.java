@@ -26,4 +26,12 @@ public class CreateAccountData implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "CreateAccountData{" +
+				"username='" + username + '\'' +
+				", password='" + password + '\'' +
+				'}';
+	}
 }

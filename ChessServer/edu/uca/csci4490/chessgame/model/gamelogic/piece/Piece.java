@@ -52,4 +52,9 @@ public abstract class Piece implements Serializable {
 	public abstract ArrayList<Location> filterAvailableLocations(Board board);
 
 	public abstract int getWorth();
+
+	@Override
+	public String toString() {
+		return "Piece." + getImage();
+	}
 }

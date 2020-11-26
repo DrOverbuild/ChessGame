@@ -27,4 +27,12 @@ public class AbandonGameData implements Serializable {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
+
+	@Override
+	public String toString() {
+		return "AbandonGameData{" +
+				"gameID=" + gameID +
+				", player=" + player +
+				'}';
+	}
 }

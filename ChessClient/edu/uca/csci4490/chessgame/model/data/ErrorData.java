@@ -16,5 +16,12 @@ public class ErrorData implements Serializable {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+
+	@Override
+	public String toString() {
+		return "ErrorData{" +
+				"msg='" + msg + '\'' +
+				'}';
+	}
 }
 
