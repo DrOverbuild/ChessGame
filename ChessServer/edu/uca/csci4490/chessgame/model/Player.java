@@ -5,7 +5,7 @@ import ocsf.server.ConnectionToClient;
 import java.io.Serializable;
 
 public class Player implements Serializable {
-	transient private ConnectionToClient client;
+	private transient ConnectionToClient client;
 
 	private int id;
 	private String username;

@@ -5,13 +5,15 @@ import ocsf.server.ConnectionToClient;
 import java.io.Serializable;
 
 public class Player implements Serializable {
+	private transient ConnectionToClient client = null;
+
 	private int id;
 	private String username;
 	private int xp;
 	private int wins;
 	private int losses;
 
-	public Player(int id, String username, int xp, int wins, int losses) {
+	public Player(ConnectionToClient client, int id, String username, int xp, int wins, int losses) {
 		this.id = id;
 		this.username = username;
 		this.xp = xp;
@@ -21,6 +23,10 @@ public class Player implements Serializable {
 
 	public Player() {
 	}
+
+	public ConnectionToClient getClient() {return null;}
+
+	public void setClient(ConnectionToClient client) { }
 
 	public int getId() {
 		return id;
