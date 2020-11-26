@@ -4,7 +4,6 @@ import edu.uca.csci4490.chessgame.client.GameScreen.GameScreenController;
 import edu.uca.csci4490.chessgame.client.loginscreen.CreateAccountController;
 import edu.uca.csci4490.chessgame.client.loginscreen.LoginScreenController;
 import edu.uca.csci4490.chessgame.client.waitingroom.WaitingRoomController;
-import edu.uca.csci4490.chessgame.client.waitingroom.WaitingRoomPanel;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.gamelogic.Game;
@@ -48,7 +47,7 @@ public class ChessClient extends JFrame {
 
 
 		// Set the title and default close operation.
-		this.setTitle("Chat Client");
+		this.setTitle("Chess Client");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Create the card layout container.
@@ -65,7 +64,7 @@ public class ChessClient extends JFrame {
 		// Retreive/create the views. Most controllers have already built the views.
 		JPanel loginView = lc.getView();
 		JPanel createAccountView = cc.getView();
-		JPanel waitingRoomView = new WaitingRoomPanel(wc);
+		JPanel waitingRoomView = wc.getView();
 		JPanel gameScreenView = gc.getView();
 
 		// Add the views to the card layout container.
@@ -79,8 +78,8 @@ public class ChessClient extends JFrame {
 
 		// Add the card layout container to the JFrame.
 		// GridBagLayout makes the container stay centered in the window.
-		this.setLayout(new GridBagLayout());
-		this.add(container);
+		this.setLayout(new BorderLayout());
+		this.add(container, BorderLayout.CENTER);
 
 		// Show the JFrame.
 		this.setSize(550, 350);
@@ -104,6 +103,7 @@ public class ChessClient extends JFrame {
 	public void transitionToWaitingRoom(Player loggedInPlayer, ArrayList<Player> players) {
 		wc.setThisPlayer(loggedInPlayer);
 		wc.setPlayers(players);
+		wc.emptyChallenges();
 		currentPanel = WAITING_ROOM_PANEL;
 		transition();
 	}

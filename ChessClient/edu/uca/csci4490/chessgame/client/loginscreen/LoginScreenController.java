@@ -101,6 +101,7 @@ public class LoginScreenController implements ActionListener {
 		attemptingUsername = null;
 		view.enableButtons();
 
+		client.setTitle("Logged in as " + loggedIn.getUsername());
 		client.transitionToWaitingRoom(loggedIn, data.getPlayers());
 	}
 
