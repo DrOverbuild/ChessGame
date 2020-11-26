@@ -2,7 +2,9 @@ package edu.uca.csci4490.chessgame.model.data;
 
 import ocsf.server.ConnectionToClient;
 
-public class CreateAccountSuccessfulData {
+import java.io.Serializable;
+
+public class CreateAccountSuccessfulData implements Serializable {
 	
 	private ConnectionToClient client;
 	

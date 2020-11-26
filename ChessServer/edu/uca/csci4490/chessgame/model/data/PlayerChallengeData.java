@@ -2,7 +2,9 @@ package edu.uca.csci4490.chessgame.model.data;
 
 import edu.uca.csci4490.chessgame.model.Player;
 
-public class PlayerChallengeData {
+import java.io.Serializable;
+
+public class PlayerChallengeData implements Serializable {
 
 	private Player to;
 	private Player from;
