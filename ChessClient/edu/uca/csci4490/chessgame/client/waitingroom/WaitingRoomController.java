@@ -34,6 +34,7 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	private ChessClient client;
 	private ChessClientCommunication comms;
 
+	private WaitingRoomPanel view;
 	private PlayerListPanel playerListPanel;
 	private PlayerViewPanel playerViewPanel;
 
@@ -44,6 +45,8 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 
 		playerListPanel = new PlayerListPanel(this);
 		playerViewPanel = new PlayerViewPanel(this);
+		view = new WaitingRoomPanel(this);
+
 	}
 
 	// Handle button clicks.
@@ -65,6 +68,14 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 		else if (command.equals("Accept")) {
 			sendPlayerChallengeResponse(selectedPlayer, true);
 		}
+	}
+
+	public WaitingRoomPanel getView() {
+		return view;
+	}
+
+	public void setView(WaitingRoomPanel view) {
+		this.view = view;
 	}
 
 	public PlayerListPanel getListPanel() {
@@ -93,6 +104,7 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 
 	public void setPlayers(ArrayList<Player> waitingRoomPlayers) {
 		this.waitingRoomPlayers = waitingRoomPlayers;
+		this.getListPanel().updatePlayers();
 	}
 
 	public ArrayList<Player> getWaitingRoomPlayers() {
