@@ -15,14 +15,14 @@ public class Database {
 
 	private Connection connection;
 	private String encryptionKey;
+	private Properties props;
 
 	public Database() {
 		try {
-			Properties props = new Properties();
+			props = new Properties();
 			props.load(new FileInputStream(filename));
-			String url = props.getProperty("url");
 			encryptionKey = props.getProperty("enc_key");
-			connection = DriverManager.getConnection(url, props);
+			createConnection();
 		} catch (IOException e) {
 			System.out.println("Fatal: unable to read db.properties.");
 			e.printStackTrace();
@@ -34,7 +34,16 @@ public class Database {
 		}
 	}
 
+	private void createConnection() throws SQLException {
+		if (connection == null || connection.isClosed()) {
+			String url = props.getProperty("url");
+			connection = DriverManager.getConnection(url, props);
+		}
+	}
+
 	public void createAccount(CreateAccountData data) throws UserAlreadyExistsException, SQLException {
+		createConnection();
+
 		// Check if exists
 		PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM players WHERE username = ?;");
 		stmt.setString(1, data.getUsername());
@@ -56,6 +65,8 @@ public class Database {
 
 	public Player authenticatePlayer(PlayerLoginData data, ConnectionToClient client) {
 		try {
+			createConnection();
+
 			PreparedStatement stmt = connection.prepareStatement("SELECT id,xp,wins,losses FROM players WHERE username = ? AND password = aes_encrypt(?,?);");
 			stmt.setString(1, data.getUsername());
 			stmt.setString(2, data.getPassword());
@@ -81,6 +92,8 @@ public class Database {
 
 	public void updatePlayerData(Player player) {
 		try {
+			createConnection();
+
 			PreparedStatement stmt = connection.prepareStatement("UPDATE players SET xp = ?, wins = ?, losses = ? WHERE id = ?;");
 			stmt.setInt(1, player.getXp());
 			stmt.setInt(2, player.getWins());
