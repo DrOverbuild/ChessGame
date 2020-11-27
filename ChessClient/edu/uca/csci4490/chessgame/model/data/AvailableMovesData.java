@@ -1,15 +1,16 @@
 package edu.uca.csci4490.chessgame.model.data;
 
 import edu.uca.csci4490.chessgame.model.gamelogic.Location;
+import edu.uca.csci4490.chessgame.model.gamelogic.LocationData;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class AvailableMovesData implements Serializable {
 	private int gameID;
-	private ArrayList<Location> moves;
+	private ArrayList<LocationData> moves;
 
-	public AvailableMovesData(int gameID, ArrayList<Location> moves) {
+	public AvailableMovesData(int gameID, ArrayList<LocationData> moves) {
 		this.gameID = gameID;
 		this.moves = moves;
 	}
@@ -22,11 +23,11 @@ public class AvailableMovesData implements Serializable {
 		this.gameID = gameID;
 	}
 
-	public ArrayList<Location> getMoves() {
+	public ArrayList<LocationData> getMoves() {
 		return moves;
 	}
 
-	public void setMoves(ArrayList<Location> moves) {
+	public void setMoves(ArrayList<LocationData> moves) {
 		this.moves = moves;
 	}
 

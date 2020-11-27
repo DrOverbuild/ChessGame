@@ -33,7 +33,7 @@ public class WaitingRoomCommunication {
 	}
 	
 	public void sendPlayerChallengeResponse(PlayerChallengeResponseData challengedata) {
-		server.getPlayerManager().playerResponded(challengedata.getFrom(), challengedata.getTo(), challengedata.getAccepted());
+		comms.sendToPlayer(challengedata.getFrom(), challengedata);
 	}
 	
 	public void receivePlayerChallenge(PlayerChallengeData data) {

@@ -1,16 +1,16 @@
-package edu.uca.csci4490.chessgame.model.gamelogic.piece;
+package edu.uca.csci4490.chessgame.server.gamelogic.piece;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Board;
+import edu.uca.csci4490.chessgame.server.gamelogic.Board;
 import edu.uca.csci4490.chessgame.model.gamelogic.Color;
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
+import edu.uca.csci4490.chessgame.server.gamelogic.Location;
 import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
 
 import java.util.ArrayList;
 
-public class Knight extends Piece {
-	public Knight() {}
+public class Bishop extends Piece {
+	public Bishop() { }
 
-	public Knight(Color color) {
+	public Bishop(Color color) {
 		super();
 		this.setColor(color);
 		this.setImage("pawn");
@@ -20,11 +20,10 @@ public class Knight extends Piece {
 	public ArrayList<Location> allMovableLocations(Board board) {
 		ArrayList<Location> locations = new ArrayList<>();
 		Direction[] directions = new Direction[]
-				{Direction.L_N2_E3, Direction.L_N2_W3, Direction.L_N3_E2, Direction.L_N3_W2,
-				 Direction.L_S2_E3, Direction.L_S2_W3, Direction.L_S3_E2, Direction.L_S3_W2};
+				{Direction.NORTHEAST, Direction.SOUTHEAST, Direction.NORTHWEST, Direction.SOUTHWEST};
 
 		for (Direction d : directions) {
-			locations.add(getLocation().getRelative(d, 0));
+			locations.addAll(getLocation().allLocationsInDirection(d));
 		}
 
 		return locations;
@@ -45,16 +44,16 @@ public class Knight extends Piece {
 	}
 
 	@Override
-	public Piece copy() {
-		Piece knight = new Knight();
-		knight.setColor(this.getColor());
-		knight.setLocation(this.getLocation());
-		knight.setImage(this.getImage());
-		return knight;
+	public int getWorth() {
+		return 8;
 	}
 
 	@Override
-	public int getWorth() {
-		return 7;
+	public Piece copy() {
+		Piece bishop = new Bishop();
+		bishop.setColor(this.getColor());
+		bishop.setLocation(this.getLocation());
+		bishop.setImage(this.getImage());
+		return bishop;
 	}
 }

@@ -1,15 +1,17 @@
-package edu.uca.csci4490.chessgame.model.gamelogic;
+package edu.uca.csci4490.chessgame.server.gamelogic;
 
 import edu.uca.csci4490.chessgame.model.Player;
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.*;
+import edu.uca.csci4490.chessgame.model.gamelogic.Color;
+import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
+import edu.uca.csci4490.chessgame.model.gamelogic.MoveData;
+import edu.uca.csci4490.chessgame.model.gamelogic.PieceData;
+import edu.uca.csci4490.chessgame.server.gamelogic.piece.*;
 import edu.uca.csci4490.chessgame.server.communication.GameCommunication;
-import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public class Game implements Serializable {
+public class Game {
 	transient private GameCommunication communication;
 
 	private int id;
@@ -47,6 +49,32 @@ public class Game implements Serializable {
 		if (!(o instanceof Game)) return false;
 		Game game = (Game) o;
 		return id == game.getId();
+	}
+
+	public GameData data() {
+		GameData data = new GameData();
+		data.setId(id);
+		data.setBoard(board.data());
+		data.setWhite(white);
+		data.setBlack(black);
+		data.setTurn(turn);
+		data.setInCheck(inCheck);
+		data.setCheckmate(checkmate);
+		data.setStalemate(stalemate);
+
+		ArrayList<MoveData> moveData = new ArrayList<>();
+		for (Move move : moves) {
+			moveData.add(move.data());
+		}
+		data.setMoves(moveData);
+
+		ArrayList<PieceData> pieceData = new ArrayList<>();
+		for (Piece piece: capturedPieces) {
+			pieceData.add(piece.data());
+		}
+		data.setCapturedPieces(pieceData);
+
+		return data;
 	}
 
 	public GameCommunication getCommunication() {

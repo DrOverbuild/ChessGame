@@ -1,7 +1,8 @@
 package edu.uca.csci4490.chessgame.server;
 
 import edu.uca.csci4490.chessgame.model.Player;
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
+import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
+import edu.uca.csci4490.chessgame.server.gamelogic.Game;
 import edu.uca.csci4490.chessgame.server.communication.ChessServerCommunication;
 import edu.uca.csci4490.chessgame.server.playermanager.PlayerManager;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class ChessServer {
 	private static int gameId = 0;
 
-	List<Game> runningGames = new ArrayList<>();
+	List<Game> runningGames = new ArrayList<Game>();
 
 	ChessServerCommunication comms;
 	PlayerManager playerManager;
@@ -71,7 +72,7 @@ public class ChessServer {
 		runningGames.remove(game);
 		playerManager.movePlayerToWaitingRoom(game.getBlack());
 		playerManager.movePlayerToWaitingRoom(game.getWhite());
-		getComms().getWaitingRoomCommunication().sendWaitingRoomToAll();
+//		getComms().getWaitingRoomCommunication().sendWaitingRoomToAll();
 
 		playerManager.updateStats(game);
 	}

@@ -5,8 +5,8 @@ import edu.uca.csci4490.chessgame.model.data.CreateAccountData;
 import edu.uca.csci4490.chessgame.model.data.EndOfGameData;
 import edu.uca.csci4490.chessgame.model.data.PlayerLoginData;
 import edu.uca.csci4490.chessgame.model.gamelogic.Color;
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
+import edu.uca.csci4490.chessgame.server.gamelogic.Game;
+import edu.uca.csci4490.chessgame.server.gamelogic.piece.Piece;
 import edu.uca.csci4490.chessgame.server.ChessServer;
 import edu.uca.csci4490.chessgame.server.database.Database;
 import edu.uca.csci4490.chessgame.server.database.UserAlreadyExistsException;
@@ -129,7 +129,7 @@ public class PlayerManager {
 			playersChallenges.remove(to);
 
 			if (accepted) {
-				removePlayersFromWaitingRoom(from, to);
+//				removePlayersFromWaitingRoom(from, to);
 				server.startGame(from, to);
 			}
 		}

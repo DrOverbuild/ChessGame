@@ -1,14 +1,14 @@
 package edu.uca.csci4490.chessgame.model.data;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
+import edu.uca.csci4490.chessgame.model.gamelogic.PieceData;
 
 import java.io.Serializable;
 
 public class PieceSelectionData implements Serializable {
 	private int gameID;
-	private Piece piece;
+	private PieceData piece;
 
-	public PieceSelectionData(int gameID, Piece piece) {
+	public PieceSelectionData(int gameID, PieceData piece) {
 		this.gameID = gameID;
 		this.piece = piece;
 	}
@@ -21,11 +21,11 @@ public class PieceSelectionData implements Serializable {
 		this.gameID = gameID;
 	}
 
-	public Piece getPiece() {
+	public PieceData getPiece() {
 		return piece;
 	}
 
-	public void setPiece(Piece piece) {
+	public void setPiece(PieceData piece) {
 		this.piece = piece;
 	}
 

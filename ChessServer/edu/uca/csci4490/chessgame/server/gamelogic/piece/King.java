@@ -1,19 +1,19 @@
-package edu.uca.csci4490.chessgame.model.gamelogic.piece;
+package edu.uca.csci4490.chessgame.server.gamelogic.piece;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Board;
+import edu.uca.csci4490.chessgame.server.gamelogic.Board;
 import edu.uca.csci4490.chessgame.model.gamelogic.Color;
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
+import edu.uca.csci4490.chessgame.server.gamelogic.Location;
 import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
 
 import java.util.ArrayList;
 
-public class Queen extends Piece {
-	public Queen() { }
+public class King extends Piece {
+	public King() { }
 
-	public Queen(Color color) {
+	public King(Color color) {
 		super();
 		this.setColor(color);
-		this.setImage("queen");
+		this.setImage("pawn");
 	}
 
 	@Override
@@ -21,10 +21,10 @@ public class Queen extends Piece {
 		ArrayList<Location> locations = new ArrayList<>();
 		Direction[] directions = new Direction[]
 				{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST,
-				 Direction.NORTHEAST, Direction.SOUTHEAST, Direction.NORTHWEST, Direction.SOUTHWEST};
+						Direction.NORTHEAST, Direction.SOUTHEAST, Direction.NORTHWEST, Direction.SOUTHWEST};
 
 		for (Direction d : directions) {
-			locations.addAll(getLocation().allLocationsInDirection(d));
+			locations.add(getLocation().getRelative(d, 1));
 		}
 
 		return locations;
@@ -46,15 +46,15 @@ public class Queen extends Piece {
 
 	@Override
 	public Piece copy() {
-		Piece queen = new Queen();
-		queen.setColor(this.getColor());
-		queen.setLocation(this.getLocation());
-		queen.setImage(this.getImage());
-		return queen;
+		Piece king = new King();
+		king.setColor(this.getColor());
+		king.setLocation(this.getLocation());
+		king.setImage(this.getImage());
+		return king;
 	}
 
 	@Override
 	public int getWorth() {
-		return 10;
+		return 0;
 	}
 }

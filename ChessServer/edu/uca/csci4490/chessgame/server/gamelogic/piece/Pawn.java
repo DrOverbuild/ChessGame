@@ -1,8 +1,8 @@
-package edu.uca.csci4490.chessgame.model.gamelogic.piece;
+package edu.uca.csci4490.chessgame.server.gamelogic.piece;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Board;
+import edu.uca.csci4490.chessgame.server.gamelogic.Board;
 import edu.uca.csci4490.chessgame.model.gamelogic.Color;
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
+import edu.uca.csci4490.chessgame.server.gamelogic.Location;
 import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
 
 import java.util.ArrayList;

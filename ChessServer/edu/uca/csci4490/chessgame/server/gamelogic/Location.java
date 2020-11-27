@@ -1,10 +1,9 @@
-package edu.uca.csci4490.chessgame.model.gamelogic;
+package edu.uca.csci4490.chessgame.server.gamelogic;
 
-import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
+import edu.uca.csci4490.chessgame.model.gamelogic.LocationData;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Location implements Serializable {
 	private byte x;
@@ -13,6 +12,10 @@ public class Location implements Serializable {
 	public Location(byte x, byte y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	public LocationData data() {
+		return new LocationData(x, y);
 	}
 
 	public byte getX() {

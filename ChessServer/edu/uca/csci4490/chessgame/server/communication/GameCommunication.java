@@ -2,12 +2,15 @@ package edu.uca.csci4490.chessgame.server.communication;
 
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
+import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
+import edu.uca.csci4490.chessgame.model.gamelogic.LocationData;
+import edu.uca.csci4490.chessgame.server.gamelogic.Game;
+import edu.uca.csci4490.chessgame.server.gamelogic.Location;
+import edu.uca.csci4490.chessgame.server.gamelogic.piece.Piece;
 import edu.uca.csci4490.chessgame.server.ChessServer;
 import ocsf.server.ConnectionToClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -23,18 +26,30 @@ public class GameCommunication {
 	public void sendStartOfGame(Game game) {
 		Player black = game.getBlack();
 		Player white = game.getWhite();
-		StartOfGameData data = new StartOfGameData(game);
+		StartOfGameData data = new StartOfGameData(game.data());
 
-		comms.sendToPlayer(black, data);
-		comms.sendToPlayer(white, data);
+		Thread th = new Thread(() -> {
+			try {
+				black.getClient().sendToClient(data);
+				white.getClient().sendToClient(data);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		th.start();
 	}
 
 	public void sendAvailableMoves(Game game, ArrayList<Location> moves) {
-		AvailableMovesData data = new AvailableMovesData(game.getId(),moves);
+		ArrayList<LocationData> locations = new ArrayList<>();
+		for (Location l: moves) {
+			locations.add(l.data());
+		}
+
+		AvailableMovesData data = new AvailableMovesData(game.getId(),locations);
 		comms.sendToPlayer(game.getWhoseTurn(), data);
 	}
 
-	public void sendNextTurn(Game game) {
+	public void sendNextTurn(GameData game) {
 		Player black = game.getBlack();
 		Player white = game.getWhite();
 		NextTurnData data = new NextTurnData(game);
@@ -63,14 +78,16 @@ public class GameCommunication {
 
 	public void receivePieceSelection(PieceSelectionData data, ConnectionToClient client) {
 		int id = data.getGameID();
-		Piece piece = data.getPiece();
-
 		Game game = server.getGameByID(id);
 
 		if (game == null) {
 			System.out.println("Warning - received PieceSelectionData for game " + id + " but could not find any games by that ID.");
 			return;
 		}
+
+		LocationData location = data.getPiece().getLocation();
+		Piece piece = game.getBoard().getPieceAt(location.getX(), location.getY());
+
 
 		if (client.getId() != game.getWhoseTurn().getClient().getId()) {
 			return;
@@ -93,13 +110,30 @@ public class GameCommunication {
 			return;
 		}
 
-		game.movePiece(data.getPiece(), data.getMoveTo(), data.getPromoteTo());
+		LocationData location = data.getPiece().getLocation();
+		Piece piece = game.getBoard().getPieceAt(location.getX(), location.getY());
+		Class<? extends Piece> promoteTo = null;
+		if (data.getPromoteTo() != null) {
+			String firstChar = data.getPromoteTo().substring(0,1);
+			String className = data.getPromoteTo().replaceFirst(firstChar, firstChar.toUpperCase());
+			try {
+				promoteTo = (Class<? extends Piece>) Class.forName("edu.uca.csci4490.chessgame.server.gamelogic.piece." + className);
+			} catch (Exception e) {
+				System.out.println("WARNING - Failed to get promote to class");
+				e.printStackTrace();
+			}
+		}
+
+		LocationData toData = data.getMoveTo();
+		Location to = new Location(toData.getX(), toData.getY());
+
+		game.movePiece(piece, to, promoteTo);
 
 		if (game.isCheckmate() || game.isStalemate()) {
 			server.endGame(game);
 			sendEndOfGameData(game);
 		} else {
-			sendNextTurn(game);
+			sendNextTurn(game.data());
 		}
 	}
 	

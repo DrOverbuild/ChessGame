@@ -4,10 +4,7 @@ import edu.uca.csci4490.chessgame.client.ChessClient;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
-import edu.uca.csci4490.chessgame.model.gamelogic.Color;
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
+import edu.uca.csci4490.chessgame.model.gamelogic.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,13 +17,13 @@ public class GameScreenController implements ActionListener {
 	private GameScreenPanel view;
 	private ChessClient client;
 
-	private Game game;
+	private GameData game;
 
 	/**
 	 * List of available moves, received from the server after selecting a piece.
 	 */
-	private ArrayList<Location> availableMoves = null;
-	private Piece selectedPiece = null;
+	private ArrayList<LocationData> availableMoves = null;
+	private PieceData selectedPiece = null;
 	private Player thisPlayer;
 	private Color thisColor;
 
@@ -66,7 +63,7 @@ public class GameScreenController implements ActionListener {
 		}
 	}
 
-	public void setGame(Game game) {
+	public void setGame(GameData game) {
 		this.game = game;
 	}
 
@@ -82,7 +79,7 @@ public class GameScreenController implements ActionListener {
 		return view;
 	}
 
-	public void initGame(Game game, Player thisPlayer) {
+	public void initGame(GameData game, Player thisPlayer) {
 		this.game = game;
 		this.thisPlayer = thisPlayer;
 
@@ -120,7 +117,7 @@ public class GameScreenController implements ActionListener {
 
 		game = data.getGame();
 
-		view.updateGame(data.getGame());
+		view.updateGame(game);
 
 		if (game.getWhoseTurn().equals(thisPlayer)) {
 			view.setStatus("Your turn");
@@ -152,7 +149,7 @@ public class GameScreenController implements ActionListener {
 	}
 
 	public void sendPieceSelection(int x, int y) {
-		Piece piece = game.getBoard().getPieceAt(x, y);
+		PieceData piece = game.getBoard().getPieceAt(x, y);
 
 		if (piece == null || !piece.getColor().equals(thisColor)) {
 			return;
@@ -167,7 +164,7 @@ public class GameScreenController implements ActionListener {
 			return;
 		}
 
-		Location to = new Location((byte)x, (byte)y);
+		LocationData to = new LocationData((byte)x, (byte)y);
 
 		if (!availableMoves.contains(to)) {
 			// remove outlines and do nothing

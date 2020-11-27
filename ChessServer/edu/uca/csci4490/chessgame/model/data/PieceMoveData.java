@@ -1,24 +1,24 @@
 package edu.uca.csci4490.chessgame.model.data;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
+import edu.uca.csci4490.chessgame.model.gamelogic.LocationData;
+import edu.uca.csci4490.chessgame.model.gamelogic.PieceData;
 
 import java.io.Serializable;
 
 public class PieceMoveData implements Serializable {
 	private int gameID;
-	private Piece piece;
-	private Location moveTo;
-	private Class<? extends Piece> promoteTo;
+	private PieceData piece;
+	private LocationData moveTo;
+	private String promoteTo;
 
-	public PieceMoveData(int gameID, Piece piece, Location moveTo, Class<? extends Piece> promoteTo) {
+	public PieceMoveData(int gameID, PieceData piece, LocationData moveTo, String promoteTo) {
 		this.gameID = gameID;
 		this.piece = piece;
 		this.moveTo = moveTo;
 		this.promoteTo = promoteTo;
 	}
 
-	public PieceMoveData(int gameID, Piece piece, Location moveTo) {
+	public PieceMoveData(int gameID, PieceData piece, LocationData moveTo) {
 		this.gameID = gameID;
 		this.piece = piece;
 		this.moveTo = moveTo;
@@ -33,27 +33,27 @@ public class PieceMoveData implements Serializable {
 		this.gameID = gameID;
 	}
 
-	public Piece getPiece() {
+	public PieceData getPiece() {
 		return piece;
 	}
 
-	public void setPiece(Piece piece) {
+	public void setPiece(PieceData piece) {
 		this.piece = piece;
 	}
 
-	public Location getMoveTo() {
+	public LocationData getMoveTo() {
 		return moveTo;
 	}
 
-	public void setMoveTo(Location moveTo) {
+	public void setMoveTo(LocationData moveTo) {
 		this.moveTo = moveTo;
 	}
 
-	public Class<? extends Piece> getPromoteTo() {
+	public String getPromoteTo() {
 		return promoteTo;
 	}
 
-	public void setPromoteTo(Class<? extends Piece> promoteTo) {
+	public void setPromoteTo(String promoteTo) {
 		this.promoteTo = promoteTo;
 	}
 

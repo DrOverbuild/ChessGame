@@ -6,7 +6,7 @@ import edu.uca.csci4490.chessgame.client.loginscreen.LoginScreenController;
 import edu.uca.csci4490.chessgame.client.waitingroom.WaitingRoomController;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
+import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -108,7 +108,7 @@ public class ChessClient extends JFrame {
 		transition();
 	}
 
-	public void transitionToGameScreen(Game game, Player player) {
+	public void transitionToGameScreen(GameData game, Player player) {
 		gc.initGame(game, player);
 		currentPanel = GAME_SCREEN_PANEL;
 		transition();
@@ -142,6 +142,12 @@ public class ChessClient extends JFrame {
 		if (args.length == 0) {
 			exp = JOptionPane.showInputDialog("Enter IP Address: ").split(":");
 		} else {
+
+			if (args[0].equals("test")) {
+				new TestClasses(ip, Integer.parseInt(port)).start();
+				return;
+			}
+
 			exp = args[0].split(":");
 		}
 

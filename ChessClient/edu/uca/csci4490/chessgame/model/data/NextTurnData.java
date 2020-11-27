@@ -1,21 +1,21 @@
 package edu.uca.csci4490.chessgame.model.data;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
+import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
 
 import java.io.Serializable;
 
 public class NextTurnData implements Serializable {
-	private Game game;
+	private GameData game;
 
-	public NextTurnData(Game game) {
+	public NextTurnData(GameData game) {
 		this.game = game;
 	}
 
-	public Game getGame() {
+	public GameData getGame() {
 		return game;
 	}
 
-	public void setGame(Game game) {
+	public void setGame(GameData game) {
 		this.game = game;
 	}
 

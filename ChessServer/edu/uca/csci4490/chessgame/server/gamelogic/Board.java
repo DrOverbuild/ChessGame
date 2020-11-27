@@ -1,12 +1,12 @@
-package edu.uca.csci4490.chessgame.model.gamelogic;
+package edu.uca.csci4490.chessgame.server.gamelogic;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.*;
-import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
+import edu.uca.csci4490.chessgame.model.gamelogic.BoardData;
+import edu.uca.csci4490.chessgame.model.gamelogic.Color;
+import edu.uca.csci4490.chessgame.server.gamelogic.piece.*;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board implements Serializable {
+public class Board {
 	private Piece[][] board;
 
 	public Board() {
@@ -172,5 +172,21 @@ public class Board implements Serializable {
 		}
 
 		return false;
+	}
+
+	public BoardData data() {
+		BoardData data = new BoardData();
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				Piece piece = this.getPieceAt(x, y);
+
+				if (piece == null) {
+					data.setPieceOnBoard((byte) x, (byte) y, null);
+				} else {
+					data.setPieceOnBoard((byte) x, (byte) y, piece.data());
+				}
+			}
+		}
+		return data;
 	}
 }

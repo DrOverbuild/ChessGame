@@ -4,7 +4,7 @@ import edu.uca.csci4490.chessgame.client.ChessClient;
 import edu.uca.csci4490.chessgame.client.communication.ChessClientCommunication;
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
+import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -164,11 +164,11 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 	}
 
 	public void receiveStartOfGame(StartOfGameData data) {
-		Game game = data.getGame();
+		GameData game = data.getGame();
 		challengers.remove(game.getBlack());
 		challengers.remove(game.getWhite());
 
-		this.client.transitionToGameScreen(data.getGame(), thisPlayer);
+		this.client.transitionToGameScreen(game, thisPlayer);
 	}
 
 	public void sendPlayerChallenge(Player to) {

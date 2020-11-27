@@ -1,6 +1,7 @@
-package edu.uca.csci4490.chessgame.model.gamelogic;
+package edu.uca.csci4490.chessgame.server.gamelogic;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
+import edu.uca.csci4490.chessgame.model.gamelogic.MoveData;
+import edu.uca.csci4490.chessgame.server.gamelogic.piece.Piece;
 
 import java.io.Serializable;
 
@@ -37,5 +38,9 @@ public class Move implements Serializable {
 		this.piece = piece;
 		this.from = from;
 		this.to = to;
+	}
+
+	public MoveData data() {
+		return new MoveData(piece.data(), from.data(), to.data());
 	}
 }

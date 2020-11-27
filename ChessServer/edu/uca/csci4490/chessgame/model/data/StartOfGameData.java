@@ -1,28 +1,28 @@
 package edu.uca.csci4490.chessgame.model.data;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
+import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
 
 import java.io.Serializable;
 
 public class StartOfGameData implements Serializable {
-	private Game game;
+	private GameData game;
 
-	public StartOfGameData(Game game) {
+	public StartOfGameData(GameData game) {
 		this.game = game;
 	}
 
-	public Game getGame() {
+	public GameData getGame() {
 		return game;
 	}
 
-	public void setGame(Game game) {
+	public void setGame(GameData game) {
 		this.game = game;
 	}
 
 	@Override
 	public String toString() {
 		return "StartOfGameData{" +
-				"game=" + game.getId() +
+				"game=" + game +
 				'}';
 	}
 }

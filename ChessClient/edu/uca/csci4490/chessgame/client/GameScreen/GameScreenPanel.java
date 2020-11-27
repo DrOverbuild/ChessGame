@@ -1,9 +1,8 @@
 package edu.uca.csci4490.chessgame.client.GameScreen;
 
-import edu.uca.csci4490.chessgame.model.gamelogic.Game;
-import edu.uca.csci4490.chessgame.model.gamelogic.Location;
-import edu.uca.csci4490.chessgame.model.gamelogic.piece.Piece;
-
+import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
+import edu.uca.csci4490.chessgame.model.gamelogic.LocationData;
+import edu.uca.csci4490.chessgame.model.gamelogic.PieceData;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -75,17 +74,17 @@ public class GameScreenPanel extends JPanel {
 		this.add(buttonsPanel, BorderLayout.SOUTH);
 	}
 
-	public void updateAvailableMoves(Piece piece, ArrayList<Location> availableMoves) {
+	public void updateAvailableMoves(PieceData piece, ArrayList<LocationData> availableMoves) {
         String path = "res" + System.getProperty("file.separator") +
                 piece.getImage() + "_outline.png";
         ImageIcon icon = new ImageIcon(path);
 
-        for (Location loc: availableMoves) {
+        for (LocationData loc: availableMoves) {
             pieceButtons[loc.getX()][loc.getY()].setIcon(icon);
         }
 	}
 
-	public void updateGame(Game game) {
+	public void updateGame(GameData game) {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 				updatePiece(x, y, game.getBoard().getPieceAt(x, y));
@@ -93,7 +92,7 @@ public class GameScreenPanel extends JPanel {
 		}
 	}
 
-	private void updatePiece(int x, int y, Piece piece) {
+	private void updatePiece(int x, int y, PieceData piece) {
 		JButton pieceButton = pieceButtons[x][y];
 
 		if (piece == null) {
