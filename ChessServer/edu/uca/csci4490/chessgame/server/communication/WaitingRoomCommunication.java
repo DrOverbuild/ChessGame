@@ -36,17 +36,17 @@ public class WaitingRoomCommunication {
 		server.getPlayerManager().playerResponded(challengedata.getFrom(), challengedata.getTo(), challengedata.getAccepted());
 	}
 	
-	public void receivePlayerChallenge (PlayerChallengeData data) {
+	public void receivePlayerChallenge(PlayerChallengeData data) {
 		Player to = server.getPlayerManager().playerById(data.getTo().getId());
 		Player from = server.getPlayerManager().playerById(data.getFrom().getId());
 		server.getPlayerManager().playerChallenged(from,to);
 		sendPlayerChallenge(data);
 	}
 	
-	public void receivePlayerChallengeResponse (PlayerChallengeResponseData data) {
-		data.getTo().setClient(server.getPlayerManager().clientForPlayer(data.getTo()));
-		data.getFrom().setClient(server.getPlayerManager().clientForPlayer(data.getFrom()));
-		server.getPlayerManager().playerResponded(data.getFrom(), data.getTo(), data.getAccepted());
+	public void receivePlayerChallengeResponse(PlayerChallengeResponseData data) {
+		Player to = server.getPlayerManager().playerById(data.getTo().getId());
+		Player from = server.getPlayerManager().playerById(data.getFrom().getId());
+		server.getPlayerManager().playerResponded(from, to, data.getAccepted());
 		
 		if (!data.getAccepted()) {
 			sendPlayerChallengeResponse(data);

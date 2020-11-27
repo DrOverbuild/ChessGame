@@ -19,6 +19,11 @@ public class ChessClientCommunication extends AbstractClient {
 	@Override
 	protected void handleMessageFromServer(Object o) {
 		try {
+			if (o != null && !o.equals("Ping")) {
+				System.out.println("Received from server: ");
+				System.out.println(o);
+			}
+
 			if (o instanceof ErrorData) {
 				if (client.getCurrentPanel().equals(ChessClient.LOGIN_PANEL)) {
 					client.getLc().receiveError((ErrorData) o);

@@ -59,12 +59,14 @@ public class PlayerManager {
 	/**
 	 * Remember, when calling this, all players in the waiting room must be sent the update
 	 */
-	public void removePlayerFromWaitingRoom(Player p) {
-		waitingRoom.remove(p);
-		challenges.remove(p);
+	public void removePlayersFromWaitingRoom(Player... players) {
+		for (Player p : players) {
+			waitingRoom.remove(p);
+			challenges.remove(p);
 
-		for (Player challenger: challenges.keySet()) {
-			challenges.get(challenger).remove(p);
+			for (Player challenger : challenges.keySet()) {
+				challenges.get(challenger).remove(p);
+			}
 		}
 	}
 
@@ -127,8 +129,7 @@ public class PlayerManager {
 			playersChallenges.remove(to);
 
 			if (accepted) {
-				removePlayerFromWaitingRoom(from);
-				removePlayerFromWaitingRoom(to);
+				removePlayersFromWaitingRoom(from, to);
 				server.startGame(from, to);
 			}
 		}

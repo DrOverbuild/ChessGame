@@ -143,7 +143,7 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 
 			// refresh challenge button if the challenge was from the currently selected player
 			if (selectedPlayer != null && selectedPlayer.equals(data.getFrom())) {
-				setThisPlayer(selectedPlayer);
+				setSelectedPlayer(selectedPlayer);
 			}
 
 			comms.send(thisPlayer.getUsername() + " received player challenge");
@@ -180,8 +180,8 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 		comms.send(data);
 	}
 
-	public void sendPlayerChallengeResponse(Player to, boolean accepted) {
-		PlayerChallengeResponseData data = new PlayerChallengeResponseData(thisPlayer, to, accepted);
+	public void sendPlayerChallengeResponse(Player from, boolean accepted) {
+		PlayerChallengeResponseData data = new PlayerChallengeResponseData(from, thisPlayer, accepted);
 		comms.send(data);
 	}
 
