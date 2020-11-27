@@ -1,14 +1,14 @@
 package edu.uca.csci4490.chessgame.server.communication;
 
+import edu.uca.csci4490.chessgame.model.Player;
+import edu.uca.csci4490.chessgame.model.data.*;
+import edu.uca.csci4490.chessgame.server.ChessServer;
+import ocsf.server.AbstractServer;
+import ocsf.server.ConnectionToClient;
+
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import edu.uca.csci4490.chessgame.model.Player;
-import edu.uca.csci4490.chessgame.server.ChessServer;
-import edu.uca.csci4490.chessgame.model.data.*;
-import ocsf.server.AbstractServer;
-import ocsf.server.ConnectionToClient;
 
 public class ChessServerCommunication extends AbstractServer {
 	
@@ -35,55 +35,43 @@ public class ChessServerCommunication extends AbstractServer {
 
 	@Override
 	protected void handleMessageFromClient(Object o, ConnectionToClient client) {
-		{
+		try {
 			System.out.println("Incoming message from client " + client.getId());
 			System.out.println(o);
 			System.out.println();
 			// If we received LoginData, verify the account information.
-			if (o instanceof PlayerLoginData)
-			{
+			if (o instanceof PlayerLoginData) {
 				// Try to Login the player
-				playerLoginCommunication.receivePlayerLogin((PlayerLoginData)o, client);
+				playerLoginCommunication.receivePlayerLogin((PlayerLoginData) o, client);
 			}
 
 			// If we received CreateAccountData, create a new account.
-			else if (o instanceof CreateAccountData)
-			{
+			else if (o instanceof CreateAccountData) {
 				// Try to create the account.
-				playerLoginCommunication.receiveCreateAccount((CreateAccountData)o, client);
-			}
-			else if (o instanceof PlayerLogoutData) {
+				playerLoginCommunication.receiveCreateAccount((CreateAccountData) o, client);
+			} else if (o instanceof PlayerLogoutData) {
 				// log the player out and update the other players
 				playerLoginCommunication.receivePlayerLogout((PlayerLogoutData) o);
-			}
-			else if (o instanceof PlayerChallengeData)
-			{
+			} else if (o instanceof PlayerChallengeData) {
 				// Receive a challenge data
-				waitingRoomCommunication.receivePlayerChallenge((PlayerChallengeData)o);
-			}
-			else if (o instanceof PlayerChallengeResponseData)
-			{
+				waitingRoomCommunication.receivePlayerChallenge((PlayerChallengeData) o);
+			} else if (o instanceof PlayerChallengeResponseData) {
 				// Receive a challenge response data
-				waitingRoomCommunication.receivePlayerChallengeResponse((PlayerChallengeResponseData)o);
-			}
-			else if (o instanceof PieceSelectionData)
-			{
+				waitingRoomCommunication.receivePlayerChallengeResponse((PlayerChallengeResponseData) o);
+			} else if (o instanceof PieceSelectionData) {
 				// Receive data about the piece selection
-				gameCommunication.receivePieceSelection((PieceSelectionData)o, client);
-			}
-			else if (o instanceof PieceMoveData)
-			{
+				gameCommunication.receivePieceSelection((PieceSelectionData) o, client);
+			} else if (o instanceof PieceMoveData) {
 				// Receive Piece Move Data
-				gameCommunication.receivePieceMove((PieceMoveData)o, client);
-			}
-			else if (o instanceof AbandonGameData)
-			{
+				gameCommunication.receivePieceMove((PieceMoveData) o, client);
+			} else if (o instanceof AbandonGameData) {
 				// Receive game Abandoned
-				gameCommunication.receiveGameAbandoned((AbandonGameData)o);
+				gameCommunication.receiveGameAbandoned((AbandonGameData) o);
 			}
-
-			
-		}	
+		} catch (Exception e) {
+			System.out.println("Error processing received data");
+			e.printStackTrace();
+		}
 	}
 	
 	public void listeningException(Throwable exception) {

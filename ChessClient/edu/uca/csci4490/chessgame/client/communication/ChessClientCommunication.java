@@ -18,32 +18,37 @@ public class ChessClientCommunication extends AbstractClient {
 
 	@Override
 	protected void handleMessageFromServer(Object o) {
-		if (o instanceof ErrorData) {
-			if (client.getCurrentPanel().equals(ChessClient.LOGIN_PANEL)) {
-				client.getLc().receiveError((ErrorData) o);
-			} else if (client.getCurrentPanel().equals(ChessClient.CREATE_ACCOUNT_PANEL)) {
-				client.getCc().receiveCreateAccountUnsuccessful();
+		try {
+			if (o instanceof ErrorData) {
+				if (client.getCurrentPanel().equals(ChessClient.LOGIN_PANEL)) {
+					client.getLc().receiveError((ErrorData) o);
+				} else if (client.getCurrentPanel().equals(ChessClient.CREATE_ACCOUNT_PANEL)) {
+					client.getCc().receiveCreateAccountUnsuccessful();
+				}
+			} else if (o instanceof WaitingRoomData) {
+				if (client.getCurrentPanel().equals(ChessClient.LOGIN_PANEL)) {
+					client.getLc().receiveWaitingRoom((WaitingRoomData) o);
+				} else if (client.getCurrentPanel().equals(ChessClient.WAITING_ROOM_PANEL)) {
+					client.getWc().receiveWaitingRoom((WaitingRoomData) o);
+				}
+			} else if (o instanceof CreateAccountSuccessfulData) {
+				client.getCc().receiveCreateAccountSuccess();
+			} else if (o instanceof PlayerChallengeData) {
+				client.getWc().receivePlayerChallenge((PlayerChallengeData) o);
+			} else if (o instanceof PlayerChallengeResponseData) {
+				client.getWc().receivePlayerChallengeResponse((PlayerChallengeResponseData) o);
+			} else if (o instanceof StartOfGameData) {
+				client.getWc().receiveStartOfGame((StartOfGameData) o);
+			} else if (o instanceof AvailableMovesData) {
+				client.getGc().receiveAvailableMoves((AvailableMovesData) o);
+			} else if (o instanceof NextTurnData) {
+				client.getGc().receiveNextTurn((NextTurnData) o);
+			} else if (o instanceof EndOfGameData) {
+				client.getGc().receiveEndOfGame((EndOfGameData) o);
 			}
-		} else if (o instanceof WaitingRoomData) {
-			if (client.getCurrentPanel().equals(ChessClient.LOGIN_PANEL)) {
-				client.getLc().receiveWaitingRoom((WaitingRoomData)o);
-			} else if (client.getCurrentPanel().equals(ChessClient.WAITING_ROOM_PANEL)) {
-				client.getWc().receiveWaitingRoom((WaitingRoomData)o);
-			}
-		} else if (o instanceof CreateAccountSuccessfulData) {
-			client.getCc().receiveCreateAccountSuccess();
-		} else if (o instanceof PlayerChallengeData) {
-			client.getWc().receivePlayerChallenge((PlayerChallengeData)o);
-		} else if (o instanceof PlayerChallengeResponseData) {
-			client.getWc().receivePlayerChallengeResponse((PlayerChallengeResponseData)o);
-		} else if (o instanceof StartOfGameData) {
-			client.getWc().receiveStartOfGame((StartOfGameData) o);
-		} else if (o instanceof AvailableMovesData) {
-			client.getGc().receiveAvailableMoves((AvailableMovesData)o);
-		} else if (o instanceof NextTurnData) {
-			client.getGc().receiveNextTurn((NextTurnData)o);
-		} else if (o instanceof EndOfGameData) {
-			client.getGc().receiveEndOfGame((EndOfGameData)o);
+		} catch (Exception e) {
+			System.out.println("Error processing received data");
+			e.printStackTrace();
 		}
 	}
 
