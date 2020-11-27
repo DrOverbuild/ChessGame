@@ -4,6 +4,7 @@ import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
 import edu.uca.csci4490.chessgame.model.gamelogic.LocationData;
 import edu.uca.csci4490.chessgame.model.gamelogic.PieceData;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -26,11 +27,14 @@ public class GameScreenPanel extends JPanel {
 		JPanel grid = new JPanel(new GridLayout(8, 8));
 		boolean dark = false;
 
-		for (int x = 0; x < 8; x++) {
-			for (int y = 0; y < 8; y++) {
+		for (int y = 0; y < 8; y++) {
+			for (int x = 0; x < 8; x++) {
 				JButton pieceButton = new JButton();
 				pieceButton.setActionCommand(x + "," + y);
 				pieceButton.addActionListener(controller);
+				pieceButton.setOpaque(true);
+				Border emptyBorder = BorderFactory.createEmptyBorder();
+				pieceButton.setBorder(emptyBorder);
 				grid.add(pieceButton);
 				pieceButtons[x][y] = pieceButton;
 
@@ -42,7 +46,10 @@ public class GameScreenPanel extends JPanel {
 
 				dark = !dark;
 			}
+			dark = !dark;
 		}
+
+		add(grid, BorderLayout.CENTER);
 
 		//import the board class and make the board??
 		//put the pieces on the board??
@@ -102,7 +109,8 @@ public class GameScreenPanel extends JPanel {
 					piece.getImage() + "_" +
 					piece.getColor().name().toLowerCase() + ".png";
 			// ex - pawn_black.png
-			ImageIcon icon = new ImageIcon(path);
+			ImageIcon icon = scaleImage(new ImageIcon(path),
+					pieceButton.getBounds().width, pieceButton.getBounds().height);
 			pieceButton.setIcon(icon);
 		}
 	}
@@ -122,5 +130,25 @@ public class GameScreenPanel extends JPanel {
 	public void setToLeaveGame() {
 		abandonButton.setText("Go to Waiting Room");
 		abandonButton.setActionCommand("Waiting Room");
+	}
+
+	public ImageIcon scaleImage(ImageIcon icon, int w, int h)
+	{
+		int nw = icon.getIconWidth();
+		int nh = icon.getIconHeight();
+
+		if(icon.getIconWidth() > w)
+		{
+			nw = w;
+			nh = (nw * icon.getIconHeight()) / icon.getIconWidth();
+		}
+
+		if(nh > h)
+		{
+			nh = h;
+			nw = (icon.getIconWidth() * nh) / icon.getIconHeight();
+		}
+
+		return new ImageIcon(icon.getImage().getScaledInstance(nw, nh, Image.SCALE_DEFAULT));
 	}
 }

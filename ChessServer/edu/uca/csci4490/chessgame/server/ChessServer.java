@@ -72,7 +72,7 @@ public class ChessServer {
 		runningGames.remove(game);
 		playerManager.movePlayerToWaitingRoom(game.getBlack());
 		playerManager.movePlayerToWaitingRoom(game.getWhite());
-//		getComms().getWaitingRoomCommunication().sendWaitingRoomToAll();
+		getComms().getWaitingRoomCommunication().sendWaitingRoomToAll();
 
 		playerManager.updateStats(game);
 	}

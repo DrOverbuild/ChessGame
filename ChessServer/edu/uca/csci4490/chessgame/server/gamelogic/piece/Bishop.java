@@ -13,7 +13,7 @@ public class Bishop extends Piece {
 	public Bishop(Color color) {
 		super();
 		this.setColor(color);
-		this.setImage("pawn");
+		this.setImage("bishop");
 	}
 
 	@Override

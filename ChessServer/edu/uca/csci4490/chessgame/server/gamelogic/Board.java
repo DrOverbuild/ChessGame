@@ -80,8 +80,8 @@ public class Board {
 		setPieceOnBoard((byte)0,(byte)0, new Rook(Color.WHITE));
 		setPieceOnBoard((byte)1,(byte)0, new Knight(Color.WHITE));
 		setPieceOnBoard((byte)2,(byte)0, new Bishop(Color.WHITE));
-		setPieceOnBoard((byte)5,(byte)0, new King(Color.WHITE));
-		setPieceOnBoard((byte)5,(byte)0, new Queen(Color.WHITE));
+		setPieceOnBoard((byte)3,(byte)0, new King(Color.WHITE));
+		setPieceOnBoard((byte)4,(byte)0, new Queen(Color.WHITE));
 		setPieceOnBoard((byte)5,(byte)0, new Bishop(Color.WHITE));
 		setPieceOnBoard((byte)6,(byte)0, new Knight(Color.WHITE));
 		setPieceOnBoard((byte)7,(byte)0, new Rook(Color.WHITE));
@@ -95,8 +95,8 @@ public class Board {
 		setPieceOnBoard((byte)0,(byte)7, new Rook(Color.BLACK));
 		setPieceOnBoard((byte)1,(byte)7, new Knight(Color.BLACK));
 		setPieceOnBoard((byte)2,(byte)7, new Bishop(Color.BLACK));
-		setPieceOnBoard((byte)5,(byte)7, new King(Color.BLACK));
-		setPieceOnBoard((byte)5,(byte)7, new Queen(Color.BLACK));
+		setPieceOnBoard((byte)3,(byte)7, new King(Color.BLACK));
+		setPieceOnBoard((byte)4,(byte)7, new Queen(Color.BLACK));
 		setPieceOnBoard((byte)5,(byte)7, new Bishop(Color.BLACK));
 		setPieceOnBoard((byte)6,(byte)7, new Knight(Color.BLACK));
 		setPieceOnBoard((byte)7,(byte)7, new Rook(Color.BLACK));

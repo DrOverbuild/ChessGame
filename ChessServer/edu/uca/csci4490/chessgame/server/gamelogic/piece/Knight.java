@@ -13,7 +13,7 @@ public class Knight extends Piece {
 	public Knight(Color color) {
 		super();
 		this.setColor(color);
-		this.setImage("pawn");
+		this.setImage("knight");
 	}
 
 	@Override
