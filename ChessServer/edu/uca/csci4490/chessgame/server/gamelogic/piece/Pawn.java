@@ -81,6 +81,7 @@ public class Pawn extends Piece {
 
 	@Override
 	public ArrayList<Location> filterAvailableLocations(Board board) {
+		System.out.println("Getting locations for " + this.getColor() + " " + this.getImage() + " at " + this.getLocation());
 		ArrayList<Location> all = allMovableLocations(board);
 		ArrayList<Location> filtered = new ArrayList<>();
 
@@ -106,7 +107,7 @@ public class Pawn extends Piece {
 	public Piece copy() {
 		Piece pawn = new Pawn();
 		pawn.setColor(this.getColor());
-		pawn.setLocation(this.getLocation());
+		pawn.setLocation(this.getLocation().copy());
 		pawn.setImage(this.getImage());
 		return pawn;
 	}

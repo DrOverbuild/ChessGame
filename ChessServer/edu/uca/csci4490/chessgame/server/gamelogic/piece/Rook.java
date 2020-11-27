@@ -47,7 +47,7 @@ public class Rook extends Piece {
 	public Piece copy() {
 		Piece rook = new Rook();
 		rook.setColor(this.getColor());
-		rook.setLocation(this.getLocation());
+		rook.setLocation(this.getLocation().copy());
 		rook.setImage(this.getImage());
 		return rook;
 	}

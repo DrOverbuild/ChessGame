@@ -48,7 +48,7 @@ public class Knight extends Piece {
 	public Piece copy() {
 		Piece knight = new Knight();
 		knight.setColor(this.getColor());
-		knight.setLocation(this.getLocation());
+		knight.setLocation(this.getLocation().copy());
 		knight.setImage(this.getImage());
 		return knight;
 	}

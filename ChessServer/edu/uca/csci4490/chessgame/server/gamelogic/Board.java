@@ -125,7 +125,7 @@ public class Board {
 			}
 		}
 
-		board.movePiece(piece, to);
+		board.movePiece(piece.copy(), to);
 		return board;
 	}
 

@@ -48,7 +48,7 @@ public class King extends Piece {
 	public Piece copy() {
 		Piece king = new King();
 		king.setColor(this.getColor());
-		king.setLocation(this.getLocation());
+		king.setLocation(this.getLocation().copy());
 		king.setImage(this.getImage());
 		return king;
 	}

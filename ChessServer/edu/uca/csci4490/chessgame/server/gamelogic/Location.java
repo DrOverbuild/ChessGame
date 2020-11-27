@@ -34,6 +34,10 @@ public class Location implements Serializable {
 		this.y = y;
 	}
 
+	public Location copy() {
+		return new Location(this.x, this.y);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

@@ -52,7 +52,7 @@ public class Bishop extends Piece {
 	public Piece copy() {
 		Piece bishop = new Bishop();
 		bishop.setColor(this.getColor());
-		bishop.setLocation(this.getLocation());
+		bishop.setLocation(this.getLocation().copy());
 		bishop.setImage(this.getImage());
 		return bishop;
 	}

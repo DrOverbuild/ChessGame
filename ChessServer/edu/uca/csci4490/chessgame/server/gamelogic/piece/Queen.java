@@ -48,7 +48,7 @@ public class Queen extends Piece {
 	public Piece copy() {
 		Piece queen = new Queen();
 		queen.setColor(this.getColor());
-		queen.setLocation(this.getLocation());
+		queen.setLocation(this.getLocation().copy());
 		queen.setImage(this.getImage());
 		return queen;
 	}
