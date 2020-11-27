@@ -1,4 +1,4 @@
-package edu.uca.csci4490.chessgame.client.GameScreen;
+package edu.uca.csci4490.chessgame.client.gamescreen;
 
 import edu.uca.csci4490.chessgame.model.gamelogic.GameData;
 import edu.uca.csci4490.chessgame.model.gamelogic.LocationData;

@@ -1,6 +1,6 @@
 package edu.uca.csci4490.chessgame.client;
 
-import edu.uca.csci4490.chessgame.client.GameScreen.GameScreenController;
+import edu.uca.csci4490.chessgame.client.gamescreen.GameScreenController;
 import edu.uca.csci4490.chessgame.client.loginscreen.CreateAccountController;
 import edu.uca.csci4490.chessgame.client.loginscreen.LoginScreenController;
 import edu.uca.csci4490.chessgame.client.waitingroom.WaitingRoomController;
