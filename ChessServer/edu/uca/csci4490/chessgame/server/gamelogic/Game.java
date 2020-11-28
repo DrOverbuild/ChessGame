@@ -171,7 +171,7 @@ public class Game {
 		}
 
 		if (isCheckmate()) {
-			return getWhoseTurn();
+			return turn == Color.WHITE ? black : white;
 		}
 
 		return null;
@@ -183,7 +183,7 @@ public class Game {
 		}
 
 		if (isCheckmate()) {
-			return turn == Color.WHITE ? black : white;
+			return turn == Color.WHITE ? white : black;
 		}
 
 		return null;

@@ -94,7 +94,7 @@ public class GameScreenPanel extends JPanel {
         	if (button.getIcon() != null) {
         		button.setBackground(GameScreenPanel.RED);
 			} else {
-				button.setIcon(scaleImage(icon, button.getBounds().width, button.getBounds().height));
+				button.setIcon(scaleImage(icon, button.getBounds().width - 6, button.getBounds().height - 6));
 			}
         }
 	}
@@ -124,7 +124,7 @@ public class GameScreenPanel extends JPanel {
 					piece.getColor().name().toLowerCase() + ".png";
 			// ex - pawn_black.png
 			ImageIcon icon = scaleImage(new ImageIcon(path),
-					pieceButton.getBounds().width, pieceButton.getBounds().height);
+					pieceButton.getBounds().width - 10, pieceButton.getBounds().height - 10);
 			pieceButton.setIcon(icon);
 		}
 	}
