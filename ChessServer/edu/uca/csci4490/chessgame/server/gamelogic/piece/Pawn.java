@@ -72,7 +72,7 @@ public class Pawn extends Piece {
 			locations.add(e);
 		}
 
-		if (s2 != null && getLocation().getX() == startingPos) {
+		if (s2 != null && getLocation().getY() == startingPos) {
 			// only add the jump 2 location if we're at the starting position
 			locations.add(s2);
 		}
@@ -81,7 +81,6 @@ public class Pawn extends Piece {
 
 	@Override
 	public ArrayList<Location> filterAvailableLocations(Board board) {
-		System.out.println("Getting locations for " + this.getColor() + " " + this.getImage() + " at " + this.getLocation());
 		ArrayList<Location> all = allMovableLocations(board);
 		ArrayList<Location> filtered = new ArrayList<>();
 
@@ -93,8 +92,8 @@ public class Pawn extends Piece {
 				if (p != null && p.getColor() != this.getColor()) {
 					filtered.add(loc);
 				}
-			} else { // otherwise add to filtered unless blocked
-				if (!board.pieceIsBlocked(this, loc)) {
+			} else { // otherwise add to filtered unless blocked or
+				if (board.getPieceAt(loc) == null && !board.pieceIsBlocked(this, loc)) {
 					filtered.add(loc);
 				}
 			}

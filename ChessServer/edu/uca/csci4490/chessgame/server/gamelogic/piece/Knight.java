@@ -20,11 +20,14 @@ public class Knight extends Piece {
 	public ArrayList<Location> allMovableLocations(Board board) {
 		ArrayList<Location> locations = new ArrayList<>();
 		Direction[] directions = new Direction[]
-				{Direction.L_N2_E3, Direction.L_N2_W3, Direction.L_N3_E2, Direction.L_N3_W2,
-				 Direction.L_S2_E3, Direction.L_S2_W3, Direction.L_S3_E2, Direction.L_S3_W2};
+				{Direction.L_N1_E2, Direction.L_N1_W2, Direction.L_N2_E1, Direction.L_N2_W1,
+				 Direction.L_S1_E2, Direction.L_S1_W2, Direction.L_S2_E1, Direction.L_S2_W1};
 
 		for (Direction d : directions) {
-			locations.add(getLocation().getRelative(d, 0));
+			Location relative = getLocation().getRelative(d, 0);
+			if (relative != null) {
+				locations.add(relative);
+			}
 		}
 
 		return locations;

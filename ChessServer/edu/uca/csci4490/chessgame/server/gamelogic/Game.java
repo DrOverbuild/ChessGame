@@ -242,6 +242,11 @@ public class Game {
 			return new ArrayList<>();
 		}
 
+		// if a piece is selected and it's not their turn, return empty piece list
+		if  (piece.getColor() != turn) {
+			return new ArrayList<>();
+		}
+
 		ArrayList<Location> availableLocations = piece.filterAvailableLocations(getBoard());
 
 		// find locations from array that would put the king in check

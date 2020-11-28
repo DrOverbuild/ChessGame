@@ -54,10 +54,15 @@ public class Board {
 			Piece checkedPiece = getPieceAt(checkedLoc);
 
 			if (checkedPiece != null) {
-				return checkedPiece.getColor() == piece.getColor();
+				if (checkedLoc.equals(destination)) {
+					return checkedPiece.getColor().equals(piece.getColor());
+				} else {
+					return true;
+				}
 			}
 
 			distance++;
+			checkedLoc = original.getRelative(dir, distance);
 		}
 
 		return false;
@@ -164,7 +169,7 @@ public class Board {
 			for (int y = 0; y < 8; y++) {
 				Piece potentialThreat = getPieceAt(x, y);
 				if (potentialThreat != null && potentialThreat.getColor() != piece.getColor()) {
-					if (!potentialThreat.filterAvailableLocations(this).contains(piece.getLocation())) {
+					if (potentialThreat.filterAvailableLocations(this).contains(piece.getLocation())) {
 						return true;
 					}
 				}
@@ -188,5 +193,27 @@ public class Board {
 			}
 		}
 		return data;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("      0     1     2     3     4     5     6     7 \n\n");
+		for (int y = 0; y < 8; y++) {
+			builder.append(y);
+			for (int x = 0; x < 8; x++) {
+				Piece piece = getPieceAt(x, y);
+				if (piece == null) {
+					builder.append("    --");
+				} else {
+					String color = piece.getColor().name().substring(0,1).toUpperCase();
+					String name = piece.getImage().substring(0,1).toUpperCase();
+					builder.append("    ").append(color).append(name);
+				}
+			}
+			builder.append("\n\n");
+		}
+
+		return builder.toString();
 	}
 }

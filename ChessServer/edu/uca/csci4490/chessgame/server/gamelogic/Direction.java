@@ -9,24 +9,24 @@ public enum Direction {
 	SOUTHEAST,
 	NORTHWEST,
 	SOUTHWEST,
-	L_N2_E3,
-	L_N3_E2,
-	L_S2_E3,
-	L_S3_E2,
-	L_N2_W3,
-	L_N3_W2,
-	L_S2_W3,
-	L_S3_W2;
+	L_N1_E2,
+	L_N2_E1,
+	L_S1_E2,
+	L_S2_E1,
+	L_N1_W2,
+	L_N2_W1,
+	L_S1_W2,
+	L_S2_W1;
 
 	public boolean isLShaped() {
-		return this == L_N2_E3 ||
-				this == L_N3_E2 ||
-				this == L_S2_E3 ||
-				this == L_S3_E2 ||
-				this == L_N2_W3 ||
-				this == L_N3_W2 ||
-				this == L_S2_W3 ||
-				this == L_S3_W2;
+		return this == L_N1_E2 ||
+				this == L_N2_E1 ||
+				this == L_S1_E2 ||
+				this == L_S2_E1 ||
+				this == L_N1_W2 ||
+				this == L_N2_W1 ||
+				this == L_S1_W2 ||
+				this == L_S2_W1;
 
 	}
 

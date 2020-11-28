@@ -89,37 +89,37 @@ public class Location implements Serializable {
 				newX = getX() - distance;
 				newY = getY() + distance;
 				break;
-			case L_N2_E3:
-				newX = getX() + 3;
+			case L_N1_E2:
+				newX = getX() + 2;
+				newY = getY() - 1;
+				break;
+			case L_N2_E1:
+				newX = getX() + 1;
 				newY = getY() - 2;
 				break;
-			case L_N3_E2:
+			case L_S1_E2:
 				newX = getX() + 2;
-				newY = getY() - 3;
+				newY = getY() + 1;
 				break;
-			case L_S2_E3:
-				newX = getX() + 3;
+			case L_S2_E1:
+				newX = getX() + 1;
 				newY = getY() + 2;
 				break;
-			case L_S3_E2:
-				newX = getX() + 2;
-				newY = getY() + 3;
+			case L_N1_W2:
+				newX = getX() - 2;
+				newY = getY() - 1;
 				break;
-			case L_N2_W3:
-				newX = getX() - 3;
+			case L_N2_W1:
+				newX = getX() - 1;
 				newY = getY() - 2;
 				break;
-			case L_N3_W2:
+			case L_S1_W2:
 				newX = getX() - 2;
-				newY = getY() - 3;
+				newY = getY() + 1;
 				break;
-			case L_S2_W3:
-				newX = getX() - 3;
+			case L_S2_W1:
+				newX = getX() - 1;
 				newY = getY() + 2;
-				break;
-			case L_S3_W2:
-				newX = getX() - 2;
-				newY = getY() + 3;
 				break;
 		}
 
@@ -150,22 +150,22 @@ public class Location implements Serializable {
 		int deltaX = destination.getX() - getX();
 		int deltaY = destination.getY() - getY();
 
-		if (deltaX == 2 && deltaY == 3) {
-			return Direction.L_S3_E2;
-		} else if (deltaX == 3 && deltaY == 2) {
-			return Direction.L_S2_E3;
-		} else if (deltaX == -2 && deltaY == 3)  {
-			return Direction.L_S3_W2;
-		} else if (deltaX == -3 && deltaY == 2)  {
-			return Direction.L_S2_W3;
-		} else if (deltaX == 2 && deltaY == -3) {
-			return Direction.L_N3_E2;
-		} else if (deltaX == 3 && deltaY == -2) {
-			return Direction.L_N2_E3;
-		} else if (deltaX == -2 && deltaY == -3)  {
-			return Direction.L_N3_W2;
-		} else if (deltaX == -3 && deltaY == -2)  {
-			return Direction.L_N2_W3;
+		if (deltaX == 1 && deltaY == 2) {
+			return Direction.L_S2_E1;
+		} else if (deltaX == 2 && deltaY == 1) {
+			return Direction.L_S1_E2;
+		} else if (deltaX == -1 && deltaY == 2)  {
+			return Direction.L_S2_W1;
+		} else if (deltaX == -2 && deltaY == 1)  {
+			return Direction.L_S1_W2;
+		} else if (deltaX == 1 && deltaY == -2) {
+			return Direction.L_N2_E1;
+		} else if (deltaX == 2 && deltaY == -1) {
+			return Direction.L_N1_E2;
+		} else if (deltaX == -1 && deltaY == -2)  {
+			return Direction.L_N2_W1;
+		} else if (deltaX == -2 && deltaY == -1)  {
+			return Direction.L_N1_W2;
 		} else if (deltaX == 0 && deltaY > 0) {
 			return Direction.SOUTH;
 		} else if (deltaX == 0 && deltaY < 0) {
