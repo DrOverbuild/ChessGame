@@ -128,9 +128,22 @@ public class GameScreenPanel extends JPanel {
 		}
 	}
 
+	public void enableButtons() {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				pieceButtons[x][y].setEnabled(true);
+			}
+		}
+	}
+
 	public void setToLeaveGame() {
 		abandonButton.setText("Go to Waiting Room");
 		abandonButton.setActionCommand("Waiting Room");
+	}
+
+	public void setToAbandonGame() {
+		abandonButton.setText("Abandon Game");
+		abandonButton.setActionCommand("Abandon Game");
 	}
 
 	public ImageIcon scaleImage(ImageIcon icon, int w, int h)

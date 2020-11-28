@@ -1,15 +1,13 @@
 package edu.uca.csci4490.chessgame.server.playermanager;
 
 import edu.uca.csci4490.chessgame.model.Player;
-import edu.uca.csci4490.chessgame.model.data.CreateAccountData;
-import edu.uca.csci4490.chessgame.model.data.EndOfGameData;
-import edu.uca.csci4490.chessgame.model.data.PlayerLoginData;
+import edu.uca.csci4490.chessgame.model.data.*;
 import edu.uca.csci4490.chessgame.model.gamelogic.Color;
-import edu.uca.csci4490.chessgame.server.gamelogic.Game;
-import edu.uca.csci4490.chessgame.server.gamelogic.piece.Piece;
 import edu.uca.csci4490.chessgame.server.ChessServer;
 import edu.uca.csci4490.chessgame.server.database.Database;
 import edu.uca.csci4490.chessgame.server.database.UserAlreadyExistsException;
+import edu.uca.csci4490.chessgame.server.gamelogic.Game;
+import edu.uca.csci4490.chessgame.server.gamelogic.piece.Piece;
 import ocsf.server.ConnectionToClient;
 
 import java.sql.SQLException;
@@ -126,10 +124,9 @@ public class PlayerManager {
 
 		Set<Player> playersChallenges = challenges.get(from);
 		if (playersChallenges != null) {
-			playersChallenges.remove(to);
 
 			if (accepted) {
-//				removePlayersFromWaitingRoom(from, to);
+				removePlayersFromWaitingRoom(from, to);
 				server.startGame(from, to);
 			}
 		}
@@ -181,7 +178,15 @@ public class PlayerManager {
 			allLoggedInPlayers.remove(p);
 			allLoggedInPlayers.add(p);
 
-			this.movePlayerToWaitingRoom(p);
+			Game game = server.gameOfPlayer(p);
+			if (game != null) {
+				game.playerAbandonedGame(p);
+				server.endGame(game);
+				server.getComms().getGameCommunication().sendEndOfGameData(game);
+			} else {
+				this.movePlayerToWaitingRoom(p);
+			}
+
 			return true;
 		}
 	}

@@ -104,6 +104,7 @@ public class ChessClient extends JFrame {
 		wc.setThisPlayer(loggedInPlayer);
 		wc.setPlayers(players);
 		wc.emptyChallenges();
+		wc.getListPanel().updatePlayers();
 		currentPanel = WAITING_ROOM_PANEL;
 		transition();
 	}

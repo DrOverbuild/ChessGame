@@ -62,7 +62,7 @@ public abstract class Piece implements Serializable {
 	public PieceData data() {
 		PieceData data = new PieceData();
 		data.setColor(this.getColor());
-		data.setLocation(this.getLocation().data());
+		data.setLocation(this.getLocation() == null ? null : this.getLocation().data());
 		data.setImage(this.getImage());
 		return data;
 	}

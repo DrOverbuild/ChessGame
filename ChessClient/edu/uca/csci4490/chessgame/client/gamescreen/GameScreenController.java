@@ -86,6 +86,8 @@ public class GameScreenController implements ActionListener {
 		this.thisColor = game.getBlack().equals(thisPlayer) ? Color.BLACK : Color.WHITE;
 
 		view.updateGame(game);
+		view.enableButtons();
+		view.setToAbandonGame();
 
 		if (game.getWhoseTurn().equals(thisPlayer)) {
 			view.setStatus("Your turn");
@@ -185,6 +187,9 @@ public class GameScreenController implements ActionListener {
 
 		PieceMoveData data = new PieceMoveData(game.getId(), selectedPiece, to);
 		comms.send(data);
+
+		selectedPiece = null;
+		availableMoves = null;
 	}
 
 	public void sendAbandonGame() {
