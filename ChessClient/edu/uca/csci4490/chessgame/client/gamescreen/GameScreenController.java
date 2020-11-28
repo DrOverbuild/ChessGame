@@ -145,6 +145,8 @@ public class GameScreenController implements ActionListener {
 			view.setStatus(data.getWinner().getUsername() + " wins!");
 		}
 
+		this.game = data.getGame();
+		view.updateGame(data.getGame());
 		view.disableButtons();
 		view.setToLeaveGame();
 

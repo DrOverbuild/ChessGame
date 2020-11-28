@@ -206,7 +206,7 @@ public class PlayerManager {
 
 			// send end of game to the other player in the game
 			EndOfGameData data = new EndOfGameData(game.getWinner(),
-					player, false, new ArrayList<>(getWaitingRoom()));
+					player, false, game.data(), new ArrayList<>(getWaitingRoom()));
 			server.getComms().sendToPlayer(game.getWinner(), data);
 		}
 	}

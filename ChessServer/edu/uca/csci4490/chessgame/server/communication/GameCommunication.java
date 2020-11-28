@@ -70,7 +70,7 @@ public class GameCommunication {
 		}
 		Set<Player> set = server.getPlayerManager().getWaitingRoom();
 		ArrayList<Player> players = new ArrayList<>(set);
-		EndOfGameData data = new EndOfGameData(winner, loser, stalemate, players);
+		EndOfGameData data = new EndOfGameData(winner, loser, stalemate, game.data(), players);
 
 		comms.sendToPlayer(winner, data);
 		comms.sendToPlayer(loser, data);
