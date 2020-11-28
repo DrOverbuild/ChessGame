@@ -144,6 +144,7 @@ public class GameCommunication {
 		// call game.playerAbandonedGame
 		Game game = server.getGameByID(id);
 		game.playerAbandonedGame(data.getPlayer());
+		server.endGame(game);
 		
 		// send EndOfGameData to both players
 		sendEndOfGameData(game);
