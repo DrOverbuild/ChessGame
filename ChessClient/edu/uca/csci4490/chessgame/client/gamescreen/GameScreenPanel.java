@@ -9,6 +9,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameScreenPanel extends JPanel {
+	private static final Color LIGHT_GREY = Color.LIGHT_GRAY;
+	private static final Color DARK_GREY = Color.GRAY;
+	private static final Color RED = new Color(255, 152, 150);
 
 	private JLabel status;
 	private JButton[][] pieceButtons = new JButton[8][8];
@@ -39,9 +42,9 @@ public class GameScreenPanel extends JPanel {
 				pieceButtons[x][y] = pieceButton;
 
 				if (dark) {
-					pieceButton.setBackground(Color.DARK_GRAY);
+					pieceButton.setBackground(GameScreenPanel.LIGHT_GREY);
 				} else {
-				    pieceButton.setBackground(Color.LIGHT_GRAY);
+				    pieceButton.setBackground(GameScreenPanel.DARK_GREY);
                 }
 
 				dark = !dark;
@@ -88,20 +91,30 @@ public class GameScreenPanel extends JPanel {
 
         for (LocationData loc: availableMoves) {
         	JButton button = pieceButtons[loc.getX()][loc.getY()];
-            button.setIcon(scaleImage(icon, button.getBounds().width, button.getBounds().height));
+        	if (button.getIcon() != null) {
+        		button.setBackground(GameScreenPanel.RED);
+			} else {
+				button.setIcon(scaleImage(icon, button.getBounds().width, button.getBounds().height));
+			}
         }
 	}
 
 	public void updateGame(GameData game) {
+		boolean dark = true;
+
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				updatePiece(x, y, game.getBoard().getPieceAt(x, y));
+				Color color = dark ? GameScreenPanel.DARK_GREY : GameScreenPanel.LIGHT_GREY;
+				updatePiece(x, y, game.getBoard().getPieceAt(x, y), color);
+				dark = !dark;
 			}
+			dark = !dark;
 		}
 	}
 
-	private void updatePiece(int x, int y, PieceData piece) {
+	private void updatePiece(int x, int y, PieceData piece, Color color) {
 		JButton pieceButton = pieceButtons[x][y];
+		pieceButton.setBackground(color);
 
 		if (piece == null) {
 			pieceButton.setIcon(null);

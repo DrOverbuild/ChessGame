@@ -108,6 +108,7 @@ public class GameScreenController implements ActionListener {
 		}
 
 		availableMoves = data.getMoves();
+		view.updateGame(game);
 		view.updateAvailableMoves(selectedPiece, availableMoves);
 	}
 

@@ -82,7 +82,7 @@ public class ChessClient extends JFrame {
 		this.add(container, BorderLayout.CENTER);
 
 		// Show the JFrame.
-		this.setSize(550, 350);
+		this.setSize(550, 600);
 		this.setVisible(true);
 	}
 
