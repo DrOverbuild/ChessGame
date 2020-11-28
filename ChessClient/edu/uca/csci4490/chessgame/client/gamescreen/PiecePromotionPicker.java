@@ -71,6 +71,6 @@ public class PiecePromotionPicker extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		gc.piecePromoted(e.getActionCommand());
+		//gc.piecePromoted(e.getActionCommand());
 	}
 }
