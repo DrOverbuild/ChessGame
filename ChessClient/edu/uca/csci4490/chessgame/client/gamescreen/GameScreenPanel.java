@@ -87,7 +87,8 @@ public class GameScreenPanel extends JPanel {
         ImageIcon icon = new ImageIcon(path);
 
         for (LocationData loc: availableMoves) {
-            pieceButtons[loc.getX()][loc.getY()].setIcon(icon);
+        	JButton button = pieceButtons[loc.getX()][loc.getY()];
+            button.setIcon(scaleImage(icon, button.getBounds().width, button.getBounds().height));
         }
 	}
 

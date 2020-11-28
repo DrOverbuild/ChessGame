@@ -155,22 +155,28 @@ public class GameScreenController implements ActionListener {
 			return;
 		}
 
+		selectedPiece = piece;
+
+		System.out.println("Sending piece " + selectedPiece.getColor() + " " + selectedPiece.getImage() + " at " + selectedPiece.getLocation());
 		PieceSelectionData data = new PieceSelectionData(game.getId(), piece);
 		comms.send(data);
 	}
 
 	public void sendPieceMove(int x, int y) {
-		if (selectedPiece == null) {
+		if (selectedPiece == null || availableMoves == null) {
 			return;
 		}
 
 		LocationData to = new LocationData((byte)x, (byte)y);
 
 		if (!availableMoves.contains(to)) {
+			availableMoves = new ArrayList<>();
 			// remove outlines and do nothing
 			view.updateGame(game);
 
-			if (game.getBoard().getPieceAt(to).getColor().equals(thisColor)) {
+			PieceData selectedMove = game.getBoard().getPieceAt(to);
+
+			if (selectedMove != null && selectedMove.getColor().equals(thisColor)) {
 				sendPieceSelection(x, y);
 			}
 
