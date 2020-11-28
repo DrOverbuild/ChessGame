@@ -19,7 +19,7 @@ public class GameScreenController implements ActionListener {
 	private ChessClient client;
 
 	private PiecePromotionPicker promotionPicker;
-
+	private capturedPiecesPanel cpp = null;
 	private GameData game;
 
 	/**
@@ -50,7 +50,8 @@ public class GameScreenController implements ActionListener {
 		} else if (command.equals("View Moves")) {
 
 		} else if (command.equals("View Captured Pieces")) {
-
+			cpp = new capturedPiecesPanel(this);
+			cpp.updateCaptured(getColor(), getGame());
 		} else if (command.equals("Waiting Room")) {
 			client.transitionToWaitingRoom(thisPlayer, client.getWc().getWaitingRoomPlayers());
 		} else if (command.contains(",")) {
@@ -116,6 +117,13 @@ public class GameScreenController implements ActionListener {
 		view.updateAvailableMoves(selectedPiece, availableMoves);
 	}
 
+	public Color getColor() {
+		return thisColor;
+	}
+	public GameData getGame() {
+		return game;
+	}
+	
 	public void receiveNextTurn(NextTurnData data) {
 		if (game.getId() != data.getGame().getId()) {
 			System.out.println("WARNING - Received NextTurnData with a mismatched game ID. Ignoring message.");
@@ -127,7 +135,19 @@ public class GameScreenController implements ActionListener {
 		availableMoves = null;
 
 		view.updateGame(game);
-
+		
+		
+		
+		
+		///
+		if (cpp != null) {
+			cpp.updateCaptured(getColor(),getGame());
+		}
+		///
+		
+		
+		
+		
 		if (game.getWhoseTurn().equals(thisPlayer)) {
 			view.setStatus("Your turn");
 		} else {
