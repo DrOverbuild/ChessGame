@@ -33,7 +33,7 @@ public class ChessClientCommunication extends AbstractClient {
 			} else if (o instanceof WaitingRoomData) {
 				if (client.getCurrentPanel().equals(ChessClient.LOGIN_PANEL)) {
 					client.getLc().receiveWaitingRoom((WaitingRoomData) o);
-				} else if (client.getCurrentPanel().equals(ChessClient.WAITING_ROOM_PANEL)) {
+				} else {
 					client.getWc().receiveWaitingRoom((WaitingRoomData) o);
 				}
 			} else if (o instanceof CreateAccountSuccessfulData) {

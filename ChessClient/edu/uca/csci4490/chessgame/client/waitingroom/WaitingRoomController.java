@@ -165,8 +165,8 @@ public class WaitingRoomController implements ActionListener, ListSelectionListe
 
 	public void receiveStartOfGame(StartOfGameData data) {
 		GameData game = data.getGame();
-		challengers.remove(game.getBlack());
-		challengers.remove(game.getWhite());
+
+		emptyChallenges();
 
 		this.client.transitionToGameScreen(game, thisPlayer);
 	}

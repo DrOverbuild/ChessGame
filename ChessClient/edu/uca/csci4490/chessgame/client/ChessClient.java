@@ -103,7 +103,6 @@ public class ChessClient extends JFrame {
 	public void transitionToWaitingRoom(Player loggedInPlayer, ArrayList<Player> players) {
 		wc.setThisPlayer(loggedInPlayer);
 		wc.setPlayers(players);
-		wc.emptyChallenges();
 		wc.getListPanel().updatePlayers();
 		currentPanel = WAITING_ROOM_PANEL;
 		transition();
