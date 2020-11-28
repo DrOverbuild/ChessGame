@@ -2,16 +2,13 @@ package edu.uca.csci4490.chessgame.server.gamelogic;
 
 import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.server.gamelogic.piece.Piece;
+import edu.uca.csci4490.chessgame.server.gamelogic.piece.Queen;
 
 import java.util.ArrayList;
 
 public class GameTest {
 	public static void main(String[] args) {
-		try {
-			foolsMateTest();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		testPromotion();
 	}
 
 	public static void basicGameTest() {
@@ -122,7 +119,66 @@ public class GameTest {
 
 		System.out.println(game.getBoard());
 		Thread.sleep(5000);
+	}
 
+	public static void testPromotion() {
+		Player black = new Player(null, 1, "testBlack", 0, 0, 0);
+		Player white = new Player(null, 1, "testWhite", 0, 0, 0);
 
+		Game game = new Game(0, white, black);
+		game.getBoard().setupBoard();
+
+		Piece piece = game.getBoard().getPieceAt(1, 0);
+		ArrayList<Location> moves = game.pieceSelected(piece);
+		Location toMove = moves.get(0);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(2, 6);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(1);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(1, 1);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(1);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(2, 4);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(0);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(2, 2);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(1);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(1, 3);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(0);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(4, 3);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(0);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(1, 2);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(2);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(0, 1);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(0);
+		game.movePiece(piece, toMove, null);
+
+		piece = game.getBoard().getPieceAt(1, 1);
+		moves = game.pieceSelected(piece);
+		toMove = moves.get(2);
+		game.movePiece(piece, toMove, Queen.class);
+
+		System.out.println(game.getBoard());
+		System.out.println();
 	}
 }
