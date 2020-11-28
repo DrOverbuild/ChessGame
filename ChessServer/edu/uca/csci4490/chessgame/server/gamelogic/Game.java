@@ -219,17 +219,18 @@ public class Game {
 		capturedPieces.add(piece);
 	}
 
-	public void promotePiece(Piece piece, Class<? extends Piece> to) {
+	public Piece promotePiece(Piece piece, Class<? extends Piece> to) {
 		try {
-			Piece promoted = to.getConstructor().newInstance();
-			promoted.setColor(piece.getColor());
-			promoted.setImage(piece.getImage());
+			Piece promoted = to.getConstructor(Color.class).newInstance(piece.getColor());
 			board.setPieceOnBoard(piece.getLocation(), promoted);
+			return promoted;
 		} catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
 			System.out.println("Fatal - tried to promote piece, failed to create new instance of " + to.getName());
 			e.printStackTrace();
 			System.exit(1);
 		}
+
+		return piece;
 	}
 
 	/**
@@ -266,19 +267,19 @@ public class Game {
 
 			if (piece instanceof Pawn) {
 				Pawn pawn = (Pawn)piece;
-				if (pawn.hasReachedTheOtherEnd() && to.getY() == ((Pawn) piece).getOtherEnd()) {
+				byte otherEnd = pawn.getOtherEnd();
+				if (to.getY() == otherEnd) {
 					pawn.setHasReachedTheOtherEnd(true);
 
 					if (promoteTo != null) {
-						promotePiece(pawn, promoteTo);
+						piece = promotePiece(pawn, promoteTo);
 					}
 				}
 			}
 
-			Location original = piece.getLocation();
-
 			board.movePiece(piece, to);
 
+			Location original = piece.getLocation();
 			moves.add(new Move(piece, original, to));
 
 			// switch turn

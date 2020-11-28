@@ -27,7 +27,7 @@ public class Pawn extends Piece {
 	}
 
 	public byte getOtherEnd() {
-		return getColor() == Color.WHITE ? (byte)0 : (byte)7;
+		return getColor() == Color.WHITE ? (byte)7 : (byte)0;
 	}
 
 	@Override

@@ -10,6 +10,8 @@ public class PiecePromotionPicker extends JFrame implements ActionListener {
 	private GameScreenController gc;
 
 	public PiecePromotionPicker(GameScreenController gc, String color) throws HeadlessException {
+		this.gc = gc;
+
 		setTitle("Promote Piece");
 		setLayout(new GridLayout(1,4));
 

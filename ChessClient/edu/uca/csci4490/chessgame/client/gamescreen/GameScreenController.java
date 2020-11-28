@@ -6,6 +6,7 @@ import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
 import edu.uca.csci4490.chessgame.model.gamelogic.*;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ public class GameScreenController implements ActionListener {
 	private GameScreenPanel view;
 	private ChessClient client;
 
+	private PiecePromotionPicker promotionPicker;
+
 	private GameData game;
 
 	/**
@@ -24,6 +27,7 @@ public class GameScreenController implements ActionListener {
 	 */
 	private ArrayList<LocationData> availableMoves = null;
 	private PieceData selectedPiece = null;
+	private LocationData selectedMove = null;
 	private Player thisPlayer;
 	private Color thisColor;
 
@@ -119,6 +123,8 @@ public class GameScreenController implements ActionListener {
 		}
 
 		game = data.getGame();
+		selectedPiece = null;
+		availableMoves = null;
 
 		view.updateGame(game);
 
@@ -156,7 +162,7 @@ public class GameScreenController implements ActionListener {
 	public void sendPieceSelection(int x, int y) {
 		PieceData piece = game.getBoard().getPieceAt(x, y);
 
-		if (piece == null || !piece.getColor().equals(thisColor)) {
+		if (piece == null || !piece.getColor().equals(thisColor) || !game.getWhoseTurn().equals(thisPlayer)) {
 			return;
 		}
 
@@ -168,7 +174,7 @@ public class GameScreenController implements ActionListener {
 	}
 
 	public void sendPieceMove(int x, int y) {
-		if (selectedPiece == null || availableMoves == null) {
+		if (selectedPiece == null || availableMoves == null || !game.getWhoseTurn().equals(thisPlayer)) {
 			return;
 		}
 
@@ -188,6 +194,16 @@ public class GameScreenController implements ActionListener {
 			return;
 		}
 
+		if (selectedPiece.getImage().equals("pawn")) {
+			if (selectedPiece.getColor().equals(Color.BLACK) && y == 0) {
+				showPiecePromotion(to);
+				return;
+			} else if (selectedPiece.getColor().equals(Color.WHITE) && y == 7) {
+				showPiecePromotion(to);
+				return;
+			}
+		}
+
 		PieceMoveData data = new PieceMoveData(game.getId(), selectedPiece, to);
 		comms.send(data);
 
@@ -203,6 +219,27 @@ public class GameScreenController implements ActionListener {
 		AbandonGameData data = new AbandonGameData();
 		data.setGameID(game.getId());
 		data.setPlayer(thisPlayer);
+		comms.send(data);
+	}
+
+	public void showPiecePromotion(LocationData to) {
+		if (promotionPicker != null) {
+			promotionPicker.dispose();
+		}
+
+		promotionPicker = new PiecePromotionPicker(this, thisColor.name());
+		promotionPicker.setLocationRelativeTo(view);
+		selectedMove = to;
+	}
+
+	public void piecePromoted(String pieceName) {
+		if (selectedMove == null || selectedPiece == null) {
+			return;
+		}
+
+		promotionPicker.dispose();
+
+		PieceMoveData data = new PieceMoveData(game.getId(), selectedPiece, selectedMove, pieceName);
 		comms.send(data);
 	}
 }
