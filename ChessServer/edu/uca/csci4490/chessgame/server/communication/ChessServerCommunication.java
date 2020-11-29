@@ -36,12 +36,6 @@ public class ChessServerCommunication extends AbstractServer {
 
 	@Override
 	protected void handleMessageFromClient(Object o, ConnectionToClient client) {
-		if (o.equals("test")) {
-			System.out.println("Testing with client " + client.getId());
-			testDataClasses(client);
-			return;
-		}
-
 		try {
 			System.out.println("Incoming message from client " + client.getId());
 			System.out.println(o);
@@ -153,28 +147,6 @@ public class ChessServerCommunication extends AbstractServer {
 
 			server.getPlayerManager().playerDisconnected(p);
 			getWaitingRoomCommunication().sendWaitingRoomToAll();
-		}
-	}
-
-	public void testDataClasses(ConnectionToClient client) {
-		Player black = new Player(null, 1, "testBlack", 0, 0, 0);
-		Player white = new Player(null, 1, "testWhite", 0, 0, 0);
-
-		Game game = new Game(0, white, black);
-		game.getBoard().setupBoard();
-		try {
-			StartOfGameData startOfGameData = new StartOfGameData(game.data());
-
-			NextTurnData nextTurnData = new NextTurnData(game.data());
-			try {
-				client.sendToClient(startOfGameData);
-				client.sendToClient(nextTurnData);
-				System.out.println("Success");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }
