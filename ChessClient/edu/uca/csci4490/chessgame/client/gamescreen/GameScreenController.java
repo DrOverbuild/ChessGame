@@ -49,7 +49,7 @@ public class GameScreenController implements ActionListener {
 		if (command.equals("Abandon Game")) {
 			sendAbandonGame();
 		} else if (command.equals("View Moves")) {
-			vmp = new viewMovesPanel(this);
+			vmp = new viewMovesPanel();
 			vmp.updateMoves(game.getMoves());
 		} else if (command.equals("View Captured Pieces")) {
 			cpp = new capturedPiecesPanel(this);
