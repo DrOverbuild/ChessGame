@@ -17,6 +17,7 @@ public class GameScreenController implements ActionListener {
 	private GameScreenPanel view;
 	private ChessClient client;
 	private capturedPiecesPanel cpp = null;
+	private viewMovesPanel vmp = null;
 	private GameData game;
 
 	/**
@@ -44,7 +45,8 @@ public class GameScreenController implements ActionListener {
 		if (command.equals("Abandon Game")) {
 			sendAbandonGame();
 		} else if (command.equals("View Moves")) {
-
+			vmp = new viewMovesPanel(this);
+			vmp.updateMoves(game.getMoves());
 		} else if (command.equals("View Captured Pieces")) {
 			cpp = new capturedPiecesPanel(this);
 			cpp.updateCaptured(getColor(), getGame());
@@ -130,17 +132,16 @@ public class GameScreenController implements ActionListener {
 
 		view.updateGame(game);
 		
+		//For the View Moves Panel
+		if (vmp != null) {
+			vmp.updateMoves(game.getMoves());
+		}
 		
 		
-		
-		///
+		//Updating captured pieces
 		if (cpp != null) {
 			cpp.updateCaptured(getColor(),getGame());
 		}
-		///
-		
-		
-		
 		
 		if (game.getWhoseTurn().equals(thisPlayer)) {
 			view.setStatus("Your turn");
