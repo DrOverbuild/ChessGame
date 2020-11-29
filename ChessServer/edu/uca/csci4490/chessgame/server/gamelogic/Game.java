@@ -277,9 +277,10 @@ public class Game {
 				}
 			}
 
+			Location original = piece.getLocation();
+
 			board.movePiece(piece, to);
 
-			Location original = piece.getLocation();
 			moves.add(new Move(piece, original, to));
 
 			// switch turn
