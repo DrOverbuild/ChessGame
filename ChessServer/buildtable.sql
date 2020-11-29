@@ -1,4 +1,6 @@
-CREATE TABLE players(
+DROP TABLE IF EXISTS players
+
+CREATE TABLE IF NOT EXISTS players(
     id          INT             AUTO_INCREMENT,
     username    VARCHAR(20)     NOT NULL,
     password    VARBINARY(20)   NOT NULL,
