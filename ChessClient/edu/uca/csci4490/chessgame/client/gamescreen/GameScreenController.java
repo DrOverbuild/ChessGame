@@ -6,7 +6,6 @@ import edu.uca.csci4490.chessgame.model.Player;
 import edu.uca.csci4490.chessgame.model.data.*;
 import edu.uca.csci4490.chessgame.model.gamelogic.*;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,8 +18,8 @@ public class GameScreenController implements ActionListener {
 	private ChessClient client;
 
 	private PiecePromotionPicker promotionPicker;
-	private capturedPiecesPanel cpp = null;
-	private viewMovesPanel vmp = null;
+	private CapturedPiecesFrame cpp = null;
+	private ViewMovesFrame vmp = null;
 	private GameData game;
 
 	/**
@@ -49,10 +48,10 @@ public class GameScreenController implements ActionListener {
 		if (command.equals("Abandon Game")) {
 			sendAbandonGame();
 		} else if (command.equals("View Moves")) {
-			vmp = new viewMovesPanel();
+			vmp = new ViewMovesFrame();
 			vmp.updateMoves(game.getMoves());
 		} else if (command.equals("View Captured Pieces")) {
-			cpp = new capturedPiecesPanel(this);
+			cpp = new CapturedPiecesFrame(this);
 			cpp.updateCaptured(getColor(), getGame());
 		} else if (command.equals("Waiting Room")) {
 			client.transitionToWaitingRoom(thisPlayer, client.getWc().getWaitingRoomPlayers());

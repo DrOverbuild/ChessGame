@@ -12,16 +12,15 @@ import java.util.Queue;
 
 import edu.uca.csci4490.chessgame.model.gamelogic.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 
-public class capturedPiecesPanel extends JFrame {
+public class CapturedPiecesFrame extends JFrame {
 	private static final Color LIGHT_GREY = Color.LIGHT_GRAY;
 	private static final Color DARK_GREY = Color.GRAY;
 	private GameScreenController gc; 
 	private JLabel status;
 	private JLabel[][] pieceLabels = new JLabel[4][8];
 	
-	public capturedPiecesPanel(GameScreenController controller) {
+	public CapturedPiecesFrame(GameScreenController controller) {
 		
 		
 		JPanel panel = new JPanel();
@@ -131,7 +130,7 @@ public class capturedPiecesPanel extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		new capturedPiecesPanel(null);
+		new CapturedPiecesFrame(null);
 	}
 	
 }

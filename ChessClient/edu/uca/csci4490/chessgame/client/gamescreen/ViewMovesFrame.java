@@ -6,11 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class viewMovesPanel extends JFrame {
+public class ViewMovesFrame extends JFrame {
 
 	JTextArea textarea;
 
-	public viewMovesPanel() {
+	public ViewMovesFrame() {
 		this.setLayout(new BorderLayout());
 
 		JLabel yourCaptures = new JLabel("Moves", JLabel.CENTER);
