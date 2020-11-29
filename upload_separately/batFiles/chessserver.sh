@@ -1,0 +1,1 @@
+java -cp .:ocsf.jar:mysql-connector-java-8.0.22.jar edu.uca.csci4490.chessgame.server.ChessServer
