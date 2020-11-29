@@ -217,13 +217,20 @@ public class PlayerManager {
 		Color winnerColor = Color.WHITE;
 		Color loserColor = Color.BLACK;
 
-		if (winner.equals(game.getBlack())) {
-			winnerColor = Color.BLACK;
-			loserColor = Color.WHITE;
-		}
+		if (!game.isStalemate()) {
+			if (winner.equals(game.getBlack())) {
+				winnerColor = Color.BLACK;
+				loserColor = Color.WHITE;
+			}
 
-		winner.setWins(winner.getWins() + 1);
-		loser.setLosses(loser.getLosses() + 1);
+			winner.setWins(winner.getWins() + 1);
+			loser.setLosses(loser.getLosses() + 1);
+
+			winner.setXp(winner.getXp() + 100);
+		} else {
+			winner = game.getBlack();
+			loser = game.getWhite();
+		}
 
 		// get xp for winner (100 for winning + however many pieces are left)
 
@@ -233,7 +240,7 @@ public class PlayerManager {
 		// knight: 7
 		// rook: 6
 		// pawn: 1
-		int winnerXP = winner.getXp() + 100;
+		int winnerXP = winner.getXp();
 		int loserXP = loser.getXp();
 		for (Piece p: game.getBoard().allPieces(null)) {
 			if (p.getColor().equals(winnerColor)) {

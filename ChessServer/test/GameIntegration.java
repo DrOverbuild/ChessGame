@@ -4,14 +4,13 @@ import edu.uca.csci4490.chessgame.server.gamelogic.Board;
 import edu.uca.csci4490.chessgame.server.gamelogic.Direction;
 import edu.uca.csci4490.chessgame.server.gamelogic.Game;
 import edu.uca.csci4490.chessgame.server.gamelogic.Location;
-import edu.uca.csci4490.chessgame.server.gamelogic.piece.Pawn;
-import edu.uca.csci4490.chessgame.server.gamelogic.piece.Piece;
-import edu.uca.csci4490.chessgame.server.gamelogic.piece.Queen;
+import edu.uca.csci4490.chessgame.server.gamelogic.piece.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.image.LookupOp;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -250,5 +249,66 @@ public class GameIntegration {
 
 		ArrayList<Location> allLocations = loc.allLocationsInDirection(Direction.EAST);
 		assertEquals(allLocations.size(),4);
+	}
+
+	/**
+	 * This game starts with white having dominated the board, with black only having the queen left.
+	 * The board starts out looking like this:
+	 *
+	 *     0   1   2   3   4   5   6   7
+	 *  0  --  --  --  WK  --  --  WR  --
+	 *  1  WP  --  --  --  --  --  --  --
+	 *  2  --  --  --  --  --  --  --  --
+	 *  3  --  WR  --  --  WP  --  --  --
+	 *  4  --  --  --  --  --  --  --  --
+	 *  5  --  --  --  WQ  --  --  --  --
+	 *  6  WP  --  --  --  --  --  --  WP
+	 *  7  --  --  --  BK  --  --  --  --
+	 *
+	 *  After promoting the pawn aat the
+	 */
+	@Test
+	public void testStalemate() {
+		Player white = new Player(null, 0, "whiteTest", 0, 0, 0);
+		Player black = new Player(null, 1, "blackTest", 0, 0, 0);
+		game = new Game(0, white, black);
+		Board board = game.getBoard();
+		board.setPieceOnBoard((byte)3, (byte)0, new King(Color.WHITE));
+		board.setPieceOnBoard((byte)6, (byte)0, new Rook(Color.WHITE));
+		board.setPieceOnBoard((byte)0, (byte)1, new Pawn(Color.WHITE));
+		board.setPieceOnBoard((byte)1, (byte)3, new Rook(Color.WHITE));
+		board.setPieceOnBoard((byte)4, (byte)3, new Pawn(Color.WHITE));
+		board.setPieceOnBoard((byte)3, (byte)5, new Queen(Color.WHITE));
+		board.setPieceOnBoard((byte)0, (byte)6, new Pawn(Color.WHITE));
+		board.setPieceOnBoard((byte)7, (byte)6, new Pawn(Color.WHITE));
+
+		board.setPieceOnBoard((byte)3, (byte)7, new King(Color.BLACK));
+
+		game.setInCheck(true);
+		game.setTurn(Color.BLACK);
+
+		// move black king out of way of white queen
+		Piece blackKing = game.getBoard().getPieceAt(3,7);
+		List<Location> moves = game.pieceSelected(blackKing);
+		game.movePiece(blackKing, moves.get(0), null);
+
+		// move rook to row 6
+		Piece whiteRook = game.getBoard().getPieceAt(1,3);
+		moves = game.pieceSelected(whiteRook);
+		game.movePiece(whiteRook, moves.get(5), null);
+
+		// at this point the king has nowhere to run, with the rook at (6,0)
+		// blocking the king from going any further east, and the queen at
+		// (3,5) blocking the king from going any further west. This should
+		// end in a stalemate. King is not in check, but there's nowhere to
+		// go where he'll be safe.
+
+		assertTrue(game.isStalemate());
+		assertFalse(game.isInCheck());
+		assertFalse(game.isCheckmate());
+
+		moves = game.pieceSelected(blackKing);
+
+		assertEquals(moves.size(), 0);
 	}
 }
